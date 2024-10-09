@@ -7,5 +7,6 @@ app.use("/", (req, res) => {
 });
 
 app.listen(5000, () => {
+  console.clear();
   console.log("Listening on port 5000");
 });
