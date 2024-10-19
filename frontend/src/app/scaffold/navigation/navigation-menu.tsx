@@ -104,8 +104,10 @@ export default function NavMenu() {
             <Bell className="w-5 h-5" />
           </Button>
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            {/* <AvatarImage src="https://github.com/shadcn.png" />*/}
+            <AvatarImage src="https://ca.slack-edge.com/T054NL1J04D-U054K0E8P5L-5f1508e726ae-48" />
+
+            <AvatarFallback>CW</AvatarFallback>
           </Avatar>
         </div>
       </header>
