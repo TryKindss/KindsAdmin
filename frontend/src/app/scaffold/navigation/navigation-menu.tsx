@@ -35,13 +35,13 @@ export default function NavMenu() {
   };
 
   const menuItems = [
-    { icon: Home, label: "Home", shortcut: "⇧K" },
-    { icon: FileText, label: "Audit", shortcut: "⇧I" },
-    { icon: Shield, label: "Policies", shortcut: "⇧N" },
-    { icon: BarChart, label: "Reporting", shortcut: "⇧D" },
-    { icon: RefreshCcw, label: "Flux", shortcut: "⇧D" },
-    { icon: Database, label: "Sources", shortcut: "⇧S" },
-    { icon: Settings, label: "Settings", shortcut: "⇧B" },
+    { icon: Images.menuItems.home, label: "Home", shortcut: "⌘K" },
+    { icon: Images.menuItems.note, label: "Audit", shortcut: "⌘I" },
+    { icon: Images.menuItems.policies, label: "Policies", shortcut: "⌘N" },
+    { icon: Images.menuItems.barChart, label: "Reporting", shortcut: "⌘D" },
+    { icon: Images.menuItems.flux, label: "Flux", shortcut: "⌘D" },
+    { icon: Images.menuItems.connection, label: "Connections", shortcut: "⌘S" },
+    { icon: Images.menuItems.settings, label: "Settings", shortcut: "⌘B" },
   ];
 
   return (
@@ -52,7 +52,10 @@ export default function NavMenu() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-[200px] justify-between border-kindsGrey bg-white">
+              <Button
+                variant="outline"
+                className="w-[200px] justify-between border-kindsGrey bg-white"
+              >
                 <div className="flex items-center space-x-2">
                   <Image alt="" src={Images.icons.snowFlake} />
                   <span>Flux</span>
@@ -60,14 +63,15 @@ export default function NavMenu() {
                 <ChevronDown className="w-4 h-4 opacity-50" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-56 space-y-2">
               {menuItems.map((item, index) => (
                 <DropdownMenuItem
                   key={index}
                   className="flex justify-between items-center"
                 >
                   <div className="flex items-center">
-                    <item.icon className="mr-2 h-4 w-4" />
+                    {/* <item.icon className="mr-2 h-4 w-4" /> */}
+                    <Image alt="" src={item.icon} className="mr-2 h-4 w-4" />
                     <span>{item.label}</span>
                   </div>
                   <span className="text-xs text-gray-500">{item.shortcut}</span>
@@ -77,19 +81,26 @@ export default function NavMenu() {
           </DropdownMenu>
           <Button
             variant="ghost"
-            className="flex items-center space-x-1"
+            className="flex items-center space-x-2"
             onClick={toggleAccount}
           >
-            Partner Client Organization
-            <ExternalLink className="w-4 h-4" />
+            <span className="font-semibold">Partner Client Organization</span>
+            <Image alt="" src={Images.menuItems.shuffle} className="w-4 h-4" />
           </Button>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <Input className="pl-8" placeholder="Search..." />
-          </div>
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="border border-kindsGrey"
+          >
+            <Search className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="border border-kindsGrey"
+          >
             <Bell className="w-5 h-5" />
           </Button>
           <Avatar>

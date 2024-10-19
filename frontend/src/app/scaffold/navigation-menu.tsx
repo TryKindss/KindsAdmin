@@ -24,17 +24,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Images from "@/utils/images";
 
 export default function NavMenu() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const menuItems = [
-    { icon: Home, label: "Home", shortcut: "⇧K" },
-    { icon: FileText, label: "Audit", shortcut: "⇧I" },
-    { icon: Shield, label: "Policies", shortcut: "⇧N" },
-    { icon: BarChart, label: "Reporting", shortcut: "⇧D" },
+    { icon: Images.menuItems.home, label: "Home", shortcut: "⇧K" },
+    { icon: Images.menuItems.home, label: "Audit", shortcut: "⇧I" },
+    { icon: Images.menuItems.home, label: "Policies", shortcut: "⇧N" },
+    { icon: Images.menuItems.home, label: "Reporting", shortcut: "⇧D" },
     { icon: RefreshCcw, label: "Flux", shortcut: "⇧D" },
-    { icon: Database, label: "Sources", shortcut: "⇧S" },
+    { icon: Database, label: "Sourcesssss", shortcut: "⇧S" },
     { icon: Settings, label: "Settings", shortcut: "⇧B" },
   ];
 
