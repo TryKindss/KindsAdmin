@@ -40,7 +40,7 @@ export default function NavMenu() {
   ];
 
   const NavContent = () => (
-    <>
+    <div className="layout">
       <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
         <svg
           className="w-6 h-6 text-gray-600"
@@ -97,11 +97,11 @@ export default function NavMenu() {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>
-    </>
+    </div>
   );
 
   return (
-    <header className="flex items-center justify-between px-4 py-2 bg-white border-b">
+    <header className="flex items-center justify-between layout py-2 bg-white border-b">
       <div className="md:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
           <SheetTrigger asChild>

@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import DashboardView from "../views/dashboard";
 
 function DashboardHome() {
-  return (
-    <div>DashboardHome</div>
-  )
+  return <DashboardView />;
 }
 
-export default DashboardHome
+export default DashboardHome;
