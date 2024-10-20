@@ -13,6 +13,7 @@ interface TabListProps {
   active: string;
   setActive: (active: string) => void;
 }
+
 export default function TabList({ active, setActive, tabItems }: TabListProps) {
   return (
     <div>
