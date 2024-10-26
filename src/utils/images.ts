@@ -10,6 +10,8 @@ import policies from "../../public/layers-two-01.svg";
 import flux from "../../public/cube-outline.svg";
 import bell from "../../public/bell-02.svg";
 import search from "../../public/search-sm.svg";
+import google from "../../public/google.svg";
+import microsoft from "../../public/microsoft.svg";
 
 const Images = {
   brand: { logo },
@@ -26,6 +28,7 @@ const Images = {
     bell,
     search,
   },
+  socialIcons: { google, microsoft },
 };
 
 export default Images;

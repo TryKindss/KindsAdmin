@@ -18,48 +18,54 @@ export default function SelectAccount() {
 
   return (
     <>
-      <DialogContent  className="sm:max-w-[425px] md:max-w-[700px] bg-white bg-opacity-70">
+      <DialogContent
+        hideClose
+        className="sm:max-w-[425px] md:max-w-[700px] bg-white bg-opacity-70 p-0"
+      >
         <div className="grid gap-4">
-          <div className="relative">
+          <div className="relative ">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search accounts" className="pl-8" />
+            <Input placeholder="Search accounts" className="pl-8 border-0 outline-none focus:outline-none active:outline-none focus:border-none active:border-none" />
           </div>
-          <div>
-            <h4 className="mb-4 text-sm font-medium">Recent</h4>
-            <div className="space-y-4">
-              {accounts.map((account) => (
-                <AccountItem key={account.name} account={account} />
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="mb-4 text-sm font-medium">All Accounts</h4>
-            <ScrollArea className="h-[200px]">
+
+          <section className="p-6">
+            <div>
+              <h4 className="mb-4 text-sm font-medium">Recent</h4>
               <div className="space-y-4">
                 {accounts.map((account) => (
                   <AccountItem key={account.name} account={account} />
                 ))}
               </div>
-            </ScrollArea>
-          </div>
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <ChevronUp className="h-4 w-4" />
-              <ChevronDown className="h-4 w-4" />
-              <span>to navigate</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <span>esc to close</span>
-              <Button variant="outline" size="sm" className="h-8 px-2">
-                <Settings className="mr-2 h-4 w-4" />
-                Manage Accounts
-              </Button>
-              <Button variant="outline" size="sm" className="h-8 px-2">
-                <Plus className="mr-2 h-4 w-4" />
-                Create New
-              </Button>
+            <div>
+              <h4 className="mb-4 text-sm font-medium">All Accounts</h4>
+              <ScrollArea className="h-[200px]">
+                <div className="space-y-4">
+                  {accounts.map((account) => (
+                    <AccountItem key={account.name} account={account} />
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
-          </div>
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-center space-x-2">
+                <ChevronUp className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4" />
+                <span>to navigate</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span>esc to close</span>
+                <Button variant="outline" size="sm" className="h-8 px-2">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Manage Accounts
+                </Button>
+                <Button variant="outline" size="sm" className="h-8 px-2">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create New
+                </Button>
+              </div>
+            </div>
+          </section>
         </div>
       </DialogContent>
     </>
