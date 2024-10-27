@@ -6,29 +6,53 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Images from "@/utils/images";
+import Image from "next/image";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
-const accounts = [
-  { name: "General Health", users: 323, icon: "GH" },
-  { name: "HealthCore Systems", users: 323, icon: "HC" },
-  { name: "CanaSTEM", users: 323, icon: "CS" },
-];
+// const accounts = [
+//   { name: "General Health", users: 323, icon: "GH" },
+//   { name: "HealthCore Systems", users: 323, icon: "HC" },
+//   { name: "CanaSTEM", users: 323, icon: "CS" },
+// ];
 
 export default function SelectAccount() {
   const [open, setOpen] = React.useState(false);
+
+  const accounts = [
+    {
+      name: "General Health",
+      users: 323,
+      icon: Images.companyIcon.comapany1,
+    },
+    {
+      name: "HealthCore Systems",
+      users: 323,
+      icon: Images.companyIcon.comapany2,
+    },
+    {
+      name: "CanaSTEM",
+      users: 323,
+      icon: Images.companyIcon.comapany3,
+    },
+  ];
 
   return (
     <>
       <DialogContent
         hideClose
-        className="sm:max-w-[425px] md:max-w-[700px] bg-white bg-opacity-70 p-0"
+        className="sm:max-w-[425px] md:max-w-lg bg-white bg-opacity-70 p-0"
       >
         <div className="grid gap-4">
-          <div className="relative ">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search accounts" className="pl-8 border-0 outline-none focus:outline-none active:outline-none focus:border-none active:border-none" />
+          <div className="relative border-b-2 border-kindsGrey flex items-center gap-0 py-2 px-6">
+            <Search className=" h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search accounts"
+              className="border-0 outline-none focus:outline-none active:outline-none focus:border-none active:border-none rounded-none focus-visible:ring-0"
+            />
           </div>
 
-          <section className="p-6">
+          <section className="px-6">
             <div>
               <h4 className="mb-4 text-sm font-medium">Recent</h4>
               <div className="space-y-4">
@@ -72,12 +96,22 @@ export default function SelectAccount() {
   );
 }
 
-function AccountItem({ account }: any) {
+interface AccountItemProps {
+  name: string;
+  users: number;
+  icon: string | StaticImport;
+}
+
+interface Account {
+  account: AccountItemProps;
+}
+
+function AccountItem({ account }: Account) {
   return (
     <div className="flex items-center space-x-4">
       <Avatar>
-        <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center text-sm font-medium">
-          {account.icon}
+        <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center text-sm font-medium bg-white">
+          <Image src={account.icon} alt="" className="w-8 h-8" />
         </div>
       </Avatar>
       <div className="space-y-1">

@@ -26,10 +26,16 @@ export default function Component() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Input id="name" placeholder="Enter your name" required />
+            <Input
+              className="border-kindsGrey"
+              id="name"
+              placeholder="Enter your name"
+              required
+            />
           </div>
           <div className="space-y-2">
             <Input
+              className="border-kindsGrey"
               id="email"
               placeholder="Enter your email"
               required
@@ -38,6 +44,7 @@ export default function Component() {
           </div>
           <div className="space-y-2">
             <Input
+              className="border-kindsGrey"
               id="password"
               placeholder="Create a password"
               required
@@ -47,12 +54,16 @@ export default function Component() {
               Must be at least 8 characters
             </p>
           </div>
-          <Button size={"lg"} className="w-full">
+          <Button
+            variant={"outline"}
+            size={"lg"}
+            className="w-full bg-[#182230] text-white"
+          >
             Get started
           </Button>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button size={"lg"} variant="outline" className="w-full">
+          <Button size={"lg"} variant="outline" className="w-full border-kindsGrey">
             <Image
               src={Images.socialIcons.google}
               alt=""
@@ -60,7 +71,7 @@ export default function Component() {
             />
             Sign up with Google
           </Button>
-          <Button size={"lg"} variant="outline" className="w-full">
+          <Button size={"lg"} variant="outline" className="w-full border-kindsGrey">
             <Image
               src={Images.socialIcons.microsoft}
               alt=""

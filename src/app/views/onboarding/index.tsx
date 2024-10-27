@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function OnboardingView() {
-  return (
-    <div>OnboardingView</div>
-  )
+  return <div>OnboardingView</div>;
 }
 
-export default OnboardingView
+export default OnboardingView;

@@ -12,6 +12,9 @@ import bell from "../../public/bell-02.svg";
 import search from "../../public/search-sm.svg";
 import google from "../../public/google.svg";
 import microsoft from "../../public/microsoft.svg";
+import comapany1 from "../../public/company_1.svg";
+import comapany2 from "../../public/company_2.svg";
+import comapany3 from "../../public/company_3.svg";
 
 const Images = {
   brand: { logo },
@@ -29,6 +32,11 @@ const Images = {
     search,
   },
   socialIcons: { google, microsoft },
+  companyIcon: {
+    comapany1,
+    comapany2,
+    comapany3,
+  },
 };
 
 export default Images;
