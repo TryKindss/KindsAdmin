@@ -78,7 +78,7 @@ export default function SelectAccount() {
               </div>
             </div>
           </ScrollArea>
-          <div className="flex items-center justify-between text-sm text-muted-foreground py-2 border-t-2 border-kindsGrey px-4">
+          <div className="flex items-center justify-between text-sm text-muted-foreground py-4 border-t-2 border-kindsGrey px-4">
             <div className="flex items-center space-x-2">
               <div className="bg-white rounded-lg p-2">
                 <ArrowUp className="h-4 w-4" />
