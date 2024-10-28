@@ -15,10 +15,12 @@ import microsoft from "../../public/microsoft.svg";
 import comapany1 from "../../public/company_1.svg";
 import comapany2 from "../../public/company_2.svg";
 import comapany3 from "../../public/company_3.svg";
+import unwanted from "../../public/unwanted.svg";
+import fluxCube from "../../public/fluxCube.svg";
 
 const Images = {
   brand: { logo },
-  icons: { snowFlake },
+  icons: { snowFlake, unwanted, fluxCube },
   menuItems: {
     home,
     connection,

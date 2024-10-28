@@ -12,37 +12,41 @@ export interface NameAccountScreenProps {
   companyName: string;
   setCompanyName: (companyName: string) => void;
   nextStep: () => void;
+  prevStep: () => void;
 }
 
 export default function NameAccountScreen({
   companyName,
   setCompanyName,
   nextStep,
+  prevStep,
 }: NameAccountScreenProps) {
   return (
     <>
       <CardHeader>
         <CardTitle>Name your account</CardTitle>
         <p className="text-sm text-muted-foreground">
-          This name will be shown when you share.
+          This name will be shown only in the admin experience.
         </p>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          <Label htmlFor="companyName">Company Name</Label>
           <Input
+            className="border-kindsGrey"
             id="companyName"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            placeholder="Acme Inc."
+            placeholder="Company name"
             required
           />
         </div>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full" onClick={nextStep}>
-          Next
+      <CardFooter className="flex justify-between">
+        <Button variant="outline" onClick={prevStep}>
+          Back
         </Button>
+
+        <Button onClick={nextStep}>Next</Button>
       </CardFooter>
     </>
   );

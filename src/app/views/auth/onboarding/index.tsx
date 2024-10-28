@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Link2, Mail, Lock, Upload } from "lucide-react";
 import LoginScreen from "./LoginScreen";
 import NameAccountScreen from "./NameAccountScreen";
+import { ConnectUsersScreen1 } from "./ConnectUser";
 
 export default function OnboardingFlow() {
   const [step, setStep] = useState(0);
@@ -20,7 +21,12 @@ export default function OnboardingFlow() {
   const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
 
-  const nextStep = () => setStep(step + 1);
+  const nextStep = () => {
+    setStep((prev) => prev + 1);
+  };
+  const prevStep = () => {
+    setStep((prev) => Math.max(0, prev - 1));
+  };
 
   const renderStep = () => {
     switch (step) {
@@ -40,10 +46,11 @@ export default function OnboardingFlow() {
             companyName={companyName}
             setCompanyName={setCompanyName}
             nextStep={nextStep}
+            prevStep={prevStep}
           />
         );
       case 2:
-        return <ConnectUsersScreen1 nextStep={nextStep} />;
+        return <ConnectUsersScreen1 nextStep={nextStep} prevStep={prevStep} />;
       case 3:
         return <ConnectUsersScreen2 />;
       default:
@@ -53,56 +60,12 @@ export default function OnboardingFlow() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">{renderStep()}</Card>
+      <Card className="w-fit max-w-2xl">{renderStep()}</Card>
     </div>
   );
 }
 
-function ConnectUsersScreen1({ nextStep }: { nextStep: () => void }) {
-  return (
-    <>
-      <CardHeader>
-        <CardTitle>Get Started by connecting your users</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Users will receive an invite and full access within their inboxes to
-          begin sending secure messages and files.
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center space-x-4 p-4 border rounded-lg">
-          <Mail className="w-8 h-8" />
-          <div>
-            <h3 className="font-semibold">Flux</h3>
-            <p className="text-sm text-muted-foreground">
-              Encryption for email
-            </p>
-          </div>
-          <Button variant="link" className="ml-auto">
-            Subscribe
-          </Button>
-        </div>
-        <div className="flex items-center space-x-4 p-4 border rounded-lg">
-          <Lock className="w-8 h-8" />
-          <div>
-            <h3 className="font-semibold">Unwanted</h3>
-            <p className="text-sm text-muted-foreground">
-              Reduce unwanted mail. Keep your users stay focused and secure from
-              phishing.
-            </p>
-          </div>
-          <Button variant="link" className="ml-auto">
-            Subscribe
-          </Button>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full" onClick={nextStep}>
-          Next
-        </Button>
-      </CardFooter>
-    </>
-  );
-}
+
 
 function ConnectUsersScreen2() {
   return (
