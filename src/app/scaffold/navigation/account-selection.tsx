@@ -18,15 +18,12 @@ import Images from "@/utils/images";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
-// const accounts = [
-//   { name: "General Health", users: 323, icon: "GH" },
-//   { name: "HealthCore Systems", users: 323, icon: "HC" },
-//   { name: "CanaSTEM", users: 323, icon: "CS" },
-// ];
+interface SelectAccountProps {
+  setOrganization: (org: string) => void;
+  setOpen: (value: boolean) => void;
+}
 
-export default function SelectAccount() {
-  const [open, setOpen] = React.useState(false);
-
+export default function SelectAccount({ setOrganization, setOpen }: SelectAccountProps) {
   const accounts = [
     {
       name: "General Health",
@@ -44,6 +41,11 @@ export default function SelectAccount() {
       icon: Images.companyIcon.comapany3,
     },
   ];
+
+  const handleSelect = (org: string) => {
+    setOpen(false);
+    setOrganization(org);
+  };
 
   return (
     <>
@@ -65,7 +67,11 @@ export default function SelectAccount() {
               <h4 className="mb-4 text-sm font-medium px-4">Recent</h4>
               <div className="">
                 {accounts.map((account) => (
-                  <AccountItem key={account.name} account={account} />
+                  <AccountItem
+                    key={account.name}
+                    account={account}
+                    handleSelect={handleSelect}
+                  />
                 ))}
               </div>
             </div>
@@ -73,7 +79,11 @@ export default function SelectAccount() {
               <h4 className="mb-4 text-sm font-medium px-4">All Accounts</h4>
               <div className="">
                 {accounts.map((account) => (
-                  <AccountItem key={account.name} account={account} />
+                  <AccountItem
+                    key={account.name}
+                    account={account}
+                    handleSelect={handleSelect}
+                  />
                 ))}
               </div>
             </div>
@@ -115,11 +125,15 @@ interface AccountItemProps {
 
 interface Account {
   account: AccountItemProps;
+  handleSelect: (org: string) => void;
 }
 
-function AccountItem({ account }: Account) {
+function AccountItem({ account, handleSelect }: Account) {
   return (
-    <div className="flex items-center space-x-4 hover:cursor-pointer hover:bg-kindsGrey px-6 py-3">
+    <div
+      className="flex items-center space-x-4 hover:cursor-pointer hover:bg-kindsGrey px-6 py-3"
+      onClick={() => handleSelect(account.name)}
+    >
       <Avatar>
         <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center text-sm font-medium bg-white">
           <Image src={account.icon} alt="" className="w-8 h-8" />

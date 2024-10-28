@@ -1,18 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  ChevronDown,
-  Bell,
-  Search,
-  ExternalLink,
-  Home,
-  FileText,
-  Shield,
-  BarChart,
-  RefreshCcw,
-  Database,
-  Settings,
-} from "lucide-react";
+import { ChevronDown, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -43,6 +31,8 @@ export default function NavMenu() {
     { icon: Images.menuItems.connection, label: "Connections", shortcut: "⌘S" },
     { icon: Images.menuItems.settings, label: "Settings", shortcut: "⌘B" },
   ];
+
+  const [organization, setOrganization] = useState<null | string>(null);
 
   return (
     <>
@@ -84,7 +74,9 @@ export default function NavMenu() {
             className="flex items-center space-x-2"
             onClick={toggleAccount}
           >
-            <span className="font-semibold">Partner Client Organization</span>
+            <span className="font-semibold">
+              {organization ? organization : "Partner Client Organization"}
+            </span>
             <Image alt="" src={Images.menuItems.shuffle} className="w-4 h-4" />
           </Button>
         </div>
@@ -112,7 +104,7 @@ export default function NavMenu() {
         </div>
       </header>
       <Dialog open={open} onOpenChange={toggleAccount}>
-        <SelectAccount />
+        <SelectAccount setOrganization={setOrganization} setOpen={setOpen}/>
       </Dialog>
     </>
   );
