@@ -7,11 +7,13 @@ import OnboardingView from "../onboarding";
 import PoliciesView from "../policies";
 import SettingsView from "../settings";
 import UsersView from "../users";
+import AccountsView from "../accounts";
 
 function DashboardView() {
   const tabItems = [
     { value: "onboarding", label: "Onboarding", content: <OnboardingView /> },
-    { value: "policies", label: "Policies", content: <PoliciesView /> },
+    { value: "policies", label: "Policies", content: <AccountsView /> },
+    { value: "accounts", label: "Accounts", content: <PoliciesView /> },
     { value: "users", label: "Users", content: <UsersView /> },
     { value: "logs", label: "Logs", content: <LogsView /> },
     { value: "settings", label: "Settings", content: <SettingsView /> },
