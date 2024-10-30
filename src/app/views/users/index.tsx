@@ -148,15 +148,15 @@ export default function Component() {
   const getHealthScoreColor = (score: string) => {
     switch (score.toLowerCase()) {
       case "low":
-        return "text-gray-500";
+        return "text-gray-500 rounded-full border-2 border-[#EAECF0]";
       case "medium":
-        return "text-blue-600";
+        return "text-blue-600 rounded-full border-2 border-[#B2DDFF]";
       case "high":
-        return "text-orange-600";
+        return "text-orange-600 rounded-full border-2 border-[#FEDF89]";
       case "critical":
-        return "text-red-600";
+        return "text-red-600 rounded-full border-2 border-[#FECDCA]";
       default:
-        return "text-gray-500";
+        return "text-gray-500 rounded-full border-2 border-[#EAECF0]";
     }
   };
 
@@ -178,13 +178,13 @@ export default function Component() {
       <div className="flex flex-col space-y-4">
         <h1 className="text-xl font-semibold">Users</h1>
 
-        <div className="relative">
+        <div className="relative max-w-xl">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Search" className="pl-8" />
         </div>
 
-        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-          <Tabs defaultValue="active" className="w-[400px]">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 gap-0">
+          <Tabs defaultValue="active" className="w-[200px]">
             <TabsList>
               <TabsTrigger value="active">Active Users</TabsTrigger>
               <TabsTrigger value="all">All</TabsTrigger>
@@ -322,9 +322,9 @@ export default function Component() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className={getHealthScoreColor(user.healthScore)}>
+                    <Badge variant={'secondary'} className={getHealthScoreColor(user.healthScore)}>
                       {user.healthScore}
-                    </span>
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
