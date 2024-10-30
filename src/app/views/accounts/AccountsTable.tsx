@@ -114,10 +114,10 @@ export default function AccountsTable() {
   };
 
   return (
-    <div className="container mx-auto ">
-      <Table className="border rounded-lg">
-        <TableHeader className="rounded-lg">
-          <TableRow className="rounded-t-lg">
+    <div className="container mx-auto rounded-md border">
+      <Table className="">
+        <TableHeader className="">
+          <TableRow className="">
             <TableHead className="py-4 px-6">Account</TableHead>
             <TableHead className="py-4">
               <div className="flex items-center gap-1">
@@ -207,9 +207,21 @@ export default function AccountsTable() {
               </TableCell>
               <TableCell className="py-3">
                 <div className="flex gap-3 items-center">
-                  <Image src={Images.emailLog.gmail} alt="" className="w-6 h-6"/>
-                  <Image src={Images.emailLog.ms_outlook} alt="" className="w-6 h-6"/>
-                  <Image src={Images.emailLog.okta} alt="" className="w-6 h-6"/>
+                  <Image
+                    src={Images.emailLog.gmail}
+                    alt=""
+                    className="w-6 h-6"
+                  />
+                  <Image
+                    src={Images.emailLog.ms_outlook}
+                    alt=""
+                    className="w-6 h-6"
+                  />
+                  <Image
+                    src={Images.emailLog.okta}
+                    alt=""
+                    className="w-6 h-6"
+                  />
                 </div>
               </TableCell>
               <TableCell className="py-3">
