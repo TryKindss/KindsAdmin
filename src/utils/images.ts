@@ -17,6 +17,9 @@ import comapany2 from "../../public/company_2.svg";
 import comapany3 from "../../public/company_3.svg";
 import unwanted from "../../public/unwanted.svg";
 import fluxCube from "../../public/fluxCube.svg";
+import gmail from "../../public/connections/gmail.svg";
+import okta from "../../public/connections/Okta.svg";
+import ms_outlook from "../../public/connections/ms_outlook.svg";
 
 const Images = {
   brand: { logo },
@@ -38,6 +41,11 @@ const Images = {
     comapany1,
     comapany2,
     comapany3,
+  },
+  emailLog: {
+    gmail,
+    okta,
+    ms_outlook,
   },
 };
 

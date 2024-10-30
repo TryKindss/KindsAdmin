@@ -16,9 +16,9 @@ interface TabListProps {
 
 export default function TabList({ active, setActive, tabItems }: TabListProps) {
   return (
-    <div>
-      <div className="">
-        <Tabs value={active} onValueChange={setActive}>
+    <div className="h-full">
+      <div className="h-full">
+        <Tabs value={active} onValueChange={setActive} className="h-full">
           <div className="border-b border-kindsGrey py-2 mb-4">
             <TabsList className="bg-transparent">
               {tabItems.map((tab, index) => (

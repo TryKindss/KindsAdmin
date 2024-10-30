@@ -23,7 +23,7 @@ function DashboardView() {
   const [active, setActive] = useState(tabItems[0].value);
 
   return (
-    <div className="layout">
+    <div className="layout h-full">
       <TabList active={active} setActive={setActive} tabItems={tabItems} />
     </div>
   );

@@ -5,7 +5,7 @@ function layout({ children }: PropsWithChildren) {
   return (
     <div className="min-h-screen h-full flex flex-col">
       <NavMenu />
-      <main className="flex-1 h-full">{children}</main>
+      <main className="flex-1 h-full ">{children}</main>
     </div>
   );
 }
