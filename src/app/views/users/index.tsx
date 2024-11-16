@@ -1,5 +1,5 @@
 import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
-import UsersFilter from "./UserFIlter";
+import UsersFilter from "./UserFilter";
 import UsersTable from "./UsersTable";
 
 export default function Component() {
