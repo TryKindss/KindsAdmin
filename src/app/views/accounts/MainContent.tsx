@@ -1,13 +1,12 @@
 import React from "react";
 import AccountsTable from "./AccountsTable";
+import MainTableWrapper from "@/components/global/wrappers/MainTableWrapper";
 
 function MainContent() {
   return (
-    <div className="flex-1 overflow-auto">
-      <div className="px-6">
-        <AccountsTable/>
-      </div>
-    </div>
+    <MainTableWrapper>
+      <AccountsTable />
+    </MainTableWrapper>
   );
 }
 

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Images from "@/utils/images";
 import Image from "next/image";
+import TableWrapper from "@/components/global/wrappers/TableWrapper";
 
 export default function AccountsTable() {
   const [offices, setOffices] = React.useState([
@@ -114,7 +115,7 @@ export default function AccountsTable() {
   };
 
   return (
-    <div className="container mx-auto rounded-md border">
+    <TableWrapper>
       <Table className="">
         <TableHeader className="">
           <TableRow className="">
@@ -262,6 +263,6 @@ export default function AccountsTable() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </TableWrapper>
   );
 }

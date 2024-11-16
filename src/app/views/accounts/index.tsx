@@ -1,13 +1,14 @@
 import React from "react";
-import FilterSidebar from "./FilterSidebar";
 import MainContent from "./MainContent";
+import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
+import AccountFilter from "./AccountFIlter";
 
 function AccountsView() {
   return (
-    <div className="flex h-full bg-gray-50">
-      <FilterSidebar />
+    <MainPageWrapper>
+      <AccountFilter />
       <MainContent />
-    </div>
+    </MainPageWrapper>
   );
 }
 
