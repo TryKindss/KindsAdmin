@@ -1,7 +1,7 @@
 import React from "react";
 import MainContent from "./MainContent";
 import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
-import AccountFilter from "./AccountFIlter";
+import AccountFilter from "./AccountFilter";
 
 function AccountsView() {
   return (
