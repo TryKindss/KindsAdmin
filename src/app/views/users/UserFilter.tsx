@@ -31,7 +31,7 @@ function UsersFilter() {
       <div className="space-y-4">
         <Select>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All connections" />
+            <SelectValue placeholder="Accounts" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Accounts</SelectItem>
