@@ -267,7 +267,11 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
               <TableCell className="py-3">
                 <Badge
                   variant="outline"
-                  className={`${office.status.toLowerCase() === "active" ? "bg-green-50 text-green-700 border-green-200" : "bg-red-50 text-red-700 border-red-200"}`}
+                  className={`${
+                    office.status.toLowerCase() === "active"
+                      ? "bg-green-50 text-green-700 border-green-200"
+                      : "bg-red-50 text-red-700 border-red-200"
+                  }`}
                 >
                   {office.status}
                 </Badge>
