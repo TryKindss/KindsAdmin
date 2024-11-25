@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/select";
 import React from "react";
 import FilterSideBarWrapper from "@/components/global/wrappers/FilterSideBarWrapper";
+import { UserPageProps } from ".";
 
-function UsersFilter() {
+function UsersFilter({ filter, setFilter }: UserPageProps) {
   return (
     <FilterSideBarWrapper>
       <h2 className="text-lg font-semibold">Users</h2>
@@ -25,7 +26,14 @@ function UsersFilter() {
 
       <div className="relative">
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search" className="pl-8" />
+        <Input
+          placeholder="Search"
+          className="pl-8"
+          onChange={(e) => {
+            setFilter({ ...filter, searchQuery: e.target.value });
+          }}
+          value={filter.searchQuery}
+        />
       </div>
 
       <div className="space-y-4">

@@ -35,8 +35,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
+import { UserPageProps } from ".";
 
-function UsersTable() {
+function UsersTable({filter,setFilter}: UserPageProps) {
   const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
 
   const users = [

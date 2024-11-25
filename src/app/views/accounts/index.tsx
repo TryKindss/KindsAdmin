@@ -9,6 +9,7 @@ interface InitialFilters {
   searchQuery: string;
   connections: string;
   healthScore: string;
+  autoSync: string;
 }
 export interface AccountPageProps {
   filter: InitialFilters;
@@ -21,6 +22,7 @@ function AccountsView() {
     searchQuery: "",
     connections: "all",
     healthScore: "all",
+    autoSync: "all",
   };
   const [filter, setFilter] = useState(initialFilters);
 

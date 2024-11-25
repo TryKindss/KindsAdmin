@@ -68,8 +68,8 @@ function AccountFilter({ filter, setFilter }: AccountPageProps) {
         </Select>
 
         <Select
-          onValueChange={
-            (value) => setFilter({ ...filter, healthScore: value })
+          onValueChange={(value) =>
+            setFilter({ ...filter, healthScore: value })
           }
         >
           <SelectTrigger className="w-full">
@@ -80,6 +80,18 @@ function AccountFilter({ filter, setFilter }: AccountPageProps) {
             <SelectItem value="high">High (80-100%)</SelectItem>
             <SelectItem value="medium">Medium (40-79%)</SelectItem>
             <SelectItem value="low">Low (0-39%)</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          onValueChange={(value) => setFilter({ ...filter, autoSync: value })}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Auto Sync" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Auto Sync</SelectItem>
+            <SelectItem value="on">On</SelectItem>
+            <SelectItem value="off">Off</SelectItem>
           </SelectContent>
         </Select>
       </div>

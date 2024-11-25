@@ -33,7 +33,7 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     {
       id: 1,
       name: "A-One Big Dental Office",
-      healthScore: 20, // Updated key
+      healthScore: 20,
       status: "Active",
       connection: "gmail",
       groups: 13,
@@ -46,32 +46,32 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       id: 2,
       name: "Bright Smiles Clinic",
       healthScore: 40,
-      status: "Inactive", // Different status
-      connection: "microsoft", // Different connection
+      status: "Inactive",
+      connection: "microsoft",
       groups: 5,
       users: 100,
       created: "01/10/2024",
       lastSync: "02/15/2024",
-      autoSync: false, // AutoSync disabled
+      autoSync: true,
     },
     {
       id: 3,
       name: "Dental Care Group",
       healthScore: 60,
       status: "Active",
-      connection: "okta", // Different connection
+      connection: "okta",
       groups: 8,
       users: 22,
       created: "03/05/2023",
       lastSync: "11/10/2024",
-      autoSync: true,
+      autoSync: false,
     },
     {
       id: 4,
       name: "Healthy Smiles Co.",
       healthScore: 80,
       status: "Active",
-      connection: "gmail", // Gmail connection
+      connection: "gmail",
       groups: 18,
       users: 50,
       created: "02/14/2023",
@@ -83,7 +83,7 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       name: "Perfect Smile Dentistry",
       healthScore: 99,
       status: "Inactive",
-      connection: "microsoft", // Microsoft connection
+      connection: "microsoft",
       groups: 121,
       users: 320,
       created: "07/21/2023",
@@ -100,7 +100,7 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       users: 32,
       created: "05/11/2023",
       lastSync: "08/20/2024",
-      autoSync: true,
+      autoSync: false,
     },
     {
       id: 7,
@@ -174,13 +174,15 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
         break;
     }
 
-    // const matchesConnections =
-    //   filter.connections === "all" || acc.connection === filter.connections;
+    let matchesAutoSync = true;
+    if (filter.autoSync === "off") {
+      matchesAutoSync = acc.autoSync === false;
+    } else if (filter.autoSync === "on") {
+      matchesAutoSync = acc.autoSync === true;
+    }
 
     return (
-      matchesSearchQuery && matchesStatus && matchesProgress
-      //  &&
-      // matchesConnections
+      matchesSearchQuery && matchesStatus && matchesProgress && matchesAutoSync
     );
   });
 
