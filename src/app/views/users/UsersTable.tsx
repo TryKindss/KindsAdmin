@@ -37,7 +37,7 @@ import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { UserPageProps } from ".";
 
-function UsersTable({filter,setFilter}: UserPageProps) {
+function UsersTable({ filter, setFilter }: UserPageProps) {
   const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
 
   const users = [
@@ -174,6 +174,39 @@ function UsersTable({filter,setFilter}: UserPageProps) {
         return "bg-gray-50 text-gray-700 hover:bg-gray-50";
     }
   };
+
+  const filteredUser = users.filter((acc) => {
+    const matchesSearchQuery =
+      filter.searchQuery === "" ||
+      acc.name.toLowerCase().includes(filter.searchQuery.toLowerCase());
+
+    // const matchesStatus = filter.active
+    //   ? acc.active.toLowerCase() === "active"
+    //   : true;
+
+    let matchesHealthScore = true;
+    switch (filter.healthScore) {
+      case "low":
+        matchesHealthScore = acc.healthScore === "low";
+        break;
+      case "medium":
+        matchesHealthScore = acc.healthScore === "medium";
+        break;
+      case "high":
+        matchesHealthScore = acc.healthScore === "high";
+        break;
+      case "critical":
+        matchesHealthScore = acc.healthScore === "critical";
+        break;
+
+      case "all":
+      default:
+        matchesHealthScore = true;
+        break;
+    }
+
+    return matchesSearchQuery;
+  });
 
   return (
     <TableWrapper>

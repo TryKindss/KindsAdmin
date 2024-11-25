@@ -19,8 +19,22 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
 
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger
+            value="active"
+            onClick={() => {
+              setFilter({ ...filter, active: true });
+            }}
+          >
+            Active
+          </TabsTrigger>
+          <TabsTrigger
+            value="all"
+            onClick={() => {
+              setFilter({ ...filter, active: false });
+            }}
+          >
+            All
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -37,7 +51,9 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
       </div>
 
       <div className="space-y-4">
-        <Select>
+        <Select
+          onValueChange={(value) => setFilter({ ...filter, account: value })}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Accounts" />
           </SelectTrigger>
@@ -49,7 +65,9 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
           </SelectContent>
         </Select>
 
-        <Select>
+        <Select
+          onValueChange={(value) => setFilter({ ...filter, group: value })}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All groups" />
           </SelectTrigger>
@@ -58,6 +76,36 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
             <SelectItem value="security">Security</SelectItem>
             <SelectItem value="compliance">Corporate Compliance</SelectItem>
             <SelectItem value="legal">FinTech Legal</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          onValueChange={(value) => setFilter({ ...filter, roles: value })}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="All Roles" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All </SelectItem>
+            <SelectItem value="owner">Owner</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+            <SelectItem value="member">Member</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          onValueChange={(value) =>
+            setFilter({ ...filter, healthScore: value })
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Health Score" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Health Score</SelectItem>
+            <SelectItem value="low">Low</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+            <SelectItem value="critical">Critical</SelectItem>
           </SelectContent>
         </Select>
       </div>

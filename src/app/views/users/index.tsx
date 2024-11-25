@@ -8,6 +8,8 @@ interface InitialFilters {
   searchQuery: string;
   group: string;
   account: string;
+  roles: string;
+  healthScore: string;
 }
 export interface UserPageProps {
   filter: InitialFilters;
@@ -19,6 +21,8 @@ export default function Component() {
     active: true,
     account: "",
     group: "",
+    roles: "",
+    healthScore: "",
     searchQuery: "",
   });
   return (
