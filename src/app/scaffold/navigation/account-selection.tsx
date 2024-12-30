@@ -54,7 +54,19 @@ export default function SelectAccount({
   const { setShowCreateAccountModal, showCreateAccountModal } =
     useCreateAccountContext();
 
-  console.log("showCreateAccountModal", showCreateAccountModal);
+  React.useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === "n") {
+        setOpen(false);
+        setShowCreateAccountModal(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [setOpen, setShowCreateAccountModal]);
 
   return (
     <>

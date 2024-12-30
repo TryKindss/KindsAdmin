@@ -31,7 +31,7 @@ export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
   const [accountName, setAccountName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showCreateAccountModal, setShowCreateAccountModal] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = React.useMemo(() => {
