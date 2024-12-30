@@ -17,13 +17,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Images from "@/utils/images";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { useCreateAccountContext } from "@/providers/CreateAccountContext";
+import CreateAccountFlow from "@/app/views/create-account";
 
 interface SelectAccountProps {
   setOrganization: (org: string) => void;
   setOpen: (value: boolean) => void;
 }
 
-export default function SelectAccount({ setOrganization, setOpen }: SelectAccountProps) {
+export default function SelectAccount({
+  setOrganization,
+  setOpen,
+}: SelectAccountProps) {
   const accounts = [
     {
       name: "General Health",
@@ -46,6 +51,10 @@ export default function SelectAccount({ setOrganization, setOpen }: SelectAccoun
     setOpen(false);
     setOrganization(org);
   };
+  const { setShowCreateAccountModal, showCreateAccountModal } =
+    useCreateAccountContext();
+
+  console.log("showCreateAccountModal", showCreateAccountModal);
 
   return (
     <>
@@ -105,7 +114,14 @@ export default function SelectAccount({ setOrganization, setOpen }: SelectAccoun
                 <Settings className="mr-2 h-6 w-6" />
                 <span className="font-semibold">Manage Accounts</span>
               </Button>
-              <Button variant={"ghost"} className="flex items-center">
+              <Button
+                variant={"ghost"}
+                className="flex items-center"
+                onClick={() => {
+                  setOpen(false);
+                  setShowCreateAccountModal(true);
+                }}
+              >
                 <Plus className="mr-2 h-6 w-6" />
                 <span className="font-semibold">Create New</span>
               </Button>
@@ -113,6 +129,7 @@ export default function SelectAccount({ setOrganization, setOpen }: SelectAccoun
           </div>
         </div>
       </DialogContent>
+      <CreateAccountFlow />
     </>
   );
 }
