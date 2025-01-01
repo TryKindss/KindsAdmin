@@ -21,6 +21,8 @@ import gmail from "../../public/connections/gmail.svg";
 import okta from "../../public/connections/Okta.svg";
 import ms_outlook from "../../public/connections/ms_outlook.svg";
 
+import welcome from "../../public/dashboard/welcome.svg";
+
 const Images = {
   brand: { logo },
   icons: { snowFlake, unwanted, fluxCube },
@@ -46,6 +48,11 @@ const Images = {
     gmail,
     okta,
     ms_outlook,
+  },
+  illustration: {
+    dashboard: {
+      welcome,
+    },
   },
 };
 

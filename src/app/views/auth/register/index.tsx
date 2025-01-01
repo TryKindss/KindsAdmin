@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import RegisterForm from "./RegisterForm";
 import ConfirmRegister from "./confirmRegister";
 import EmailVerified from "./emailVerified";
-import RegisterSurvey from "./registerSurvey";
-
+import FinishRegister from "./finish-register";
 export default function RegisterFlow() {
   const [step, setStep] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
@@ -28,7 +27,7 @@ export default function RegisterFlow() {
         return <EmailVerified setStep={setStep} />;
       }
       case 3: {
-        return <RegisterSurvey />;
+        return <FinishRegister />;
       }
     }
   };

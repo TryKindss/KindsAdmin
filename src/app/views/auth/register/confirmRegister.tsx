@@ -15,7 +15,7 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp"
+} from "@/components/ui/input-otp";
 
 interface ConfirmProps {
   email: string;
@@ -32,22 +32,51 @@ export default function ConfirmRegister(props: ConfirmProps) {
           <div className="flex items-center justify-center">
             <Logo />
           </div>
-          <CardTitle className="text-xl font-bold">Almost there...</CardTitle>
-          <p className="text-sm text-gray-500">We sent an OTP to {email}</p>
+          <CardTitle className="text-xl font-bold">
+            We sent a code to your email
+          </CardTitle>
+          <p className="text-sm text-gray-500">
+            To continue, please enter the 6-digit verification code sent to{" "}
+            <span className="font-semibold">{email}</span>
+          </p>
+          <p className="text-sm text-gray-500">
+            Didnt receive a code?
+            <Button variant={"link"} className="font-bold">
+              Resend.
+            </Button>
+          </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-center items-center">
-            <InputOTP maxLength={6}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
+            <InputOTP maxLength={6} className="flex flex-col gap-4">
+              <InputOTPGroup className="flex gap-3">
+                <InputOTPSlot
+                  index={0}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
+                <InputOTPSlot
+                  index={1}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
+                <InputOTPSlot
+                  index={2}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
               </InputOTPGroup>
               <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
+              <InputOTPGroup className="flex gap-3">
+                <InputOTPSlot
+                  index={3}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
+                <InputOTPSlot
+                  index={4}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
+                <InputOTPSlot
+                  index={5}
+                  className="border border-gray-300 rounded-lg p-2 text-center w-12 h-12 font-bold text-3xl text-gray-700" 
+                />
               </InputOTPGroup>
             </InputOTP>
           </div>
@@ -67,26 +96,15 @@ export default function ConfirmRegister(props: ConfirmProps) {
           >
             Confirm Email
           </Button>
-          <Button
-            variant={"ghost"}
-            size={"lg"}
-            className="w-full mt-4 "
-            onClick={() => {
-              // Add your resend OTP logic here
-              console.log("Resend OTP clicked");
-            }}
-          >
-            Resend OTP
-          </Button>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        {/* <CardFooter className="flex flex-col space-y-4">
           <p className="text-xs text-center text-gray-500">
             Already have an account?{" "}
             <Link href="/login" className="text-blue-500 hover:underline">
               Log in
             </Link>
           </p>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </>
   );

@@ -36,27 +36,29 @@ export default function RegisterForm(props: RegisterProps) {
           <p className="text-sm text-gray-500">Sign up in less than a minute</p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-[#344054]">
-              First Name*
-            </Label>
-            <Input
-              className="border-kindsGrey"
-              id="firstName"
-              placeholder="Enter your name"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-[#344054]">
-              Last Name*
-            </Label>
-            <Input
-              className="border-kindsGrey"
-              id="lastName"
-              placeholder="Enter your last name"
-              required
-            />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[#344054]">
+                First Name*
+              </Label>
+              <Input
+                className="border-kindsGrey"
+                id="firstName"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[#344054]">
+                Last Name*
+              </Label>
+              <Input
+                className="border-kindsGrey"
+                id="lastName"
+                placeholder="Enter your last name"
+                required
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="name" className="text-[#344054]">
@@ -97,6 +99,7 @@ export default function RegisterForm(props: RegisterProps) {
           >
             Get started
           </Button>
+        <p className="text-center">or</p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button

@@ -11,7 +11,7 @@ import AccountsView from "../accounts";
 
 function DashboardView() {
   const tabItems = [
-    { value: "onboarding", label: "Onboarding", content: <OnboardingView /> },
+    { value: "dashboard", label: "Dashboard", content: <OnboardingView /> },
     { value: "policies", label: "Policies", content: <PoliciesView /> },
     { value: "accounts", label: "Accounts", content: <AccountsView /> },
     { value: "users", label: "Users", content: <UsersView /> },
