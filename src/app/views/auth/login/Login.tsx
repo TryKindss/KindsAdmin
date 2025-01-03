@@ -76,7 +76,7 @@ export default function LoginAuth() {
               alt=""
               className="w-5 h-5 mr-2"
             />
-            Sign up with Google
+            Continue with Google
           </Button>
           {/* <Button
             size={"lg"}

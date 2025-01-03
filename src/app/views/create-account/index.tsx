@@ -51,7 +51,7 @@ export default function CreateAccountFlow() {
 
   console.log("showCreateAccountModal", showCreateAccountModal);
   return createPortal(
-    <div className="fixed inset-0 bg-background z-50 ">
+    <div className="fixed inset-0 bg-background bg-opacity-75 z-50 ">
       <div className="max-w-[1920px]  mx-auto min-h-screen h-full p-8">
         <div className="w-full flex h-full flex-col ">
           <div>
