@@ -35,12 +35,8 @@ const authOptions: NextAuthOptions = {
           });
 
           const user = response.data;
-          console.log(user)
-          console.log("Response status:", response.status);
-          console.log("Response data:", response.data);
 
           if ((response.status === 200 || response.status === 201) && user) {
-            window.location.href = "/";
             console.log("Login successful:", user);
             return user;
           } else {
@@ -48,7 +44,6 @@ const authOptions: NextAuthOptions = {
             return null;
           }
         } catch (error) {
-          // console.error("Error in authorize:", error);
           console.error(
             "Error in In failingggggg:",
             (error as any).response.data.error
