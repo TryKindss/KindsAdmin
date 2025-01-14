@@ -7,6 +7,7 @@ import FinishRegister from "./finish-register";
 export default function RegisterFlow() {
   const [step, setStep] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
 
   const nextStep = () => {
     setStep((prev) => prev + 1);
@@ -21,13 +22,13 @@ export default function RegisterFlow() {
       case 0:
         return <RegisterForm setStep={setStep} setEmail={setEmail} />;
       case 1: {
-        return <ConfirmRegister email={email} setStep={setStep} />;
+        return <ConfirmRegister email={email} setStep={setStep} setUserId={setUserId}/>;
       }
       case 2: {
         return <EmailVerified setStep={setStep} />;
       }
       case 3: {
-        return <FinishRegister />;
+        return <FinishRegister userId={userId}/>;
       }
     }
   };

@@ -14,15 +14,88 @@ import Images from "@/utils/images";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { useRegisterMutation } from "@/api/auth/registerUser";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 interface RegisterProps {
   setEmail: (email: string) => void;
   setStep: (step: number) => void;
 }
 
+interface RegisterValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 export default function RegisterForm(props: RegisterProps) {
   const { setEmail, setStep } = props;
   const router = useRouter();
+
+  const registrationSchema = yup.object().shape({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    email: yup
+      .string()
+      .email("Please enter a valid email")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
+
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: registrationSchema,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+  });
+
+  const { toast } = useToast();
+  const [registerUser, { isError, isLoading }] = useRegisterMutation();
+
+  console.log("isLoading: ", isLoading);
+
+  const handleSubmit = async (values: RegisterValues) => {
+    try {
+      await registerUser(values)
+        .unwrap()
+        .then((res) => {
+          console.log("RESPONSE_RESGISTER: ", res);
+          toast({
+            title: "Account created successfully",
+            description: "Please check your email to verify your account",
+            duration: 5000,
+          });
+          setStep(1);
+          router.push("/register?confirmRegister");
+        });
+    } catch (err) {
+      setStep(0);
+      toast({
+        variant: "destructive",
+        title: "Error creating account",
+        description: (err as any)?.data?.error,
+        duration: 5000,
+      });
+      console.log("eropmd", err);
+    }
+    console.log("Formik values:", values);
+    setEmail(values.email);
+  };
+
   return (
     <>
       <Card className="w-full max-w-md rounded-lg">
@@ -46,7 +119,13 @@ export default function RegisterForm(props: RegisterProps) {
                 id="firstName"
                 placeholder="Enter your name"
                 required
+                {...formik.getFieldProps("firstName")}
               />
+              {formik.errors.firstName && formik.touched.firstName && (
+                <p className="text-red-600 text-xs">
+                  {formik.errors.firstName}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="name" className="text-[#344054]">
@@ -57,7 +136,11 @@ export default function RegisterForm(props: RegisterProps) {
                 id="lastName"
                 placeholder="Enter your last name"
                 required
+                {...formik.getFieldProps("lastName")}
               />
+              {formik.errors.lastName && formik.touched.lastName && (
+                <p className="text-red-600 text-xs">{formik.errors.lastName}</p>
+              )}
             </div>
           </div>
           <div className="space-y-2">
@@ -70,8 +153,11 @@ export default function RegisterForm(props: RegisterProps) {
               placeholder="Enter your work email"
               required
               type="email"
-              onChange={(e) => setEmail(e.target.value)}
+              {...formik.getFieldProps("email")}
             />
+            {formik.errors.email && formik.touched.email && (
+              <p className="text-red-600 text-xs">{formik.errors.email}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="name" className="text-[#344054]">
@@ -83,23 +169,28 @@ export default function RegisterForm(props: RegisterProps) {
               placeholder="Create a password"
               required
               type="password"
+              {...formik.getFieldProps("password")}
             />
-            <p className="text-xs text-gray-500">
-              Must be at least 8 characters
-            </p>
+            {formik.errors.password && formik.touched.password && (
+              <p className="text-red-600 text-xs">{formik.errors.password}</p>
+            )}
           </div>
           <Button
             variant={"outline"}
             size={"lg"}
             className="w-full bg-[#182230] text-white"
+            disabled={!formik.isValid || isLoading}
             onClick={() => {
-              setStep(1);
-              router.push("/register?confirmRegister");
+              handleSubmit(formik.values);
             }}
           >
-            Get started
+            {isLoading ? (
+              <Loader2 className="text-center animate-spin" />
+            ) : (
+              "Sign up"
+            )}
           </Button>
-        <p className="text-center">or</p>
+          <p className="text-center">or</p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button
@@ -114,18 +205,7 @@ export default function RegisterForm(props: RegisterProps) {
             />
             Sign up with Google
           </Button>
-          {/* <Button
-            size={"lg"}
-            variant="outline"
-            className="w-full border-kindsGrey"
-          >
-            <Image
-              src={Images.socialIcons.microsoft}
-              alt=""
-              className="w-5 h-5 mr-2"
-            />
-            Sign up with Microsoft
-          </Button> */}
+
           <p className="text-xs text-center text-gray-500">
             Already have an account?{" "}
             <Link href="/login" className="text-blue-500 hover:underline">
