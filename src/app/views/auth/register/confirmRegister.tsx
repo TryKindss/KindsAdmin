@@ -82,7 +82,8 @@ export default function ConfirmRegister(props: ConfirmProps) {
       toast({
         variant: "destructive",
         title: "Resend Error",
-        description: "Failed to resend OTP. Please try again later.",
+        description: (err as any)?.data?.error || "Something went wrong",
+
       });
     }
   };

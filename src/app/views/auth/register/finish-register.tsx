@@ -72,27 +72,24 @@ export default function FinishRegister({ userId }: FinishRegisterProps) {
     validationSchema: onboardingSchema,
     onSubmit: async (values) => {
       try {
-        // Call RTK Query mutation
-        // Your API expects: { userId, onboardingDetails }
         await registerOnboarding({
           userId,
           onboadingDetails: values,
         }).unwrap();
 
         toast({
-          title: "Success",
-          description: "Your account has been created successfully!",
+          title: "Account verified",
+          description:
+            "Your account has been created successfully, proceed to login.",
           duration: 4000,
         });
 
-        // Navigate somewhere, e.g., dashboard
         router.push("/");
       } catch (err) {
-        // Show an error toast if the API call fails
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Something went wrong. Please try again.",
+          description: (err as any)?.data?.error || "Something went wrong",
           duration: 4000,
         });
       }
@@ -106,7 +103,6 @@ export default function FinishRegister({ userId }: FinishRegisterProps) {
         <CardDescription>Tell us a bit about your company.</CardDescription>
       </CardHeader>
 
-      {/* Wrap inputs in a <form> for Formik */}
       <form onSubmit={formik.handleSubmit}>
         <CardContent className="space-y-6">
           {/* Account Name */}
