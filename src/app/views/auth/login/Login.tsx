@@ -20,6 +20,7 @@ import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import notificatonService from "@/services/notificaton.service";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 interface LoginValues {
   email: string;
@@ -167,7 +168,11 @@ export default function LoginAuth() {
             }}
             disabled={!isValid || isLoading}
           >
-            {isLoading ? "Loading..." : "Login"}
+            {isLoading ? (
+              <Loader2 className="text-center animate-spin" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
