@@ -19,6 +19,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import notificatonService from "@/services/notificaton.service";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoginValues {
   email: string;
@@ -28,6 +29,7 @@ interface LoginValues {
 export default function LoginAuth() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const loginSchema = yup.object().shape({
     email: yup
@@ -74,19 +76,28 @@ export default function LoginAuth() {
         callbackUrl: "/",
       });
 
-      console.log(response);
-
       if (response?.ok) {
-        notificatonService.success("Login Successful");
+        toast({
+          title: "Login successful",
+          description: "Redirecting to dashboard.",
+        });
         if (typeof window !== "undefined") {
           window.location.href = "/";
         }
         router.push("/");
       } else {
-        notificatonService.error(response?.error || "Incorrect credentials");
+        toast({
+          variant: "destructive",
+          title: "Login Error",
+          description: "An error ocurred.",
+        });
       }
     } catch (error) {
-      notificatonService.error("An error occurred, please try again");
+      toast({
+        variant: "destructive",
+        title: "Login Error",
+        description: "An error ocurred.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -107,31 +118,41 @@ export default function LoginAuth() {
             <Label htmlFor="name" className="text-[#344054]">
               Work Email*
             </Label>
-            <Input
-              className="border-kindsGrey"
-              id="email"
-              placeholder="Enter your email"
-              required
-              type="email"
-              onChange={handleChange}
-              value={values.email}
-              onBlur={handleBlur}
-            />
+            <div className="space-y-1">
+              <Input
+                className="border-kindsGrey"
+                id="email"
+                placeholder="Enter your email"
+                required
+                type="email"
+                onChange={handleChange}
+                value={values.email}
+                onBlur={handleBlur}
+              />
+              {errors.email && touched.email && (
+                <p className="text-red-600 text-xs">{errors.email}</p>
+              )}
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="name" className="text-[#344054]">
               Password*
             </Label>
-            <Input
-              className="border-kindsGrey"
-              id="password"
-              placeholder="Create a password"
-              required
-              type="password"
-              onChange={handleChange}
-              value={values.password}
-              onBlur={handleBlur}
-            />
+            <div className="space-y-1">
+              <Input
+                className="border-kindsGrey"
+                id="password"
+                placeholder="Create a password"
+                required
+                type="password"
+                onChange={handleChange}
+                value={values.password}
+                onBlur={handleBlur}
+              />
+              {errors.password && touched.password && (
+                <p className="text-red-600 text-xs">{errors.password}</p>
+              )}
+            </div>
             {/* <p className="text-xs text-gray-500">
               Must be at least 8 characters
             </p> */}
@@ -139,7 +160,7 @@ export default function LoginAuth() {
           <Button
             variant={"outline"}
             size={"lg"}
-            className="w-full "
+            className="w-full bg-[#182230] text-white"
             onClick={(e: any) => {
               // e.preventDefault();
               handleSubmit();

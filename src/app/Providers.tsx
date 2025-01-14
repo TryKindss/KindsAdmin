@@ -5,7 +5,9 @@ import { Provider } from "react-redux";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useAppDispatch } from "@/hooks";
 import { setUser } from "@/store/slice/userSlice";
+import { setToken } from "@/store/slice/authSlice";
 import { AccountCreateProvider } from "@/providers/CreateAccountContext";
+import SplashScreen from "@/components/global/splash-screen";
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
@@ -24,10 +26,13 @@ function SessionToState({ children }: PropsWithChildren) {
   const session = data as any;
   const dispatch = useAppDispatch();
 
+  console.log("session", session);
+
   useEffect(() => {
     if (status === "authenticated" && session?.user.user) {
-      dispatch(setUser(session?.user));
+      dispatch(setUser(session?.user?.data?.user));
+      dispatch(setToken(session?.user?.data?.access_token));
     }
   }, [status, data, dispatch]);
-  return children;
+  return <>{status === "loading" ? <SplashScreen /> : children}</>;
 }
