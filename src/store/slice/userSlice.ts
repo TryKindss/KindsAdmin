@@ -31,7 +31,7 @@ interface SigninResponse {
 }
 
 const initialState: SigninResponse = {
-  status: "",
+  status: 0,
   message: "",
   access_token: "",
   user: {
