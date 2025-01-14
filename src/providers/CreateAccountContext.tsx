@@ -11,6 +11,8 @@ interface AccountCreateContextType {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   showCreateAccountModal: boolean;
   setShowCreateAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showRefineSync: boolean;
+  setShowRefineSync: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Create context with default undefined value
@@ -32,6 +34,7 @@ export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
   const [email, setEmail] = useState<string>("");
   const [showCreateAccountModal, setShowCreateAccountModal] =
     useState<boolean>(false);
+  const [showRefineSync, setShowRefineSync] = useState<boolean>(false);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = React.useMemo(() => {
@@ -44,6 +47,8 @@ export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
       setEmail,
       showCreateAccountModal,
       setShowCreateAccountModal,
+      showRefineSync,
+      setShowRefineSync,
     };
   }, [step, accountName, email, showCreateAccountModal]);
 

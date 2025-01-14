@@ -1,24 +1,34 @@
-'use client'
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { InfoIcon } from 'lucide-react'
-import { useCreateAccountContext } from "@/providers/CreateAccountContext"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { InfoIcon } from "lucide-react";
+import { useCreateAccountContext } from "@/providers/CreateAccountContext";
+import { RefineSync } from "./refine-sync";
+import { useState } from "react";
 
 export default function SyncPreviewCard() {
-  const handleRefine = () => {
-    console.log("Refine clicked")
-    // Handle refine action
-  }
+  const { setStep, step, setShowRefineSync } = useCreateAccountContext();
 
- const {setStep,step} = useCreateAccountContext()
+  const [open, setOpen] = useState(true);
+
+  const handleRefine = () => {
+    setOpen(true);
+  };
 
   return (
     <Card className="w-full max-w-md border shadow-none">
       <CardHeader className="space-y-2">
         <CardTitle>Sync preview</CardTitle>
         <CardDescription>
-          This is a preview only, no changes have been made. Use the refine option to exclude any Domains, OUs, Groups, or Inboxes.
+          This is a preview only, no changes have been made. Use the refine
+          option to exclude any Domains, OUs, Groups, or Inboxes.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -87,17 +97,11 @@ export default function SyncPreviewCard() {
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Button
-            variant="outline"
-            onClick={handleRefine}
-          >
+          <Button variant="outline" onClick={handleRefine}>
             Refine
           </Button>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setStep(step - 1)}
-            >
+            <Button variant="outline" onClick={() => setStep(step - 1)}>
               Back
             </Button>
             <Button
@@ -109,7 +113,7 @@ export default function SyncPreviewCard() {
           </div>
         </div>
       </CardContent>
+      <RefineSync open={open} onOpenChange={setOpen} />
     </Card>
-  )
+  );
 }
-

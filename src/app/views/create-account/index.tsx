@@ -11,6 +11,7 @@ import EmailSecurityAudit from "./email-audit-prompt";
 import InboxSyncCard from "./inbox-sync";
 import SyncPreviewCard from "./sync-preview";
 import LaunchPlaygroundCard from "./launch-playground";
+import { RefineSync } from "./refine-sync";
 
 export default function CreateAccountFlow() {
   const [mounted, setMounted] = useState(false);
