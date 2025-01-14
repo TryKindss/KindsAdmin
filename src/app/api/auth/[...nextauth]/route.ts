@@ -1,61 +1,58 @@
-import axios from "axios";
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth from "next-auth";
-// import notificatonService from "@/services/notificaton.service";
-
-interface Credentials {
-  email: string;
-  password: string;
-}
+import NextAuth from "next-auth/next";
+import axios from "axios";
 
 const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60,
-    updateAge: 12 * 60 * 60,
+    maxAge: 60 * 45,
+    updateAge: 60 * 45,
   },
-  jwt: {
-    maxAge: 24 * 60 * 60,
-  },
+  debug: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: {
+          label: "email",
+          type: "text",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
+
       async authorize(credentials, req) {
-        const baseUrl = "https://us.pureworker.com/api/auth/verify-signin-otp";
-
-        const { email, password } = credentials as Credentials;
-
-        if (!email || !password) {
-          console.error("Missing email or password");
-          return null;
-        }
-
+        const baseUrl = "https://api.trykinds.com/auth/login";
+        const { email, password } = credentials as any;
         try {
-          const response = await axios.post(baseUrl, {
+          const response = await axios.post(`${baseUrl}`, {
             email,
             password,
           });
 
           const user = response.data;
+          console.log(user)
+          console.log("Response status:", response.status);
+          console.log("Response data:", response.data);
 
           if ((response.status === 200 || response.status === 201) && user) {
+            window.location.href = "/";
+            console.log("Login successful:", user);
             return user;
           } else {
-            console.error("Login failed", response.status, user);
+            console.error("Login failed:", user);
             return null;
           }
         } catch (error) {
-          if (axios.isAxiosError(error)) {
-            // notificatonService.error("An error occured");
-            console.error("Axios error in authorizing", error.response?.data);
-          } else {
-            console.error("Unexpected error in authorizing", error);
-          }
+          // console.error("Error in authorize:", error);
+          console.error(
+            "Error in In failingggggg:",
+            (error as any).response.data.error
+          );
           return null;
         }
       },
@@ -70,14 +67,17 @@ const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user = token as any;
+      (session as any).user = token;
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
   },
   pages: {
     signIn: "/login",
   },
-  secret: "process.env.NEXTAUTH_SECRET",
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
