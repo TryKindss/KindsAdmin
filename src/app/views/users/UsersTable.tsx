@@ -36,6 +36,7 @@ import { Badge } from "@/components/ui/badge";
 import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { UserPageProps } from ".";
+import TableSkeleton from "@/components/global/table-loading-state";
 
 function UsersTable({ filter, setFilter }: UserPageProps) {
   const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
@@ -209,136 +210,142 @@ function UsersTable({ filter, setFilter }: UserPageProps) {
   });
 
   return (
-    <TableWrapper>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">
-              <Checkbox
-                checked={selectedUsers.length === users.length}
-                onCheckedChange={toggleAll}
-                aria-label="Select all users"
-              />
-            </TableHead>
-            <TableHead>User</TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Account
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Associated account information</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Group
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>User's assigned group</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Roles
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>User's assigned roles</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Health Score</TableHead>
-            <TableHead className="w-[50px]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>
+    <>
+      {/* <TableWrapper>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[50px]">
                 <Checkbox
-                  checked={selectedUsers.includes(user.id)}
-                  onCheckedChange={() => toggleUser(user.id)}
-                  aria-label={`Select ${user.name}`}
+                  checked={selectedUsers.length === users.length}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all users"
                 />
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col">
-                  <span className="font-medium">{user.name}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {user.email}
-                  </span>
+              </TableHead>
+              <TableHead>User</TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Account
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Associated account information</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </TableCell>
-              <TableCell>{user.account}</TableCell>
-              <TableCell>{user.group}</TableCell>
-              <TableCell>
-                <div className="flex gap-1 flex-wrap">
-                  {user.roles.map((role, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className={getRoleBadgeVariant(role)}
-                    >
-                      {role}
-                    </Badge>
-                  ))}
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Group
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>User's assigned group</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
-                    1 year ago
-                  </span>
-                  <span className="text-sm">{user.created}</span>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Roles
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>User's assigned roles</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant={"secondary"}
-                  className={getHealthScoreColor(user.healthScore)}
-                >
-                  {user.healthScore}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <MoreVertical className="h-5 w-5 text-muted-foreground" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>View Profile</DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              </TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead>Health Score</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableWrapper>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedUsers.includes(user.id)}
+                    onCheckedChange={() => toggleUser(user.id)}
+                    aria-label={`Select ${user.name}`}
+                  />
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="font-medium">{user.name}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {user.email}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{user.account}</TableCell>
+                <TableCell>{user.group}</TableCell>
+                <TableCell>
+                  <div className="flex gap-1 flex-wrap">
+                    {user.roles.map((role, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className={getRoleBadgeVariant(role)}
+                      >
+                        {role}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="text-sm text-muted-foreground">
+                      1 year ago
+                    </span>
+                    <span className="text-sm">{user.created}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={"secondary"}
+                    className={getHealthScoreColor(user.healthScore)}
+                  >
+                    {user.healthScore}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem>View Profile</DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600">
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableWrapper> */}
+
+      <TableWrapper>
+        <TableSkeleton columns={7} />
+      </TableWrapper>
+    </>
   );
 }
 
