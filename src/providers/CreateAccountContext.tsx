@@ -29,7 +29,7 @@ interface ContextProviderProps {
 export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
   children,
 }) => {
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const [accountName, setAccountName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showCreateAccountModal, setShowCreateAccountModal] =
