@@ -5,7 +5,7 @@ import DashboardHero from "./dashboard-hero";
 export default function WelcomeDashboard() {
   return (
   
-      <div className="space-y-12">
+      <div className="space-y-12 pb-12">
         <DashboardHero />
         <DashBoardMetric />
         <AnalyticsCards />

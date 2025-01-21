@@ -23,6 +23,12 @@ import ms_outlook from "../../public/connections/ms_outlook.svg";
 
 import welcome from "../../public/dashboard/welcome.svg";
 
+import domainIcon from "../../public/dashboard/metric/domainIcon.svg";
+import inboxesIcon from "../../public/dashboard/metric/inboxesIcon.svg";
+import maliciousIcon from "../../public/dashboard/metric/maliciousIcon.svg";
+import messagesIcon from "../../public/dashboard/metric/messagesIcon.svg";
+import organizationIcon from "../../public/dashboard/metric/organizationIcon.svg";
+
 const Images = {
   brand: { logo },
   icons: { snowFlake, unwanted, fluxCube },
@@ -52,6 +58,15 @@ const Images = {
   illustration: {
     dashboard: {
       welcome,
+    },
+  },
+  dashboard: {
+    metric: {
+      domainIcon,
+      inboxesIcon,
+      maliciousIcon,
+      messagesIcon,
+      organizationIcon,
     },
   },
 };

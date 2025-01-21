@@ -12,14 +12,25 @@ import { InfoIcon } from "lucide-react";
 import { useCreateAccountContext } from "@/providers/CreateAccountContext";
 import { RefineSync } from "./refine-sync";
 import { useState } from "react";
+import { useSyncPreviewQuery } from "@/api/m365/auth";
+import { useAppSelector } from "@/hooks";
 
 export default function SyncPreviewCard() {
   const { setStep, step, setShowRefineSync } = useCreateAccountContext();
+  const token = useAppSelector((store) => store.authState.token);
 
   const [open, setOpen] = useState(true);
 
+  const {
+    data: syncData,
+    isLoading,
+    isError,
+  } = useSyncPreviewQuery(undefined, { skip: !token });
+
+  console.log("SYNCDATAAAAA", syncData);
+
   const handleRefine = () => {
-    setOpen(true);
+    setOpen(false);
   };
 
   return (
@@ -113,7 +124,7 @@ export default function SyncPreviewCard() {
           </div>
         </div>
       </CardContent>
-      <RefineSync open={open} onOpenChange={setOpen} />
+      <RefineSync open={open} onOpenChange={setOpen} syncData={syncData}/>
     </Card>
   );
 }

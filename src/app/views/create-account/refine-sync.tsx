@@ -2,6 +2,7 @@
 interface SyncPreviewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  syncData: SyncAccountPreview;
 }
 
 import * as React from "react";
@@ -23,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { SyncAccountPreview } from "@/lib/type/accounts";
 
 interface SyncItem {
   id: string;
@@ -61,8 +63,9 @@ const tabInfo: Record<keyof TabData, TabInfo> = {
   },
 };
 
-export function RefineSync({ open, onOpenChange }: SyncPreviewProps) {
+export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
+  console.log(syncData);
 
   const [data, setData] = React.useState<TabData>({
     domains: [

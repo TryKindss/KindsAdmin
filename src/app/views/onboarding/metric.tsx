@@ -8,60 +8,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Building2,
-  Globe,
-  Inbox,
-  MessageSquare,
-  AlertTriangle,
-} from "lucide-react";
+import Images from "@/utils/images";
+import Image from "next/image";
+import { useFetchDomainStatQuery } from "@/api/dashboard/stats";
+import { useAppSelector } from "@/hooks";
 
 const timeRanges = ["All time", "Last 24h", "Last 7d", "Last 30d", "Last 90d"];
 
-const metrics = [
-  {
-    icon: Building2,
-    label: "Organizations",
-    value: 0,
-    change: 0,
-  },
-  {
-    icon: Globe,
-    label: "Domains",
-    value: 0,
-    change: 0,
-  },
-  {
-    icon: Inbox,
-    label: "Inboxes",
-    value: 0,
-    change: 0,
-  },
-  {
-    icon: MessageSquare,
-    label: "Messages",
-    value: 0,
-    change: 0,
-  },
-  {
-    icon: AlertTriangle,
-    label: "Malicious messages",
-    value: 0,
-    change: 0,
-  },
-];
-
 interface MetricProps {
-  icon: React.ElementType;
+  icon: string;
   label: string;
   value: number;
   change: number;
 }
 
-const Metric = ({ icon: Icon, label, value, change }: MetricProps) => (
+const Metric = ({ icon, label, value, change }: MetricProps) => (
   <div className="flex flex-col items-start p-6 ">
     <div className="flex items-center gap-2">
-      <Icon className="w-6 h-6 mb-2" />
+      <Image alt="" src={icon} className="w-6 h-6 mb-2" />
       <span className="font-bold text-black">{label}</span>
     </div>
     <div className="flex items-center gap-2 mb-1">
@@ -88,8 +52,46 @@ const Metric = ({ icon: Icon, label, value, change }: MetricProps) => (
 );
 
 export default function DashBoardMetric() {
+  const token = useAppSelector((store) => store.authState.token);
   const [timeRange, setTimeRange] = useState("All time");
 
+  const {
+    data: metricData,
+    isLoading,
+    isError,
+  } = useFetchDomainStatQuery(undefined, { skip: !token });
+  const metrics = [
+    {
+      icon: Images.dashboard.metric.organizationIcon,
+      label: "Organizations",
+      value: metricData?.organizations?.count || 0,
+      change: metricData?.organizations?.percentageChange || 0,
+    },
+    {
+      icon: Images.dashboard.metric.domainIcon,
+      label: "Domains",
+      value: metricData?.domains?.count || 0,
+      change: metricData?.domains?.percentageChange || 0,
+    },
+    {
+      icon: Images.dashboard.metric.inboxesIcon,
+      label: "Inboxes",
+      value: metricData?.inboxes?.count || 0,
+      change: metricData?.inboxes?.percentageChange || 0,
+    },
+    {
+      icon: Images.dashboard.metric.messagesIcon,
+      label: "Messages",
+      value: metricData?.messages?.count || 0,
+      change: metricData?.messages?.percentageChange || 0,
+    },
+    {
+      icon: Images.dashboard.metric.maliciousIcon,
+      label: "Malicious messages",
+      value: metricData?.maliciousMessages?.count || 0,
+      change: metricData?.maliciousMessages?.percentageChange || 0,
+    },
+  ];
   return (
     <>
       <div className="flex justify-end px-6 py-3  mt-12">

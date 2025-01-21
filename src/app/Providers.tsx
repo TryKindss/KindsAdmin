@@ -26,10 +26,8 @@ function SessionToState({ children }: PropsWithChildren) {
   const session = data as any;
   const dispatch = useAppDispatch();
 
-  console.log("session", session);
-
   useEffect(() => {
-    if (status === "authenticated" && session?.user.user) {
+    if (status === "authenticated" && session?.user) {
       dispatch(setUser(session?.user?.data?.user));
       dispatch(setToken(session?.user?.data?.access_token));
     }
