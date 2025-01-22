@@ -30,15 +30,15 @@ export default function InboxSyncCard() {
       await triggerConnectMsAccount()
         .unwrap()
         .then((data) => {
-          toast({
-            title: "Authenticating",
-            description: "Redirecting to Microsoft.",
-          });
           console.log("RESPONSE____ ", data);
           if (data?.url) {
             window.open(data.url, "_blank");
+            toast({
+              title: "Authenticating",
+              description: "Redirecting to Microsoft.",
+            });
+            setStep(3);
           }
-          // setStep(3);
         });
     } catch (error) {
       // console.error("Error:", error);
@@ -73,7 +73,7 @@ export default function InboxSyncCard() {
               className="mr-2"
             />
             {isLoading ? (
-              <Loader2 className="animate-spin text-black w-4 h-4"/>
+              <Loader2 className="animate-spin text-black w-4 h-4" />
             ) : (
               <p className="font-medium ">Connect with Google</p>
             )}
