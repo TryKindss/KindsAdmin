@@ -26,6 +26,23 @@ import {
 } from "@/components/ui/tooltip";
 import { SyncAccountPreview } from "@/lib/type/accounts";
 
+
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+  } from "@/components/ui/card";
+  import { InfoIcon } from "lucide-react";
+  import { useCreateAccountContext } from "@/providers/CreateAccountContext";
+  import { useState } from "react";
+  import { useSyncPreviewQuery } from "@/api/m365/auth";
+  import { useAppSelector } from "@/hooks";
+  import { createPortal } from "react-dom";
+  import Logo from "@/app/scaffold/navigation/Logo";
+  import { useRouter } from "next/navigation";
+
 interface SyncItem {
   id: string;
   label: string;
@@ -235,21 +252,6 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
   );
 }
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { InfoIcon } from "lucide-react";
-import { useCreateAccountContext } from "@/providers/CreateAccountContext";
-import { useState } from "react";
-import { useSyncPreviewQuery } from "@/api/m365/auth";
-import { useAppSelector } from "@/hooks";
-import { createPortal } from "react-dom";
-import Logo from "@/app/scaffold/navigation/Logo";
-import { useRouter } from "next/router";
 
 export function SyncPreviewCard() {
   const { setStep, step, setShowRefineSync } = useCreateAccountContext();

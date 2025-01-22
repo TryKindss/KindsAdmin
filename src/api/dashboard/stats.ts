@@ -8,14 +8,14 @@ export const domainStatApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchDomainStat: builder.query<DomainStatInterface, void>({
       query: () => ({
-        url: "microsoft/dashboard/stats",
+        url: "microsoft/dashboard/organization-stats",
         method: "GET",
       }),
     }),
 
     fetchDashboardStat: builder.query<DashboardStatsInterface, void>({
       query: () => ({
-        url: "protection/dashboard/stats",
+        url: "protection/dashboard/security-stats",
         method: "GET",
       }),
     }),
