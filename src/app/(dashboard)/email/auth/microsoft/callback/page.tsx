@@ -26,22 +26,21 @@ import {
 } from "@/components/ui/tooltip";
 import { SyncAccountPreview } from "@/lib/type/accounts";
 
-
 import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-  } from "@/components/ui/card";
-  import { InfoIcon } from "lucide-react";
-  import { useCreateAccountContext } from "@/providers/CreateAccountContext";
-  import { useState } from "react";
-  import { useSyncPreviewQuery } from "@/api/m365/auth";
-  import { useAppSelector } from "@/hooks";
-  import { createPortal } from "react-dom";
-  import Logo from "@/app/scaffold/navigation/Logo";
-  import { useRouter } from "next/navigation";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { InfoIcon } from "lucide-react";
+import { useCreateAccountContext } from "@/providers/CreateAccountContext";
+import { useState } from "react";
+import { useSyncPreviewQuery } from "@/api/m365/auth";
+import { useAppSelector } from "@/hooks";
+import { createPortal } from "react-dom";
+import Logo from "@/app/scaffold/navigation/Logo";
+import { useRouter } from "next/navigation";
 
 interface SyncItem {
   id: string;
@@ -80,7 +79,7 @@ const tabInfo: Record<keyof TabData, TabInfo> = {
   },
 };
 
-export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
+function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
   console.log(syncData);
 
@@ -252,8 +251,7 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
   );
 }
 
-
-export function SyncPreviewCard() {
+function SyncPreviewCard() {
   const { setStep, step, setShowRefineSync } = useCreateAccountContext();
   const token = useAppSelector((store) => store.authState.token);
 
@@ -368,7 +366,7 @@ export function SyncPreviewCard() {
   );
 }
 
-export default function Page() {
+export default function EmailCallbackPage() {
   const router = useRouter();
   return createPortal(
     <div className="fixed inset-0 bg-background bg-opacity-75 z-50 ">
