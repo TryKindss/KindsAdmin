@@ -124,6 +124,7 @@ export default function SyncPreviewCard() {
           </div>
         </div>
       </CardContent>
+      
       <RefineSync open={open} onOpenChange={setOpen} syncData={syncData}/>
     </Card>
   );

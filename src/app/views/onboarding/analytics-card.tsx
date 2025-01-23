@@ -17,15 +17,15 @@ export default function AnalyticsCards() {
   const cards = [
     {
       title: "Top 5% of domains",
-      subtitle: `${dashboardData?.topDomains.total} unique domains`,
+      subtitle: `${dashboardData?.topDomains?.total || 0} unique domains`,
     },
     {
       title: "Suspicious Domains",
-      subtitle: `${dashboardData?.suspiciousDomains.total} unique domains`,
+      subtitle: `${dashboardData?.suspiciousDomains?.total || 0} unique domains`,
     },
     {
       title: "Top 25% of threats",
-      subtitle: `${dashboardData?.threats.total} types of threats detected`,
+      subtitle: `${dashboardData?.threats?.total || 0} types of threats detected`,
     },
   ];
 
