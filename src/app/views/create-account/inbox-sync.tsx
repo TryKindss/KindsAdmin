@@ -32,7 +32,7 @@ export default function InboxSyncCard() {
         .then((data) => {
           console.log("RESPONSE____ ", data);
           if (data?.url) {
-            window.open(data.url, "_blank");
+            window.open(data.url, "");
             toast({
               title: "Authenticating",
               description: "Redirecting to Microsoft.",
