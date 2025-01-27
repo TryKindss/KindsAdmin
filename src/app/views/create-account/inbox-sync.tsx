@@ -37,7 +37,7 @@ export default function InboxSyncCard() {
               title: "Authenticating",
               description: "Redirecting to Microsoft.",
             });
-            setStep(3);
+            // setStep(3);
           }
         });
     } catch (error) {
