@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import { ChevronDown, Bell, Search } from "lucide-react";
+import { ChevronDown, Bell, Search, LogOut, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,8 @@ import SelectAccount from "./account-selection";
 import { Dialog } from "@/components/ui/dialog";
 import Image from "next/image";
 import Images from "@/utils/images";
+import axios from "axios";
+import { signOut } from "next-auth/react";
 
 export default function NavMenu() {
   const [open, setOpen] = useState(false);
@@ -33,6 +36,20 @@ export default function NavMenu() {
   ];
 
   const [organization, setOrganization] = useState<null | string>(null);
+
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const handleLogout = async () => {
+    setLogoutLoading(true);
+    try {
+      await signOut({
+        callbackUrl: "/login",
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
 
   return (
     <>
@@ -95,16 +112,36 @@ export default function NavMenu() {
           >
             <Bell className="w-5 h-5" />
           </Button>
-          <Avatar>
-            {/* <AvatarImage src="https://github.com/shadcn.png" />*/}
-            <AvatarImage src="https://ca.slack-edge.com/T054NL1J04D-U054K0E8P5L-5f1508e726ae-48" />
-
-            <AvatarFallback>CW</AvatarFallback>
-          </Avatar>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="cursor-pointer">
+                <AvatarImage src="https://ca.slack-edge.com/T054NL1J04D-U054K0E8P5L-5f1508e726ae-48" />
+                <AvatarFallback>CW</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer text-red-600"
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                {logoutLoading ? (
+                  <Loader2 className="anumate-spin text-black text-center" />
+                ) : (
+                  "Logout"
+                )}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
       <Dialog open={open} onOpenChange={toggleAccount}>
-        <SelectAccount setOrganization={setOrganization} setOpen={setOpen}/>
+        <SelectAccount setOrganization={setOrganization} setOpen={setOpen} />
       </Dialog>
     </>
   );
