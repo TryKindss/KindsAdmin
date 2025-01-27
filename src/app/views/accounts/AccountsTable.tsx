@@ -43,17 +43,7 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     isError,
   } = useFetchAllAccountsQuery();
 
-  // const [offices, setOffices] = React.useState(
-  //   accountData?.organization ? [accountData.organization] : []
-  // );
-
-  const [offices, setOffices] = React.useState<Organization[]>([]);
-
-  React.useEffect(() => {
-    if (accountData?.organization) {
-      setOffices([accountData.organization]);
-    }
-  }, [accountData?.organization]);
+  const offices = accountData?.organizations || [];
 
   const getProgressColor = (progress: number) => {
     if (progress < 79) return "bg-red-500";

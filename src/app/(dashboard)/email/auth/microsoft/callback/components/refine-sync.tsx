@@ -1,6 +1,8 @@
-"use client";
-import * as React from "react";
-import { HelpCircle } from "lucide-react";
+import { useRefineSyncMutation } from "@/api/m365/auth";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -8,17 +10,22 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { SyncAccountPreview } from "@/lib/type/accounts";
+import { useToast } from "@/hooks/use-toast";
+import { RefineSyncPayload, SyncAccountPreview } from "@/lib/type/accounts";
+import { HelpCircle, Loader2 } from "lucide-react";
+import React from "react";
+
+interface SyncPreviewProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  syncData?: SyncAccountPreview;
+}
 
 interface SyncItem {
   id: string;
@@ -57,38 +64,43 @@ const tabInfo: Record<keyof TabData, TabInfo> = {
   },
 };
 
-interface SyncPreviewProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  syncData?: SyncAccountPreview;
-}
-
-export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
+export default function RefineSync({
+  open,
+  onOpenChange,
+  syncData,
+}: SyncPreviewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
-  console.log(syncData);
 
-  const [data, setData] = React.useState<TabData>({
-    domains: [
-      { id: "1", label: "list of domains", checked: true },
-      { id: "2", label: "list of domains", checked: true },
-      { id: "3", label: "list of domains", checked: false },
-    ],
-    organizationalUnits: Array.from({ length: 8 }, (_, i) => ({
-      id: i.toString(),
-      label: "list of Organizational Units",
-      checked: false,
-    })),
-    groups: Array.from({ length: 8 }, (_, i) => ({
-      id: i.toString(),
-      label: "list of groups",
-      checked: i < 5,
-    })),
-    activeInboxes: Array.from({ length: 80 }, (_, i) => ({
-      id: i.toString(),
-      label: `user@domain.com`,
-      checked: i < 72,
-    })),
-  });
+  const refinedData: TabData = React.useMemo(() => {
+    return {
+      domains:
+        syncData?.domains?.items?.map((item) => ({
+          id: item.id,
+          label: item.id,
+          checked: item.selected,
+        })) || [],
+      organizationalUnits:
+        syncData?.organizationalUnits?.items?.map((item) => ({
+          id: item.id,
+          label: item.name || item.id,
+          checked: item.selected,
+        })) || [],
+      groups:
+        syncData?.groups?.items?.map((item) => ({
+          id: item.id,
+          label: item.name || item.email,
+          checked: item.selected,
+        })) || [],
+      activeInboxes:
+        syncData?.activeInboxes?.items?.map((item) => ({
+          id: item.id,
+          label: `${item.name} (${item.email})`,
+          checked: item.selected,
+        })) || [],
+    };
+  }, [syncData]);
+
+  const [data, setData] = React.useState<TabData>(refinedData);
 
   const toggleItem = (tab: keyof TabData, id: string) => {
     setData((prev) => ({
@@ -106,7 +118,7 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
     }));
   };
 
-  const getCheckedCount = (items: SyncItem[]) =>
+  const getCheckedCount = (items: SyncItem[] = []) =>
     items.filter((item) => item.checked).length;
 
   const filteredData = React.useMemo(() => {
@@ -122,11 +134,45 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
     );
   }, [data, searchQuery]);
 
-  const areAllChecked = (items: SyncItem[]) =>
+  const areAllChecked = (items: SyncItem[] = []) =>
     items.length > 0 && items.every((item) => item.checked);
 
-  const areSomeChecked = (items: SyncItem[]) =>
+  const areSomeChecked = (items: SyncItem[] = []) =>
     items.some((item) => item.checked);
+
+  const extractSelectedIds = (data: TabData) => {
+    return {
+      groups: data.groups.filter((item) => item.checked).map((item) => item.id),
+      inboxes: data.activeInboxes
+        .filter((item) => item.checked)
+        .map((item) => item.id),
+    };
+  };
+
+  const { toast } = useToast();
+
+  const [refineSync, { isError, isLoading, data: syncResponse }] =
+    useRefineSyncMutation();
+
+  const handleRefinedSync = async (payload: RefineSyncPayload) => {
+    await refineSync(payload)
+      .unwrap()
+      .then((data) => {
+        onOpenChange(false);
+        toast({
+          title: "Selection updated",
+          duration: 5000,
+        });
+      })
+      .catch((err) => {
+        console.error("Error refining sync", err);
+        toast({
+          title: "Error refining sync",
+          variant: "destructive",
+          description: "Could not refine the sync. Please try again.",
+        });
+      });
+  };
 
   return (
     <TooltipProvider>
@@ -159,7 +205,7 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
                   <TabsTrigger key={tab} value={tab} className="flex gap-2">
                     {tabInfo[tab].label}
                     <span className="text-muted-foreground">
-                      {getCheckedCount(data[tab])}/{data[tab].length}
+                      {getCheckedCount(data[tab])}/{data[tab]?.length}
                     </span>
                   </TabsTrigger>
                 ))}
@@ -187,7 +233,7 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
                           className="text-base font-medium flex items-center gap-2"
                         >
                           {tabInfo[tab].label} ({getCheckedCount(data[tab])}/
-                          {data[tab].length})
+                          {data[tab]?.length})
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -198,7 +244,7 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
                           </Tooltip>
                         </label>
                       </div>
-                      {filteredData[tab].map((item) => (
+                      {filteredData[tab]?.map((item) => (
                         <div
                           key={item.id}
                           className="flex items-center space-x-2 py-2 px-6"
@@ -226,7 +272,13 @@ export function RefineSync({ open, onOpenChange, syncData }: SyncPreviewProps) {
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Back
               </Button>
-              <Button onClick={() => onOpenChange(false)}>Save</Button>
+              <Button
+                onClick={() => {
+                  handleRefinedSync(extractSelectedIds(data));
+                }}
+              >
+                { isLoading ? <Loader2 className="animate-spin text-black text-center"/> : "Refine" }
+              </Button>
             </div>
           </div>
         </SheetContent>
