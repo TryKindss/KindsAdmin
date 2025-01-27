@@ -12,6 +12,7 @@ import Images from "@/utils/images";
 import Image from "next/image";
 import { useFetchDomainStatQuery } from "@/api/dashboard/stats";
 import { useAppSelector } from "@/hooks";
+import DashboardHero from "./dashboard-hero";
 
 const timeRanges = ["All time", "Last 24h", "Last 7d", "Last 30d", "Last 90d"];
 
@@ -94,6 +95,7 @@ export default function DashBoardMetric() {
   ];
   return (
     <>
+      {metricData && metricData?.organizations?.count < 1 && <DashboardHero />}
       <div className="flex justify-end px-6 py-3  mt-12">
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground">Filter</span>

@@ -1,5 +1,5 @@
 import apiSlice from "@/api";
-import { SyncAccountPreview } from "@/lib/type/accounts";
+import { RefineSyncPayload, SyncAccountPreview } from "@/lib/type/accounts";
 // import headerApiSlice from "./headerApiSlice";
 
 export const domainStatApi = apiSlice.injectEndpoints({
@@ -16,8 +16,17 @@ export const domainStatApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    refineSync: builder.mutation<any, RefineSyncPayload>({
+      query: () => ({
+        url: "/email/microsoft/sync/refine",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useLazyConnectMsAccountQuery, useSyncPreviewQuery } =
-  domainStatApi;
+export const {
+  useLazyConnectMsAccountQuery,
+  useSyncPreviewQuery,
+  useRefineSyncMutation,
+} = domainStatApi;

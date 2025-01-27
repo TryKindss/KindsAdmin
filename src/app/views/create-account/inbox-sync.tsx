@@ -32,12 +32,12 @@ export default function InboxSyncCard() {
         .then((data) => {
           console.log("RESPONSE____ ", data);
           if (data?.url) {
-            window.open(data.url, "");
+            window.open(data.url, "_self");
             toast({
               title: "Authenticating",
               description: "Redirecting to Microsoft.",
             });
-            setStep(3);
+            // setStep(3);
           }
         });
     } catch (error) {

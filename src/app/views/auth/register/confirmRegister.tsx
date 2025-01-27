@@ -47,7 +47,6 @@ export default function ConfirmRegister(props: ConfirmProps) {
   const handleVerifyOTP = async (codeValue: string) => {
     try {
       const res = await verifyOTP({ email, code: codeValue }).unwrap();
-      console.log("RESPONSE_REGISTER: ", res);
 
       toast({
         title: "Email Verified",

@@ -15,47 +15,44 @@ export interface Organization {
 
 export interface AccountsDetailInterface {
   success: boolean;
-  organization: Organization;
+  organizations: Organization[];
 }
 
-
-
-
-interface DomainItem {
+export interface DomainItem {
   id: string;
   selected: boolean;
 }
 
-interface OrganizationalUnit {
+export interface OrganizationalUnit {
   total: number;
-  items: any[]; 
+  items: any[];
 }
 
-interface GroupItem {
+export interface GroupItem {
   id: string;
   name: string;
   email: string;
   selected: boolean;
 }
 
-interface ActiveInboxItem {
+export interface ActiveInboxItem {
   id: string;
   name: string;
   email: string;
   selected: boolean;
 }
 
-interface Domains {
+export interface Domains {
   total: number;
   items: DomainItem[];
 }
 
-interface Groups {
+export interface Groups {
   total: number;
   items: GroupItem[];
 }
 
-interface ActiveInboxes {
+export interface ActiveInboxes {
   total: number;
   items: ActiveInboxItem[];
 }
@@ -65,4 +62,9 @@ export interface SyncAccountPreview {
   organizationalUnits: OrganizationalUnit;
   groups: Groups;
   activeInboxes: ActiveInboxes;
+}
+
+export interface RefineSyncPayload {
+  groups: string[];
+  inboxes: string[];
 }
