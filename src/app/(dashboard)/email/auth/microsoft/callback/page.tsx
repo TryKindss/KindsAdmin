@@ -6,26 +6,9 @@ interface SyncPreviewProps {
 }
 
 import * as React from "react";
-import { HelpCircle, Loader2, X } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { HelpCircle, Loader2, X } from "lucide-react"; 
+import { Button } from "@/components/ui/button"; 
 import { SyncAccountPreview } from "@/lib/type/accounts";
-
 import {
   Card,
   CardContent,
@@ -41,8 +24,7 @@ import { useAppSelector } from "@/hooks";
 import { createPortal } from "react-dom";
 import Logo from "@/app/scaffold/navigation/Logo";
 import { useRouter } from "next/navigation";
-import RefineSync from "./components/refine-sync";
-import AutoSyncPromptCard from "./components/auto-sync";
+import RefineSync from "./components/refine-sync"; 
 
 function SyncPreviewCard() {
   const { setStep, step, setShowRefineSync } = useCreateAccountContext();
@@ -67,9 +49,10 @@ function SyncPreviewCard() {
     setSyncStep(syncStep + 1);
   };
 
+
   return (
     <>
-      {syncStep === 0 ? (
+      {/* {syncStep === 0 ? ( */}
         <Card className="w-full max-w-md border shadow-none">
           <CardHeader className="space-y-2">
             <CardTitle>Sync preview</CardTitle>
@@ -190,12 +173,12 @@ function SyncPreviewCard() {
             open={open}
             onOpenChange={setOpen}
             // @ts-ignore
-            syncData={!isLoading && !isError && syncData}
+            syncData={!isLoading && syncData}
           />
         </Card>
-      ) : (
+      {/* ) : (
         <AutoSyncPromptCard setSyncStep={setSyncStep}/>
-      )}
+      )} */}
     </>
   );
 }
