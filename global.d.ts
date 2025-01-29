@@ -2,6 +2,7 @@ declare type SessionProps = {
   access_token: string;
   user: {
     onboardingCompleted: boolean;
+    hasMicrosoftSync: boolean;
     _id: string;
     firstName: string;
     lastName: string;

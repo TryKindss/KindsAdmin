@@ -38,11 +38,11 @@ import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { UserPageProps } from ".";
 import TableSkeleton from "@/components/global/table-loading-state";
 import { useFetchAllUsersQuery } from "@/api/m365/users";
-import { Span } from "next/dist/trace";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { formatDate } from "@/lib/utils";
+import { UserData } from "@/lib/type/user";
 
-function UsersTable({ filter, setFilter }: UserPageProps) {
+function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
   const {
     data: userData,
     error: userError,
@@ -95,40 +95,63 @@ function UsersTable({ filter, setFilter }: UserPageProps) {
     }
   };
 
+  const filteredUser = usersData.filter((acc) => {
+    const matchesSearchQuery =
+      filter.searchQuery === "" ||
+      acc.user.displayName
+        .toLowerCase()
+        .includes(filter.searchQuery.toLowerCase());
 
+    // const matchesStatus = filter.active
+    //   ? acc.active.toLowerCase() === "active"
+    //   : true;
 
-  // const filteredUser = users.filter((acc) => {
-  //   const matchesSearchQuery =
-  //     filter.searchQuery === "" ||
-  //     acc.name.toLowerCase().includes(filter.searchQuery.toLowerCase());
+    let matchesHealthScore = true;
+    switch (true) {
+      case filter.healthScore === "low":
+        matchesHealthScore = acc.healthScore >= 1 && acc.healthScore <= 25;
+        break;
+      case filter.healthScore === "medium":
+        matchesHealthScore = acc.healthScore > 25 && acc.healthScore <= 50;
+        break;
+      case filter.healthScore === "high":
+        matchesHealthScore = acc.healthScore > 50 && acc.healthScore <= 75;
+        break;
+      case filter.healthScore === "critical":
+        matchesHealthScore = acc.healthScore > 75 && acc.healthScore <= 100;
+        break;
+      case filter.healthScore === "all":
+      default:
+        matchesHealthScore = true;
+        break;
+    }
 
-  //   // const matchesStatus = filter.active
-  //   //   ? acc.active.toLowerCase() === "active"
-  //   //   : true;
+    const matchesGroup = 
+      filter.group === "all" || 
+      acc.groups.some(group => group.name === filter.group);
 
-  //   let matchesHealthScore = true;
-  //   switch (filter.healthScore) {
-  //     case "low":
-  //       matchesHealthScore = acc.healthScore === "low";
-  //       break;
-  //     case "medium":
-  //       matchesHealthScore = acc.healthScore === "medium";
-  //       break;
-  //     case "high":
-  //       matchesHealthScore = acc.healthScore === "high";
-  //       break;
-  //     case "critical":
-  //       matchesHealthScore = acc.healthScore === "critical";
-  //       break;
+    return matchesSearchQuery && matchesGroup;
+  });
 
-  //     case "all":
-  //     default:
-  //       matchesHealthScore = true;
-  //       break;
-  //   }
+  function getUniqueGroupNames(data: UserData): string[] {
+    const uniqueGroups = new Set<string>();
+    data.forEach((item) => {
+      item.groups.forEach((group) => {
+        uniqueGroups.add(group.name);
+      });
+    });
+    return Array.from(uniqueGroups);
+  }
 
-  //   return matchesSearchQuery;
-  // });
+  React.useEffect(() => {
+    if (!userLoading) {
+      setGroups(getUniqueGroupNames(usersData));
+    }
+  }, [usersData, userLoading]);
+
+  // Example usage:
+  const uniqueGroupNames = getUniqueGroupNames(usersData);
+  console.log("uniques", uniqueGroupNames);
 
   return (
     <>
@@ -138,7 +161,7 @@ function UsersTable({ filter, setFilter }: UserPageProps) {
           title="No user found"
         />
       )}
-      
+
       {usersData.length > 0 && !userLoading && (
         <TableWrapper>
           <Table>
@@ -203,7 +226,7 @@ function UsersTable({ filter, setFilter }: UserPageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {usersData?.map((user) => (
+              {filteredUser?.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <Checkbox

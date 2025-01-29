@@ -54,6 +54,7 @@ const Metric = ({ icon, label, value, change }: MetricProps) => (
 
 export default function DashBoardMetric() {
   const token = useAppSelector((store) => store.authState.token);
+  const user = useAppSelector((store) => store.userState.user);
   const [timeRange, setTimeRange] = useState("All time");
 
   const {
@@ -95,7 +96,7 @@ export default function DashBoardMetric() {
   ];
   return (
     <>
-      {metricData && metricData?.organizations?.count < 1 && <DashboardHero />}
+      {user.onboardingCompleted && <DashboardHero />}
       <div className="flex justify-end px-6 py-3  mt-12">
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground">Filter</span>
