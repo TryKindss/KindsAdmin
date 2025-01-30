@@ -12,7 +12,8 @@ import React from "react";
 import FilterSideBarWrapper from "@/components/global/wrappers/FilterSideBarWrapper";
 import { UserPageProps } from ".";
 
-function UsersFilter({ filter, setFilter }: UserPageProps) {
+function UsersFilter({ filter, setFilter, groups }: UserPageProps) {
+  console.log('groups', groups);
   return (
     <FilterSideBarWrapper>
       <h2 className="text-lg font-semibold">Users</h2>
@@ -66,6 +67,7 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
         </Select>
 
         <Select
+          value={filter.group}
           onValueChange={(value) => setFilter({ ...filter, group: value })}
         >
           <SelectTrigger className="w-full">
@@ -73,9 +75,11 @@ function UsersFilter({ filter, setFilter }: UserPageProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All groups</SelectItem>
-            <SelectItem value="security">Security</SelectItem>
-            <SelectItem value="compliance">Corporate Compliance</SelectItem>
-            <SelectItem value="legal">FinTech Legal</SelectItem>
+            {groups.map((group) => (
+              <SelectItem key={group} value={group}>
+                {group}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select

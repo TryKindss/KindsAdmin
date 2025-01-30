@@ -35,150 +35,50 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
+import { useAppSelector } from "@/hooks";
+import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
+import { useFetchEmailLogsQuery } from "@/api/m365/logs";
+import { EmailItem } from "@/lib/type/logs";
+import TableSkeleton from "@/components/global/table-loading-state";
+import TableEmptyState from "@/components/global/empty-table-state";
 
 function LogsTable() {
-  const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
+  const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>([]);
 
-  const emails = [
-    {
-      id: 1,
-      action: "Quarantined",
-      user: "olivia@untitledui.com",
-      subject: "Subject line",
-      details: "who the email is from",
-      totalUsers: 1,
-      senderScore: 60,
-      scoreColor: "red",
-      detections: ["Malicious", "Suspicious Sender"],
-    },
-    {
-      id: 2,
-      action: "Delivered",
-      user: "olivia@untitledui.com",
-      subject: "Welcome to the platform",
-      details: "User@malicious.domain.com",
-      totalUsers: 32,
-      senderScore: 99,
-      scoreColor: "yellow",
-      detections: ["Not Malicious", "Marketing"],
-    },
-    {
-      id: 3,
-      action: "Delivered",
-      user: "olivia@untitledui.com",
-      subject: "Welcome to the platform",
-      details: "User@malicious.domain.com",
-      totalUsers: 1,
-      senderScore: 100,
-      scoreColor: "green",
-      detections: ["Safe"],
-    },
-  ];
+  const token = useAppSelector((store) => store.authState.token);
 
-  const users = [
-    {
-      id: 1,
-      name: "Olivia Rhye",
-      email: "olivia@untitledui.com",
-      account: "General Health",
-      group: "Security",
-      roles: ["Owner", "Admin", "Member"],
-      created: "12/23/2023",
-      healthScore: "Low",
-    },
-    {
-      id: 2,
-      name: "Phoenix Baker",
-      email: "phoenix@untitledui.com",
-      account: "Little Dental Van Nuys",
-      group: "Corporate Compliance",
-      roles: ["Admin"],
-      created: "12/23/2023",
-      healthScore: "Low",
-    },
-    {
-      id: 3,
-      name: "Lana Steiner",
-      email: "lana@untitledui.com",
-      account: "Little Dental Van Nuys",
-      group: "Regulatory Affairs",
-      roles: ["Admin"],
-      created: "12/23/2023",
-      healthScore: "Low",
-    },
-    {
-      id: 4,
-      name: "Demi Wilkinson",
-      email: "demi@untitledui.com",
-      account: "Little Dental Van Nuys",
-      group: "FinTech Legal",
-      roles: ["Member"],
-      created: "12/23/2023",
-      healthScore: "Low",
-    },
-    {
-      id: 5,
-      name: "Candice Wu",
-      email: "candice@untitledui.com",
-      account: "Big Dental Costa Mesa",
-      group: "Corporate Governance",
-      roles: ["Admin"],
-      created: "12/23/2023",
-      healthScore: "Medium",
-    },
-    {
-      id: 6,
-      name: "Governance Team",
-      email: "Governance@untitledui.com",
-      account: "Big Dental Costa Mesa",
-      group: "Corporate Governance",
-      roles: ["Member"],
-      created: "12/23/2023",
-      healthScore: "Medium",
-    },
-    {
-      id: 7,
-      name: "Drew Cano",
-      email: "drew@untitledui.com",
-      account: "Records & Tax Co.",
-      group: "Mergers & Acquisitions",
-      roles: ["Admin"],
-      created: "12/23/2023",
-      healthScore: "High",
-    },
-    {
-      id: 8,
-      name: "Orlando Diggs",
-      email: "orlando@untitledui.com",
-      account: "Records & Tax Co.",
-      group: "Mergers & Acquisitions",
-      roles: ["Member"],
-      created: "12/23/2023",
-      healthScore: "High",
-    },
-    {
-      id: 9,
-      name: "Andi Lane",
-      email: "andi@untitledui.com",
-      account: "Records & Tax Co.",
-      group: "Corporate Compliance",
-      roles: ["Member"],
-      created: "12/23/2023",
-      healthScore: "Critical",
-    },
-  ];
+  const {
+    data: accountDetails,
+    isLoading: accountLoading,
+    isError: accountDetailsError,
+  } = useFetchAllAccountsQuery();
 
-  const toggleUser = (userId: number) => {
-    setSelectedUsers((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
+  const orgId = accountDetails?.organizations[0].id || "";
+
+  const {
+    data: emailLogs,
+    isLoading: emailLogsLoading,
+    isError: emailLogsError,
+  } = useFetchEmailLogsQuery({ orgId }, { skip: !token || orgId.length === 0 });
+
+  console.log(accountDetails);
+  console.log("emailLogs", emailLogs);
+
+  const emails = emailLogs?.items || [];
+
+  const toggleMessage = (id: string) => {
+    setSelectedMessageIds((prev) =>
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id]
     );
   };
 
   const toggleAll = () => {
-    setSelectedUsers((prev) =>
-      prev.length === users.length ? [] : users.map((user) => user.id)
+    setSelectedMessageIds((prev) =>
+      prev.length === emails.length
+        ? []
+        : emails.map((email: any) => email.id)
     );
   };
 
@@ -219,173 +119,192 @@ function LogsTable() {
 
   return (
     <TableWrapper>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">
-              <Checkbox
-                checked={selectedUsers.length === users.length}
-                onCheckedChange={toggleAll}
-                aria-label="Select all users"
-              />
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Action
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Action Carried Out</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>User</TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Email Header
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Email Preview</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Total Users
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>No. of Users</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Sender Score
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Sender Email Score</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-1">
-                Detections
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>System Detections</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </TableHead>
+      {/* loading state -- here */}
+      {(accountLoading || emailLogsLoading) && <TableSkeleton columns={6} />}
 
-            <TableHead className="w-[50px]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {emails.map((user, index) => (
-            <TableRow key={index}>
-              <TableCell>
+      {/* empty state -- here  */}
+      {!accountLoading && !emailLogsLoading && emails.length === 0 && (
+        <TableEmptyState description="No Log to display" title="No Log found" />
+      )}
+
+      {/* data state -- here  */}
+      {!accountLoading && !emailLogsLoading && emails.length > 0 && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[50px]">
                 <Checkbox
-                  checked={selectedUsers.includes(user.id)}
-                  onCheckedChange={() => toggleUser(user.id)}
-                  aria-label={`Select ${user.user}`}
+                  checked={selectedMessageIds.length === emails.length}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all messages"
                 />
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col">
-                  <Badge
-                    key={index}
-                    variant="outline"
-                    className={getActionBadgeColor(user.action)}
-                  >
-                    {user.action}
-                  </Badge>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Action
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Action Carried Out</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </TableCell>
-              <TableCell>{user.user}</TableCell>
-              <TableCell>
-                <div>
-                  <p>{user.subject}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {user.details}
-                  </p>
+              </TableHead>
+              <TableHead>User</TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Email Header
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Email Preview</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </TableCell>
-              <TableCell>{user.totalUsers}</TableCell>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Total Users
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>No. of Users</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Sender Score
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Sender Email Score</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1">
+                  Detections
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>System Detections</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </TableHead>
 
-              <TableCell className="py-3">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-24 rounded-full bg-gray-200">
-                    <div
-                      className={`h-2 rounded-full ${getProgressColor(
-                        user.senderScore
-                      )}`}
-                      style={{ width: `${user.senderScore}%` }}
-                    />
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {user.senderScore}%
-                  </span>
-                </div>
-              </TableCell>
-              <TableCell>
-                {user.detections.map((detection, i) => (
-                  <Badge
-                    key={i}
-                    variant="outline"
-                    className={getBadgeVariant(detection)}
-                  >
-                    {detection}
-                  </Badge>
-                ))}
-              </TableCell>
-
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <MoreVertical className="h-5 w-5 text-muted-foreground" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>View Profile</DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {emails.map((user: EmailItem, index: any) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedMessageIds.includes(user.id)}
+                    onCheckedChange={() => toggleMessage(user.id)}
+                    aria-label={`Select ${user.user}`}
+                  />
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className={getActionBadgeColor(user.action)}
+                    >
+                      {user.action}
+                    </Badge>
+                  </div>
+                </TableCell>
+                <TableCell>{user.user}</TableCell>
+                <TableCell>
+                  <div>
+                    <p>{user.emailHeader.from}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.emailHeader.subject}
+                    </p>
+                  </div>
+                </TableCell>
+                <TableCell>{user.totalUsers}</TableCell>
+
+                <TableCell className="py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-24 rounded-full bg-gray-200">
+                      <div
+                        className={`h-2 rounded-full ${getProgressColor(
+                          user.senderScore
+                        )}`}
+                        style={{ width: `${user.senderScore}%` }}
+                      />
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {user.senderScore}%
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {user.detections.map((detection, i) => (
+                    <Badge
+                      key={i}
+                      variant="outline"
+                      className={getBadgeVariant(detection)}
+                    >
+                      {detection}
+                    </Badge>
+                  ))}
+                </TableCell>
+
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem>View Profile</DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600">
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+
+      {/* error state -- here */}
+      {emailLogsError ||
+        (accountDetailsError && (
+          <p className="text-center text-black">
+            An error occured, kindly reload your browser
+          </p>
+        ))}
     </TableWrapper>
   );
 }

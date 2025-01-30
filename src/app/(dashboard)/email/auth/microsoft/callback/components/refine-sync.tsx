@@ -35,7 +35,7 @@ interface SyncItem {
 
 interface TabData {
   domains: SyncItem[];
-  organizationalUnits: SyncItem[];
+  // organizationalUnits: SyncItem[];
   groups: SyncItem[];
   activeInboxes: SyncItem[];
 }
@@ -50,10 +50,10 @@ const tabInfo: Record<keyof TabData, TabInfo> = {
     label: "Domains",
     tooltip: "Select domains to include in the sync",
   },
-  organizationalUnits: {
-    label: "Organizational Units",
-    tooltip: "Select organizational units to include in the sync",
-  },
+  // organizationalUnits: {
+  //   label: "Organizational Units",
+  //   tooltip: "Select organizational units to include in the sync",
+  // },
   groups: {
     label: "Groups",
     tooltip: "Select groups to include in the sync",
@@ -71,36 +71,41 @@ export default function RefineSync({
 }: SyncPreviewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
 
+  // Safely initialize refinedData
   const refinedData: TabData = React.useMemo(() => {
     return {
       domains:
         syncData?.domains?.items?.map((item) => ({
-          id: item.id,
-          label: item.id,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: item.id ?? "Unknown Domain",
+          checked: item.selected ?? false,
         })) || [],
-      organizationalUnits:
-        syncData?.organizationalUnits?.items?.map((item) => ({
-          id: item.id,
-          label: item.name || item.id,
-          checked: item.selected,
-        })) || [],
+      // organizationalUnits:
+      //   syncData?.organizationalUnits?.items?.map((item) => ({
+      //     id: item.id ?? "",
+      //     label: item.name || item.id || "Unknown OU",
+      //     checked: item.selected ?? false,
+      //   })) || [],
       groups:
         syncData?.groups?.items?.map((item) => ({
-          id: item.id,
-          label: item.name || item.email,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: item.name || item.email || "Unknown Group",
+          checked: item.selected ?? false,
         })) || [],
       activeInboxes:
         syncData?.activeInboxes?.items?.map((item) => ({
-          id: item.id,
-          label: `${item.name} (${item.email})`,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: `${item.name || "Unknown"} (${item.email || "Unknown"})`,
+          checked: item.selected ?? false,
         })) || [],
     };
   }, [syncData]);
 
   const [data, setData] = React.useState<TabData>(refinedData);
+
+  React.useEffect(() => {
+    setData(refinedData);
+  }, [refinedData]);
 
   const toggleItem = (tab: keyof TabData, id: string) => {
     setData((prev) => ({
@@ -153,6 +158,7 @@ export default function RefineSync({
 
   const [refineSync, { isError, isLoading, data: syncResponse }] =
     useRefineSyncMutation();
+
 
   const handleRefinedSync = async (payload: RefineSyncPayload) => {
     await refineSync(payload)
@@ -274,10 +280,15 @@ export default function RefineSync({
               </Button>
               <Button
                 onClick={() => {
-                  handleRefinedSync(extractSelectedIds(data));
+                  const selectedIds = extractSelectedIds(data);
+                  handleRefinedSync(selectedIds);
                 }}
               >
-                { isLoading ? <Loader2 className="animate-spin text-black text-center"/> : "Refine" }
+                {isLoading ? (
+                  <Loader2 className="animate-spin text-black text-center" />
+                ) : (
+                  "Refine"
+                )}
               </Button>
             </div>
           </div>

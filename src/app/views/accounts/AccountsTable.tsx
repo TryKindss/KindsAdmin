@@ -109,6 +109,8 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     );
   });
 
+  console.log("FILTERED ACCOUNT", filteredAccount)
+
   return (
     <>
       {offices.length === 0 && !accountLoading && (

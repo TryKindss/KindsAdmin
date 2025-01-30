@@ -56,7 +56,9 @@ export default function SelectAccount({
 
   React.useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === "n") {
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+      const isAltPressed = isMac ? event.metaKey : event.altKey;
+      if (isAltPressed && event.key.toLowerCase() === "n") {
         setOpen(false);
         setShowCreateAccountModal(true);
       }

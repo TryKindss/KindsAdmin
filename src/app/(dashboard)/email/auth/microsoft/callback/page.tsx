@@ -7,25 +7,8 @@ interface SyncPreviewProps {
 
 import * as React from "react";
 import { HelpCircle, Loader2, X } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { SyncAccountPreview } from "@/lib/type/accounts";
-
 import {
   Card,
   CardContent,
@@ -42,7 +25,7 @@ import { createPortal } from "react-dom";
 import Logo from "@/app/scaffold/navigation/Logo";
 import { useRouter } from "next/navigation";
 import RefineSync from "./components/refine-sync";
-import AutoSyncPromptCard from "./components/auto-sync";
+import { useToast } from "@/hooks/use-toast";
 
 function SyncPreviewCard() {
   const { setStep, step, setShowRefineSync } = useCreateAccountContext();
@@ -63,53 +46,62 @@ function SyncPreviewCard() {
   };
 
   const [syncStep, setSyncStep] = useState(0);
+
+  const { toast } = useToast();
+
+  const router = useRouter();
   const handleNext = () => {
     setSyncStep(syncStep + 1);
+    toast({
+      title: "Organization sync successful",
+      description: "Redirecting to dashboard.",
+    });
+    router.push("/");
   };
 
   return (
     <>
-      {syncStep === 0 ? (
-        <Card className="w-full max-w-md border shadow-none">
-          <CardHeader className="space-y-2">
-            <CardTitle>Sync preview</CardTitle>
-            <CardDescription>
-              This is a preview only, no changes have been made. Use the refine
-              option to exclude any Domains, OUs, Groups, or Inboxes.
-            </CardDescription>
-          </CardHeader>
-          {isLoading && (
-            <div className="h-24 flex justify-center items-center">
-              <Loader2 className="animate-spin text-black w-6 h-6" />
-            </div>
-          )}
-          {!isLoading && isError && (
-            <div className="h-24 flex justify-center items-center">
-              <p className="text-center text-black text-sm">
-                An Error occured, retry syncing
-              </p>
-            </div>
-          )}
-          {!isLoading && syncData && (
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex justify-between items-start flex-col">
-                  <div>
-                    <div className="font-medium">Domains</div>
-                    <div className="text-sm text-muted-foreground">
-                      {syncData?.domains?.total || 0}
-                    </div>
+      {/* {syncStep === 0 ? ( */}
+      <Card className="w-full max-w-md border shadow-none">
+        <CardHeader className="space-y-2">
+          <CardTitle>Sync preview</CardTitle>
+          <CardDescription>
+            This is a preview only, no changes have been made. Use the refine
+            option to exclude any Domains, OUs, Groups, or Inboxes.
+          </CardDescription>
+        </CardHeader>
+        {isLoading && (
+          <div className="h-24 flex justify-center items-center">
+            <Loader2 className="animate-spin text-black w-6 h-6" />
+          </div>
+        )}
+        {!isLoading && isError && (
+          <div className="h-24 flex justify-center items-center">
+            <p className="text-center text-black text-sm">
+              An Error occured, retry syncing
+            </p>
+          </div>
+        )}
+        {!isLoading && syncData && (
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start flex-col">
+                <div>
+                  <div className="font-medium">Domains</div>
+                  <div className="text-sm text-muted-foreground">
+                    {syncData?.domains?.total || 0}
                   </div>
-                  <Button
-                    variant="link"
-                    className="font-semibold text-primary p-0 h-auto "
-                    onClick={handleRefine}
-                  >
-                    refine
-                  </Button>
                 </div>
+                <Button
+                  variant="link"
+                  className="font-semibold text-primary p-0 h-auto "
+                  onClick={handleRefine}
+                >
+                  refine
+                </Button>
+              </div>
 
-                <div className="flex justify-between items-start flex-col">
+              {/* <div className="flex justify-between items-start flex-col">
                   <div className="flex items-center gap-2">
                     <div>
                       <div className="font-medium">Organizational Units</div>
@@ -126,76 +118,76 @@ function SyncPreviewCard() {
                   >
                     refine
                   </Button>
-                </div>
+                </div> */}
 
-                <div className="flex justify-between items-start flex-col">
-                  <div className="flex items-center gap-2">
-                    <div>
-                      <div className="font-medium">Groups</div>
-                      <div className="text-sm text-muted-foreground">
-                        {syncData?.groups?.total || 0}
-                      </div>
-                    </div>
-                    <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <Button
-                    variant="link"
-                    className="font-semibold text-primary p-0 h-auto "
-                    onClick={handleRefine}
-                  >
-                    refine
-                  </Button>
-                </div>
-
-                <div className="flex justify-between items-start flex-col">
+              <div className="flex justify-between items-start flex-col">
+                <div className="flex items-center gap-2">
                   <div>
-                    <div className="font-medium">Active Inboxes</div>
+                    <div className="font-medium">Groups</div>
                     <div className="text-sm text-muted-foreground">
-                      {syncData?.activeInboxes?.total || 0}
+                      {syncData?.groups?.total || 0}
                     </div>
                   </div>
-                  <Button
-                    variant="link"
-                    className="font-semibold text-primary p-0 h-auto "
-                    onClick={handleRefine}
-                  >
-                    refine
-                  </Button>
+                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
                 </div>
+                <Button
+                  variant="link"
+                  className="font-semibold text-primary p-0 h-auto "
+                  onClick={handleRefine}
+                >
+                  refine
+                </Button>
               </div>
 
-              <div className="flex items-center justify-between pt-4">
-                <Button variant="outline" onClick={handleRefine}>
-                  Refine
+              <div className="flex justify-between items-start flex-col">
+                <div>
+                  <div className="font-medium">Active Inboxes</div>
+                  <div className="text-sm text-muted-foreground">
+                    {syncData?.activeInboxes?.total || 0}
+                  </div>
+                </div>
+                <Button
+                  variant="link"
+                  className="font-semibold text-primary p-0 h-auto "
+                  onClick={handleRefine}
+                >
+                  refine
                 </Button>
-                <div className="flex gap-2">
-                  <Button
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4">
+              <Button variant="outline" onClick={handleRefine}>
+                Refine
+              </Button>
+              <div className="flex gap-2">
+                {/* <Button
                     variant="outline"
-                    // onClick={() => setStep(step - 1)}
+                    onClick={() => setStep(step - 1)}
                   >
                     Back
-                  </Button>
-                  <Button
-                    onClick={handleNext}
-                    className="bg-gray-900 text-white hover:bg-gray-800"
-                  >
-                    Next
-                  </Button>
-                </div>
+                  </Button> */}
+                <Button
+                  onClick={handleNext}
+                  className="bg-gray-900 text-white hover:bg-gray-800"
+                >
+                  Done
+                </Button>
               </div>
-            </CardContent>
-          )}
+            </div>
+          </CardContent>
+        )}
 
-          <RefineSync
-            open={open}
-            onOpenChange={setOpen}
-            // @ts-ignore
-            syncData={!isLoading && !isError && syncData}
-          />
-        </Card>
-      ) : (
+        <RefineSync
+          open={open}
+          onOpenChange={setOpen}
+          // @ts-ignore
+          syncData={!isLoading && syncData}
+        />
+      </Card>
+      {/* ) : (
         <AutoSyncPromptCard setSyncStep={setSyncStep}/>
-      )}
+      )} */}
     </>
   );
 }
