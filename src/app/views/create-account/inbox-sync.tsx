@@ -66,7 +66,7 @@ export default function InboxSyncCard() {
         >
           <div className="flex items-center">
             <Image
-              src={Images.emailLog.gmail}
+              src={Images.emailLog.ms_outlook}
               alt="Google"
               width={24}
               height={24}
@@ -75,7 +75,7 @@ export default function InboxSyncCard() {
             {isLoading ? (
               <Loader2 className="animate-spin text-black w-4 h-4" />
             ) : (
-              <p className="font-medium ">Connect with Google</p>
+              <p className="font-medium ">Connect with Microsoft Graph</p>
             )}
           </div>
         </Button>
@@ -86,13 +86,13 @@ export default function InboxSyncCard() {
         >
           <div className="flex items-center">
             <Image
-              src={Images.emailLog.ms_outlook}
+              src={Images.emailLog.gmail}
               alt="Microsoft"
               width={24}
               height={24}
               className="mr-2"
             />
-            <p className="font-medium ">Connect with Microsoft Graph</p>
+            <p className="font-medium ">Connect with Gmail</p>
           </div>
         </Button>
       </CardContent>

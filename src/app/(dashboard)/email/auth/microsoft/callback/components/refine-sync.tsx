@@ -71,36 +71,41 @@ export default function RefineSync({
 }: SyncPreviewProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
 
+  // Safely initialize refinedData
   const refinedData: TabData = React.useMemo(() => {
     return {
       domains:
         syncData?.domains?.items?.map((item) => ({
-          id: item.id,
-          label: item.id,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: item.id ?? "Unknown Domain",
+          checked: item.selected ?? false,
         })) || [],
       organizationalUnits:
         syncData?.organizationalUnits?.items?.map((item) => ({
-          id: item.id,
-          label: item.name || item.id,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: item.name || item.id || "Unknown OU",
+          checked: item.selected ?? false,
         })) || [],
       groups:
         syncData?.groups?.items?.map((item) => ({
-          id: item.id,
-          label: item.name || item.email,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: item.name || item.email || "Unknown Group",
+          checked: item.selected ?? false,
         })) || [],
       activeInboxes:
         syncData?.activeInboxes?.items?.map((item) => ({
-          id: item.id,
-          label: `${item.name} (${item.email})`,
-          checked: item.selected,
+          id: item.id ?? "",
+          label: `${item.name || "Unknown"} (${item.email || "Unknown"})`,
+          checked: item.selected ?? false,
         })) || [],
     };
   }, [syncData]);
 
   const [data, setData] = React.useState<TabData>(refinedData);
+
+  React.useEffect(() => {
+    setData(refinedData);
+  }, [refinedData]);
 
   const toggleItem = (tab: keyof TabData, id: string) => {
     setData((prev) => ({
@@ -173,6 +178,10 @@ export default function RefineSync({
         });
       });
   };
+
+  console.log("Sync Data:", syncData);
+  console.log("Refined Data:", refinedData);
+  console.log("Mapped Data State:", data);
 
   return (
     <TooltipProvider>
@@ -274,10 +283,16 @@ export default function RefineSync({
               </Button>
               <Button
                 onClick={() => {
-                  handleRefinedSync(extractSelectedIds(data));
+                  const selectedIds = extractSelectedIds(data);
+                  console.log("Selected IDs:", selectedIds);
+                  handleRefinedSync(selectedIds);
                 }}
               >
-                { isLoading ? <Loader2 className="animate-spin text-black text-center"/> : "Refine" }
+                {isLoading ? (
+                  <Loader2 className="animate-spin text-black text-center" />
+                ) : (
+                  "Refine"
+                )}
               </Button>
             </div>
           </div>

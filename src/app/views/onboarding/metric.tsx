@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useFetchDomainStatQuery } from "@/api/dashboard/stats";
 import { useAppSelector } from "@/hooks";
 import DashboardHero from "./dashboard-hero";
+import { useSession } from "next-auth/react";
 
 const timeRanges = ["All time", "Last 24h", "Last 7d", "Last 30d", "Last 90d"];
 
@@ -54,7 +55,9 @@ const Metric = ({ icon, label, value, change }: MetricProps) => (
 
 export default function DashBoardMetric() {
   const token = useAppSelector((store) => store.authState.token);
-  const user = useAppSelector((store) => store.userState.user);
+  const { data } = useSession();
+
+  const user = (data as any)?.user.data.user;
   const [timeRange, setTimeRange] = useState("All time");
 
   const {
@@ -96,7 +99,7 @@ export default function DashBoardMetric() {
   ];
   return (
     <>
-      {user.onboardingCompleted && <DashboardHero />}
+      {user.hasMicrosoftSync === false && <DashboardHero />}
       <div className="flex justify-end px-6 py-3  mt-12">
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground">Filter</span>
