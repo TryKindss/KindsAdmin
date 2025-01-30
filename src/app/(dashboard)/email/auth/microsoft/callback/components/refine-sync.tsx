@@ -35,7 +35,7 @@ interface SyncItem {
 
 interface TabData {
   domains: SyncItem[];
-  organizationalUnits: SyncItem[];
+  // organizationalUnits: SyncItem[];
   groups: SyncItem[];
   activeInboxes: SyncItem[];
 }
@@ -50,10 +50,10 @@ const tabInfo: Record<keyof TabData, TabInfo> = {
     label: "Domains",
     tooltip: "Select domains to include in the sync",
   },
-  organizationalUnits: {
-    label: "Organizational Units",
-    tooltip: "Select organizational units to include in the sync",
-  },
+  // organizationalUnits: {
+  //   label: "Organizational Units",
+  //   tooltip: "Select organizational units to include in the sync",
+  // },
   groups: {
     label: "Groups",
     tooltip: "Select groups to include in the sync",
@@ -80,12 +80,12 @@ export default function RefineSync({
           label: item.id ?? "Unknown Domain",
           checked: item.selected ?? false,
         })) || [],
-      organizationalUnits:
-        syncData?.organizationalUnits?.items?.map((item) => ({
-          id: item.id ?? "",
-          label: item.name || item.id || "Unknown OU",
-          checked: item.selected ?? false,
-        })) || [],
+      // organizationalUnits:
+      //   syncData?.organizationalUnits?.items?.map((item) => ({
+      //     id: item.id ?? "",
+      //     label: item.name || item.id || "Unknown OU",
+      //     checked: item.selected ?? false,
+      //   })) || [],
       groups:
         syncData?.groups?.items?.map((item) => ({
           id: item.id ?? "",
@@ -159,6 +159,7 @@ export default function RefineSync({
   const [refineSync, { isError, isLoading, data: syncResponse }] =
     useRefineSyncMutation();
 
+
   const handleRefinedSync = async (payload: RefineSyncPayload) => {
     await refineSync(payload)
       .unwrap()
@@ -178,10 +179,6 @@ export default function RefineSync({
         });
       });
   };
-
-  console.log("Sync Data:", syncData);
-  console.log("Refined Data:", refinedData);
-  console.log("Mapped Data State:", data);
 
   return (
     <TooltipProvider>
@@ -284,7 +281,6 @@ export default function RefineSync({
               <Button
                 onClick={() => {
                   const selectedIds = extractSelectedIds(data);
-                  console.log("Selected IDs:", selectedIds);
                   handleRefinedSync(selectedIds);
                 }}
               >

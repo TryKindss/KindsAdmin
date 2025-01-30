@@ -6,6 +6,8 @@ interface EmailLogResponse {
 export interface EmailItem {
   action: string;
   user: string;
+  id: string;
+  messageId: string;
   emailHeader: EmailHeader;
   totalUsers: number;
   senderScore: number;

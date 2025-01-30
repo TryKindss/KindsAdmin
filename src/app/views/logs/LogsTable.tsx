@@ -43,7 +43,7 @@ import TableSkeleton from "@/components/global/table-loading-state";
 import TableEmptyState from "@/components/global/empty-table-state";
 
 function LogsTable() {
-  const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
+  const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>([]);
 
   const token = useAppSelector((store) => store.authState.token);
 
@@ -64,57 +64,21 @@ function LogsTable() {
   console.log(accountDetails);
   console.log("emailLogs", emailLogs);
 
-  // const emails = [
-  //   {
-  //     id: 1,
-  //     action: "Quarantined",
-  //     user: "olivia@untitledui.com",
-  //     subject: "Subject line",
-  //     details: "who the email is from",
-  //     totalUsers: 1,
-  //     senderScore: 60,
-  //     scoreColor: "red",
-  //     detections: ["Malicious", "Suspicious Sender"],
-  //   },
-  //   {
-  //     id: 2,
-  //     action: "Delivered",
-  //     user: "olivia@untitledui.com",
-  //     subject: "Welcome to the platform",
-  //     details: "User@malicious.domain.com",
-  //     totalUsers: 32,
-  //     senderScore: 99,
-  //     scoreColor: "yellow",
-  //     detections: ["Not Malicious", "Marketing"],
-  //   },
-  //   {
-  //     id: 3,
-  //     action: "Delivered",
-  //     user: "olivia@untitledui.com",
-  //     subject: "Welcome to the platform",
-  //     details: "User@malicious.domain.com",
-  //     totalUsers: 1,
-  //     senderScore: 100,
-  //     scoreColor: "green",
-  //     detections: ["Safe"],
-  //   },
-  // ];
-
   const emails = emailLogs?.items || [];
 
-  const toggleUser = (userId: number) => {
-    setSelectedUsers((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
+  const toggleMessage = (id: string) => {
+    setSelectedMessageIds((prev) =>
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id]
     );
   };
 
   const toggleAll = () => {
-    setSelectedUsers((prev) =>
+    setSelectedMessageIds((prev) =>
       prev.length === emails.length
         ? []
-        : emails.map((user: EmailItem, index: any) => emails[index])
+        : emails.map((email: any) => email.id)
     );
   };
 
@@ -170,9 +134,9 @@ function LogsTable() {
             <TableRow>
               <TableHead className="w-[50px]">
                 <Checkbox
-                  checked={selectedUsers.length === emails.length}
+                  checked={selectedMessageIds.length === emails.length}
                   onCheckedChange={toggleAll}
-                  aria-label="Select all users"
+                  aria-label="Select all messages"
                 />
               </TableHead>
               <TableHead>
@@ -260,10 +224,8 @@ function LogsTable() {
               <TableRow key={index}>
                 <TableCell>
                   <Checkbox
-                    checked={selectedUsers.includes(index)}
-                    onCheckedChange={() => toggleUser(index)}
-                    // checked={selectedUsers.includes(user.id)}
-                    // onCheckedChange={() => toggleUser(user.id)}
+                    checked={selectedMessageIds.includes(user.id)}
+                    onCheckedChange={() => toggleMessage(user.id)}
                     aria-label={`Select ${user.user}`}
                   />
                 </TableCell>

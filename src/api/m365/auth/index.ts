@@ -17,9 +17,10 @@ export const domainStatApi = apiSlice.injectEndpoints({
       }),
     }),
     refineSync: builder.mutation<any, RefineSyncPayload>({
-      query: () => ({
+      query: (payload) => ({
         url: "/email/microsoft/sync/refine",
         method: "POST",
+        body: payload,
       }),
     }),
   }),
