@@ -33,7 +33,7 @@ const authOptions: NextAuthOptions = {
             email,
             password,
           });
-
+          
           const user = response.data;
 
           if ((response.status === 200 || response.status === 201) && user) {

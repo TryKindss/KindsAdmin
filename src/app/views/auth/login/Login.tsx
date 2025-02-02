@@ -77,6 +77,7 @@ export default function LoginAuth() {
         callbackUrl: "/",
       });
 
+      console.log("Response", response);
       if (response?.ok) {
         toast({
           title: "Login successful",
@@ -90,14 +91,14 @@ export default function LoginAuth() {
         toast({
           variant: "destructive",
           title: "Login Error",
-          description: "An error ocurred.",
+          description: "Credential Error",
         });
       }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Login Error",
-        description: "An error ocurred.",
+        description: "An error ocurred. Try again",
       });
     } finally {
       setIsLoading(false);
