@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Toggle } from "@/components/ui/toggle";
 import { Badge } from "@/components/ui/badge";
-import { MoreVertical, Search } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -126,8 +123,8 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                 <TableHead className="">Name</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Coverage</TableHead>
-                <TableHead>Created by</TableHead>
-                <TableHead>Created</TableHead>
+                <TableHead>Action</TableHead>
+                {/* <TableHead>Created</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -164,15 +161,17 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{policy?.createdBy}</TableCell>
-                    <TableCell>
+                    <TableCell className="capitalize bg-gr">
+                      {policy?.action}
+                    </TableCell>
+                    {/* <TableCell>
                       <div className="space-y-1">
                         <div className="text-sm">1 year ago</div>
                         <div className="text-sm text-muted-foreground">
                           {policy?.created}
                         </div>
                       </div>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger>

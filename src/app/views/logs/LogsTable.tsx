@@ -33,7 +33,9 @@ import TableSkeleton from "@/components/global/table-loading-state";
 import TableEmptyState from "@/components/global/empty-table-state";
 
 function LogsTable() {
-  const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>([]);
+  const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>(
+    []
+  );
 
   const token = useAppSelector((store) => store.authState.token);
 
@@ -58,17 +60,13 @@ function LogsTable() {
 
   const toggleMessage = (id: string) => {
     setSelectedMessageIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
   };
 
   const toggleAll = () => {
     setSelectedMessageIds((prev) =>
-      prev.length === emails.length
-        ? []
-        : emails.map((email: any) => email.id)
+      prev.length === emails.length ? [] : emails.map((email: any) => email.id)
     );
   };
 
