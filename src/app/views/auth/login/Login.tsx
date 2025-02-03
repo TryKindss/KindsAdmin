@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
-import notificatonService from "@/services/notificaton.service";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
