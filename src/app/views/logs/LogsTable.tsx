@@ -45,7 +45,7 @@ function LogsTable() {
     isError: accountDetailsError,
   } = useFetchAllAccountsQuery();
 
-  const orgId = accountDetails?.organizations[0].id || "";
+  const orgId = accountDetails?.organizations?.[0].id || "";
 
   const {
     data: emailLogs,

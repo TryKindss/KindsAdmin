@@ -91,9 +91,9 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
       case "admin":
         return "bg-gray-50 text-gray-700 hover:bg-gray-100";
       case "user":
-        return "bg-gray-200 text-gray-700 border-2 border-gray-500 hover:bg-gray-300";
-      case "shared inbox":
-        return "bg-purple-200 text-purple-700 border-2 border-purple-600 hover:bg-purple-300";
+        return "text-gray-500 rounded-full border-2 border-[#EAECF0] capitalize";
+      case "group":
+        return "text-blue-600 rounded-full border-2 border-[#B2DDFF] capitalize";
       default:
         return "bg-gray-50 text-gray-700 hover:bg-gray-100";
     }
@@ -148,10 +148,10 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
   }
 
   React.useEffect(() => {
-    if (!userLoading) {
-      setGroups(getUniqueGroupNames(usersData));
+    if (!userLoading && userData) {
+      setGroups(getUniqueGroupNames(userData));
     }
-  }, [usersData, userLoading]);
+  }, [userLoading, userData]);
 
   const uniqueGroupNames = getUniqueGroupNames(usersData);
   console.log("uniques", uniqueGroupNames);

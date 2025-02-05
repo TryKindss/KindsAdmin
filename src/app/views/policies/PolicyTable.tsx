@@ -38,7 +38,7 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
 
   console.log("ACCOUNTDETAILS", accountDetails)
   console.log("ACCOUNTDETAILS", accountDetailsError)
-  const orgId = accountDetails?.organizations[0]?.id ?? "";
+  const orgId = accountDetails?.organizations?.[0]?.id || "";
 
   const {
     data: policyData,
