@@ -38,6 +38,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.2",
+    "recharts": "^2.15.1",
     "redux-logger": "^3.0.6",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
