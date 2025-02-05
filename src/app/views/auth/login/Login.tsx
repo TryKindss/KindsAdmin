@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
-import notificatonService from "@/services/notificaton.service";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
@@ -77,6 +76,7 @@ export default function LoginAuth() {
         callbackUrl: "/",
       });
 
+      console.log("Response", response);
       if (response?.ok) {
         toast({
           title: "Login successful",
@@ -90,14 +90,14 @@ export default function LoginAuth() {
         toast({
           variant: "destructive",
           title: "Login Error",
-          description: "An error ocurred.",
+          description: "Credential Error",
         });
       }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Login Error",
-        description: "An error ocurred.",
+        description: "An error ocurred. Try again",
       });
     } finally {
       setIsLoading(false);

@@ -42,7 +42,7 @@ import TableEmptyState from "@/components/global/empty-table-state";
 import { formatDate } from "@/lib/utils";
 import { UserData } from "@/lib/type/user";
 
-function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
+function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
   const {
     data: userData,
     error: userError,
@@ -68,14 +68,14 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
     );
   };
 
-  const getHealthScoreColor = (score: number) => {
-    if (score >= 75 && score <= 100) {
+  const getHealthScoreColor = (score: string) => {
+    if (score.toLowerCase() === "high") {
       return "text-orange-600 rounded-full border-2 border-[#FEDF89]";
-    } else if (score >= 50 && score < 75) {
+    } else if (score.toLowerCase() === "medium") {
       return "text-blue-600 rounded-full border-2 border-[#B2DDFF]";
-    } else if (score >= 25 && score < 50) {
+    } else if (score.toLowerCase() === "low") {
       return "text-gray-500 rounded-full border-2 border-[#EAECF0]";
-    } else if (score >= 0 && score < 25) {
+    } else if (score.toLowerCase() === "critical") {
       return "text-red-600 rounded-full border-2 border-[#FECDCA]";
     } else {
       return "text-gray-500 rounded-full border-2 border-[#EAECF0]";
@@ -85,13 +85,17 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
   const getRoleBadgeVariant = (role: string) => {
     switch (role.toLowerCase()) {
       case "owner":
-        return "bg-purple-50 text-purple-700 hover:bg-purple-50";
+        return "bg-purple-50 text-purple-700 hover:bg-purple-100";
       case "member":
-        return "bg-blue-50 text-blue-700 hover:bg-blue-50";
+        return "bg-blue-50 text-blue-700 hover:bg-blue-100";
       case "admin":
-        return "bg-gray-50 text-gray-700 hover:bg-gray-50";
+        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
+      case "user":
+        return "text-gray-500 rounded-full border-2 border-[#EAECF0] capitalize";
+      case "group":
+        return "text-blue-600 rounded-full border-2 border-[#B2DDFF] capitalize";
       default:
-        return "bg-gray-50 text-gray-700 hover:bg-gray-50";
+        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
     }
   };
 
@@ -106,29 +110,29 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
     //   ? acc.active.toLowerCase() === "active"
     //   : true;
 
-    let matchesHealthScore = true;
-    switch (true) {
-      case filter.healthScore === "low":
-        matchesHealthScore = acc.healthScore >= 1 && acc.healthScore <= 25;
-        break;
-      case filter.healthScore === "medium":
-        matchesHealthScore = acc.healthScore > 25 && acc.healthScore <= 50;
-        break;
-      case filter.healthScore === "high":
-        matchesHealthScore = acc.healthScore > 50 && acc.healthScore <= 75;
-        break;
-      case filter.healthScore === "critical":
-        matchesHealthScore = acc.healthScore > 75 && acc.healthScore <= 100;
-        break;
-      case filter.healthScore === "all":
-      default:
-        matchesHealthScore = true;
-        break;
-    }
+    // let matchesHealthScore = true;
+    // switch (true) {
+    //   case filter.healthScore === "low":
+    //     matchesHealthScore = acc.healthScore >= 1 && acc.healthScore <= 25;
+    //     break;
+    //   case filter.healthScore === "medium":
+    //     matchesHealthScore = acc.healthScore > 25 && acc.healthScore <= 50;
+    //     break;
+    //   case filter.healthScore === "high":
+    //     matchesHealthScore = acc.healthScore > 50 && acc.healthScore <= 75;
+    //     break;
+    //   case filter.healthScore === "critical":
+    //     matchesHealthScore = acc.healthScore > 75 && acc.healthScore <= 100;
+    //     break;
+    //   case filter.healthScore === "all":
+    //   default:
+    //     matchesHealthScore = true;
+    //     break;
+    // }
 
-    const matchesGroup = 
-      filter.group === "all" || 
-      acc.groups.some(group => group.name === filter.group);
+    const matchesGroup =
+      filter.group === "all" ||
+      acc.groups.some((group) => group.name === filter.group);
 
     return matchesSearchQuery && matchesGroup;
   });
@@ -144,12 +148,11 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
   }
 
   React.useEffect(() => {
-    if (!userLoading) {
-      setGroups(getUniqueGroupNames(usersData));
+    if (!userLoading && userData) {
+      setGroups(getUniqueGroupNames(userData));
     }
-  }, [usersData, userLoading]);
+  }, [userLoading, userData]);
 
-  // Example usage:
   const uniqueGroupNames = getUniqueGroupNames(usersData);
   console.log("uniques", uniqueGroupNames);
 
@@ -174,17 +177,17 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
                     aria-label="Select all users"
                   />
                 </TableHead>
-                <TableHead>User</TableHead>
+                <TableHead>Inboxes</TableHead>
                 <TableHead>
                   <div className="flex items-center gap-1">
-                    Account
+                    Organization
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
                           <HelpCircle className="h-4 w-4 text-muted-foreground" />
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>Associated account information</p>
+                          <p>Associated organization information</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -207,21 +210,21 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
                 </TableHead>
                 <TableHead>
                   <div className="flex items-center gap-1">
-                    Roles
+                    Inbox Type
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
                           <HelpCircle className="h-4 w-4 text-muted-foreground" />
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>User's assigned roles</p>
+                          <p>Associated type of Inboxes</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   </div>
                 </TableHead>
                 <TableHead>Created</TableHead>
-                <TableHead>Health Score</TableHead>
+                <TableHead>Role Risk</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -256,15 +259,15 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1 flex-wrap">
-                      {user.roles.map((role, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className={getRoleBadgeVariant(role)}
-                        >
-                          {role}
-                        </Badge>
-                      ))}
+                      {/* {user.roles.map((role, index) => (
+                        
+                      ))} */}
+                      <Badge
+                        variant="secondary"
+                        className={getRoleBadgeVariant(user.inboxType)}
+                      >
+                        {user.inboxType}
+                      </Badge>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -280,9 +283,11 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
                   <TableCell>
                     <Badge
                       variant={"secondary"}
-                      className={getHealthScoreColor(user.healthScore)}
+                      className={`${getHealthScoreColor(
+                        user.roleRisk
+                      )} capitalize`}
                     >
-                      {user.healthScore}
+                      {user.roleRisk}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -315,4 +320,4 @@ function UsersTable({ filter, setFilter, setGroups }: UserPageProps) {
   );
 }
 
-export default UsersTable;
+export default InboxesTable;
