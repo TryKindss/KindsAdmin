@@ -1,6 +1,6 @@
 import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
-import UsersFilter from "./UserFilter";
-import UsersTable from "./UsersTable";
+import InboxesFilter from "./InboxesFilter";
+import InboxesTable from "./InboxesTable";
 import { useState } from "react";
 
 interface InitialFilters {
@@ -29,16 +29,17 @@ export default function Component() {
   });
 
   const [groups, setGroups] = useState<string[]>([]);
+  const [inboxType, setInboxType] = useState<string[]>([]);
 
   return (
     <MainPageWrapper>
-      <UsersFilter
+      <InboxesFilter
         filter={filter}
         setFilter={setFilter}
         groups={groups}
         setGroups={setGroups}
       />
-      <UsersTable
+      <InboxesTable
         filter={filter}
         setFilter={setFilter}
         setGroups={setGroups}

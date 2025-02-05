@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -59,12 +59,39 @@ export default function DashBoardMetric() {
 
   const user = (data as any)?.user.data.user;
   const [timeRange, setTimeRange] = useState("All time");
+  const [retryTrigger, setRetryTrigger] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   const {
     data: metricData,
     isLoading,
     isError,
-  } = useFetchDomainStatQuery(undefined, { skip: !token });
+    refetch
+  } = useFetchDomainStatQuery(undefined, { 
+    skip: !token,
+    refetchOnMountOrArgChange: retryTrigger 
+  });
+
+  useEffect(() => {
+    const shouldRetry = !isError && metricData && 
+      (!metricData.organizations?.count && !metricData.domains?.count && 
+       !metricData.inboxes?.count && !metricData.messages?.count && 
+       !metricData.maliciousMessages?.count);
+
+    if (shouldRetry && retryCount < MAX_RETRIES) {
+      const retryTimeout = setTimeout(() => {
+        console.log(`Retrying fetch (attempt ${retryCount + 1} of ${MAX_RETRIES})...`);
+        setRetryCount(prev => prev + 1);
+        setRetryTrigger(prev => prev + 1);
+      }, 2000 * (retryCount + 1)); 
+
+      return () => clearTimeout(retryTimeout);
+    } else if (retryCount >= MAX_RETRIES) {
+      console.log('Max retries reached, giving up...');
+    }
+  }, [metricData, isError, retryCount, refetch]);
+
   const metrics = [
     {
       icon: Images.dashboard.metric.organizationIcon,

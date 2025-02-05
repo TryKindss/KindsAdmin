@@ -12,7 +12,7 @@ import React from "react";
 import FilterSideBarWrapper from "@/components/global/wrappers/FilterSideBarWrapper";
 import { UserPageProps } from ".";
 
-function UsersFilter({ filter, setFilter, groups }: UserPageProps) {
+function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
   console.log('groups', groups);
   return (
     <FilterSideBarWrapper>
@@ -117,4 +117,4 @@ function UsersFilter({ filter, setFilter, groups }: UserPageProps) {
   );
 }
 
-export default UsersFilter;
+export default InboxesFilter;

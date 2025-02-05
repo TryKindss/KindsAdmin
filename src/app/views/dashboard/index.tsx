@@ -6,7 +6,7 @@ import InsightView from "../insights";
 import OnboardingView from "../onboarding";
 import PoliciesView from "../policies";
 import SettingsView from "../settings";
-import UsersView from "../users";
+import UsersView from "../inboxes";
 import AccountsView from "../accounts";
 
 function DashboardView() {
@@ -14,7 +14,7 @@ function DashboardView() {
     { value: "dashboard", label: "Dashboard", content: <OnboardingView /> },
     { value: "policies", label: "Policies", content: <PoliciesView /> },
     { value: "accounts", label: "Accounts", content: <AccountsView /> },
-    { value: "users", label: "Users", content: <UsersView /> },
+    { value: "users", label: "Inboxes", content: <UsersView /> },
     { value: "logs", label: "Logs", content: <LogsView /> },
     { value: "settings", label: "Settings", content: <SettingsView /> },
     { value: "insights", label: "Insights", content: <InsightView /> },
