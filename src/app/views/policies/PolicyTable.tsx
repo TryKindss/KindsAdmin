@@ -16,7 +16,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { PolicyPageProps } from ".";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
@@ -123,7 +122,7 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                         <div className="text-sm text-muted-foreground">
                           {policy?.created}
                         </div>
-                      </div>
+                      </div>                 
                     </TableCell> */}
                     <TableCell>
                       <DropdownMenu>
