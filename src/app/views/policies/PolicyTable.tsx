@@ -73,8 +73,9 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
       toast({
         title: "Error",
         description: "Error updating status",
-        variant: "destructive",
+        variant: "destructive"
       });
+
     }
   };
 

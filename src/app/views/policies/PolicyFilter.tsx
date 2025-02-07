@@ -59,17 +59,15 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
           </SelectContent>
         </Select>
 
-        {/* <Select>
+        <Select>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All groups" />
+            <SelectValue placeholder="All Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All groups</SelectItem>
-            <SelectItem value="security">Security</SelectItem>
-            <SelectItem value="compliance">Corporate Compliance</SelectItem>
-            <SelectItem value="legal">FinTech Legal</SelectItem>
+            <SelectItem value="all">Enabled</SelectItem>
+            <SelectItem value="security">Disabled</SelectItem>
           </SelectContent>
-        </Select> */}
+        </Select>
       </div>
     </FilterSideBarWrapper>
   );

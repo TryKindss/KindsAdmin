@@ -83,29 +83,29 @@ function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
           </SelectContent>
         </Select>
         <Select
-          onValueChange={(value) => setFilter({ ...filter, roles: value })}
+          onValueChange={(value) => setFilter({ ...filter, inboxType: value })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All Roles" />
+            <SelectValue placeholder="Inbox Type" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All </SelectItem>
+            <SelectItem value="user">User</SelectItem>
+            <SelectItem value="group">Shared Group</SelectItem>
             <SelectItem value="owner">Owner</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="member">Member</SelectItem>
           </SelectContent>
         </Select>
 
         <Select
           onValueChange={(value) =>
-            setFilter({ ...filter, healthScore: value })
+            setFilter({ ...filter, roleRisk: value })
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Health Score" />
+            <SelectValue placeholder="Role Risk" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Health Score</SelectItem>
+            <SelectItem value="all">All Role Risk</SelectItem>
             <SelectItem value="low">Low</SelectItem>
             <SelectItem value="medium">Medium</SelectItem>
             <SelectItem value="high">High</SelectItem>

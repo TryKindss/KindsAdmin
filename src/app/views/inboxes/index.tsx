@@ -9,7 +9,8 @@ interface InitialFilters {
   group: string;
   account: string;
   roles: string;
-  healthScore: string;
+  roleRisk: string;
+  inboxType: string;
 }
 export interface UserPageProps {
   filter: InitialFilters;
@@ -24,12 +25,12 @@ export default function Component() {
     account: "",
     group: "all",
     roles: "",
-    healthScore: "",
+    roleRisk: "all",
     searchQuery: "",
+    inboxType: "all",
   });
 
   const [groups, setGroups] = useState<string[]>([]);
-  const [inboxType, setInboxType] = useState<string[]>([]);
 
   return (
     <MainPageWrapper>
