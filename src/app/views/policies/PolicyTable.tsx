@@ -21,11 +21,16 @@ import { PolicyPageProps } from ".";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { useAppSelector } from "@/hooks";
 import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
-import { useFetchAllPolicyQuery } from "@/api/m365/policy";
+import {
+  useFetchAllPolicyQuery,
+  useTogglePolicyStatusMutation,
+} from "@/api/m365/policy";
 import TableSkeleton from "@/components/global/table-loading-state";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
   const token = useAppSelector((store) => store.authState.token);
+  const { toast } = useToast();
 
   const {
     data: accountDetails,
@@ -43,6 +48,36 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
     isError: policyError,
   } = useFetchAllPolicyQuery({ orgId }, { skip: !token || orgId.length === 0 });
 
+  const [togglePolicy, { isLoading: togglePolicyLoading }] =
+    useTogglePolicyStatusMutation();
+
+  const handleTogglePolicy = async (
+    policyId: string,
+    currentStatus: boolean
+  ) => {
+    try {
+      await togglePolicy({
+        policyId,
+        status: !currentStatus,
+      })
+        .unwrap()
+        .then((data) => {
+          console.log("toggleResponseDATA", data);
+          toast({
+            title: "Policy updated",
+            description: "Policy status updated successfully",
+          });
+        });
+    } catch (error) {
+      console.error("Failed to toggle policy:", error);
+      toast({
+        title: "Error",
+        description: "Error updating status",
+        variant: "destructive",
+      });
+    }
+  };
+
   const policies = policyData || [];
 
   const filteredPolicies = policies.filter((policy) => {
@@ -50,11 +85,12 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
       .toLowerCase()
       .includes(filter.search.toLowerCase());
 
-      const matchesAction =
-      filter.action === "all" || policy.action.toLowerCase().includes(filter.action.toLowerCase())
-      
-    // const matchesStatus = filter.active ? policy.status === "active" : true;
-    return matchesSearch && matchesAction;
+    const matchesAction =
+      filter.action === "all" ||
+      policy.action.toLowerCase().includes(filter.action.toLowerCase());
+
+    const matchesStatus = filter.active ? policy.isEnabled === true : true;
+    return matchesSearch && matchesAction && matchesStatus;
   });
 
   return (
@@ -119,7 +155,7 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                       {policy?.action}
                     </TableCell>
                     {/* <TableCell>
-                      <div className="space-y-1">
+                      <div className="space-y-1"></div>
                         <div className="text-sm">1 year ago</div>
                         <div className="text-sm text-muted-foreground">
                           {policy?.created}
@@ -132,6 +168,14 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                           <MoreVertical className="h-5 w-5 text-muted-foreground" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleTogglePolicy(policy.id, policy.isEnabled)
+                            }
+                            disabled={togglePolicyLoading}
+                          >
+                            {policy.isEnabled ? "Disable" : "Enable"}
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Edit</DropdownMenuItem>
                           <DropdownMenuItem>View Profile</DropdownMenuItem>
                           <DropdownMenuItem className="text-red-600">
