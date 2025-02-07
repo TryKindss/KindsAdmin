@@ -49,7 +49,7 @@ export default function AnalyticsCards() {
               <p className="text-sm text-muted-foreground">{card.subtitle}</p>
             </CardHeader>
             {/* chart goes here */}
-            <CardContent className="min-h-[400px] flex flex-col">
+            <CardContent className="min-h-[300px] flex flex-col">
               <div className="flex items-center justify-center flex-1">
                 {card?.items?.length > 0 ? (
                   <DomainChart data={card.items} />

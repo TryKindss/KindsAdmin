@@ -9,11 +9,13 @@ export interface PolicyPageProps {
   filter: {
     active: boolean;
     search: string;
+    action: string;
   };
   setFilter: React.Dispatch<
     React.SetStateAction<{
       active: boolean;
       search: string;
+      action: string;
     }>
   >;
 }
@@ -73,6 +75,7 @@ export default function Component() {
   const [filter, setFilter] = useState({
     active: true,
     search: "",
+    action: "",
   });
 
   return (
