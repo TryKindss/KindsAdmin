@@ -45,19 +45,21 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
       </div>
 
       <div className="space-y-4">
-        <Select>
+        <Select
+          onValueChange={(value) => setFilter({ ...filter, action: value })}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All connections" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Accounts</SelectItem>
-            <SelectItem value="general">General Health</SelectItem>
-            <SelectItem value="dental">Little Dental Van Nuys</SelectItem>
-            <SelectItem value="records">Records & Tax Co.</SelectItem>
+            <SelectItem value="all">All Action</SelectItem>
+            <SelectItem value="quarantine"> Quarantine</SelectItem>
+            <SelectItem value="display-banner">Display Banner</SelectItem>
+            <SelectItem value="external-sender">Sender External Banner</SelectItem>
           </SelectContent>
         </Select>
 
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All groups" />
           </SelectTrigger>
@@ -67,7 +69,7 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
             <SelectItem value="compliance">Corporate Compliance</SelectItem>
             <SelectItem value="legal">FinTech Legal</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
     </FilterSideBarWrapper>
   );

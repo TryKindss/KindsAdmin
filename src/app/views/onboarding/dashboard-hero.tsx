@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { ExternalLink, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,11 +9,19 @@ import Images from "@/utils/images";
 import { useAppSelector } from "@/hooks";
 import { RootState } from "@/store";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function DashboardHero() {
   const { data } = useSession();
 
   const user = (data as any)?.user.data.user;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      router.push("/login");
+    }
+  }, [user]);
 
   console.log("USER", user);
 

@@ -1,17 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,

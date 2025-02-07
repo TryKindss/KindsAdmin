@@ -24,8 +24,6 @@ import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
 import { useFetchAllPolicyQuery } from "@/api/m365/policy";
 import TableSkeleton from "@/components/global/table-loading-state";
 
-
-
 export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
   const token = useAppSelector((store) => store.authState.token);
 
@@ -35,8 +33,8 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
     isError: accountDetailsError,
   } = useFetchAllAccountsQuery();
 
-  console.log("ACCOUNTDETAILS", accountDetails)
-  console.log("ACCOUNTDETAILS", accountDetailsError)
+  console.log("ACCOUNTDETAILS", accountDetails);
+  console.log("ACCOUNTDETAILS", accountDetailsError);
   const orgId = accountDetails?.organizations?.[0]?.id || "";
 
   const {
@@ -51,8 +49,12 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
     const matchesSearch = policy.name
       .toLowerCase()
       .includes(filter.search.toLowerCase());
+
+      const matchesAction =
+      filter.action === "all" || policy.action.toLowerCase().includes(filter.action.toLowerCase())
+      
     // const matchesStatus = filter.active ? policy.status === "active" : true;
-    return matchesSearch;
+    return matchesSearch && matchesAction;
   });
 
   return (
