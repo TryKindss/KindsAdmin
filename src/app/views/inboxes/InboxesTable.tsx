@@ -40,7 +40,6 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
   } = useFetchAllUsersQuery();
 
   const usersData = userData || [];
-  console.log("USERDATA", usersData);
 
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
 
@@ -96,35 +95,21 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
         .toLowerCase()
         .includes(filter.searchQuery.toLowerCase());
 
-    // const matchesStatus = filter.active
-    //   ? acc.active.toLowerCase() === "active"
-    //   : true;
-
-    // let matchesHealthScore = true;
-    // switch (true) {
-    //   case filter.healthScore === "low":
-    //     matchesHealthScore = acc.healthScore >= 1 && acc.healthScore <= 25;
-    //     break;
-    //   case filter.healthScore === "medium":
-    //     matchesHealthScore = acc.healthScore > 25 && acc.healthScore <= 50;
-    //     break;
-    //   case filter.healthScore === "high":
-    //     matchesHealthScore = acc.healthScore > 50 && acc.healthScore <= 75;
-    //     break;
-    //   case filter.healthScore === "critical":
-    //     matchesHealthScore = acc.healthScore > 75 && acc.healthScore <= 100;
-    //     break;
-    //   case filter.healthScore === "all":
-    //   default:
-    //     matchesHealthScore = true;
-    //     break;
-    // }
-
     const matchesGroup =
       filter.group === "all" ||
       acc.groups.some((group) => group.name === filter.group);
 
-    return matchesSearchQuery && matchesGroup;
+    const matchesRoleRisk =
+      filter.roleRisk === "all" ||
+      acc.roleRisk.toLowerCase() === filter.roleRisk.toLocaleLowerCase();
+
+    const matchesInboxType =
+      filter.inboxType === "all" ||
+      acc.inboxType.toLowerCase() === filter.inboxType.toLocaleLowerCase();
+
+    return (
+      matchesSearchQuery && matchesGroup && matchesInboxType && matchesRoleRisk
+    );
   });
 
   function getUniqueGroupNames(data: UserData): string[] {
@@ -142,9 +127,6 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
       setGroups(getUniqueGroupNames(userData));
     }
   }, [userLoading, userData]);
-
-  const uniqueGroupNames = getUniqueGroupNames(usersData);
-  console.log("uniques", uniqueGroupNames);
 
   return (
     <>
@@ -219,85 +201,92 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUser?.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedUsers.includes(user.id)}
-                      onCheckedChange={() => toggleUser(user.id)}
-                      aria-label={`Select ${user.user.displayName}`}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col ">
-                      <span className="font-medium capitalize">
-                        {user.user.displayName}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {user.user.email}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="capitalize">
-                    {user.account.name}
-                  </TableCell>
-                  <TableCell className="capitalize">
-                    {user.groups.map((group, index) => {
-                      const isLast = index === user.groups.length - 1;
-                      return `${group.name}${isLast ? "" : ", "}`;
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1 flex-wrap">
-                      {/* {user.roles.map((role, index) => (
+              {filteredUser.length > 0 &&
+                filteredUser?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedUsers.includes(user.id)}
+                        onCheckedChange={() => toggleUser(user.id)}
+                        aria-label={`Select ${user.user.displayName}`}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col ">
+                        <span className="font-medium capitalize">
+                          {user.user.displayName}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {user.user.email}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="capitalize">
+                      {user.account.name}
+                    </TableCell>
+                    <TableCell className="capitalize">
+                      {user.groups.map((group, index) => {
+                        const isLast = index === user.groups.length - 1;
+                        return `${group.name}${isLast ? "" : ", "}`;
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1 flex-wrap">
+                        {/* {user.roles.map((role, index) => (
                         
                       ))} */}
+                        <Badge
+                          variant="secondary"
+                          className={getRoleBadgeVariant(user.inboxType)}
+                        >
+                          {user.inboxType}
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-muted-foreground">
+                          1 year ago
+                        </span>
+                        <span className="text-sm">
+                          {formatDate(user.created)}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       <Badge
-                        variant="secondary"
-                        className={getRoleBadgeVariant(user.inboxType)}
+                        variant={"secondary"}
+                        className={`${getHealthScoreColor(
+                          user.roleRisk
+                        )} capitalize`}
                       >
-                        {user.inboxType}
+                        {user.roleRisk}
                       </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="text-sm text-muted-foreground">
-                        1 year ago
-                      </span>
-                      <span className="text-sm">
-                        {formatDate(user.created)}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={"secondary"}
-                      className={`${getHealthScoreColor(
-                        user.roleRisk
-                      )} capitalize`}
-                    >
-                      {user.roleRisk}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <MoreVertical className="h-5 w-5 text-muted-foreground" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>View Profile</DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600">
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          {filteredUser.length === 0 && (
+                <TableEmptyState
+                  description="No Inbox to display, adjust filter option"
+                  title="No Inbox Match found"
+                />
+              )}
         </TableWrapper>
       )}
 
