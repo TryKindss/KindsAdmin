@@ -259,7 +259,7 @@ function LogsTable() {
                     <Badge
                       key={i}
                       variant="outline"
-                      className={getBadgeVariant(detection)}
+                      className={`${getBadgeVariant(detection)} text-nowrap`}
                     >
                       {detection}
                     </Badge>

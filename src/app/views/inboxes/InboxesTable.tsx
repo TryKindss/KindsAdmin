@@ -239,7 +239,7 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                           variant="secondary"
                           className={getRoleBadgeVariant(user.inboxType)}
                         >
-                          {user.inboxType}
+                          {user.inboxType.toLowerCase() === 'user' ? "User" : "Shared"}
                         </Badge>
                       </div>
                     </TableCell>
