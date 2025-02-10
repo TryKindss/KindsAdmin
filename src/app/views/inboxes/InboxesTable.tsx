@@ -239,7 +239,9 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                           variant="secondary"
                           className={getRoleBadgeVariant(user.inboxType)}
                         >
-                          {user.inboxType.toLowerCase() === 'user' ? "User" : "Shared"}
+                          {user.inboxType.toLowerCase() === "user"
+                            ? "User"
+                            : "Shared"}
                         </Badge>
                       </div>
                     </TableCell>
@@ -282,11 +284,11 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
             </TableBody>
           </Table>
           {filteredUser.length === 0 && (
-                <TableEmptyState
-                  description="No Inbox to display, adjust filter option"
-                  title="No Inbox Match found"
-                />
-              )}
+            <TableEmptyState
+              description="No Inbox to display, adjust filter option"
+              title="No Inbox Match found"
+            />
+          )}
         </TableWrapper>
       )}
 

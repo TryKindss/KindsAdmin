@@ -6,24 +6,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
 import Image from "next/image";
 import Images from "@/utils/images";
-import { useAppSelector } from "@/hooks";
-import { RootState } from "@/store";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 function DashboardHero() {
   const { data } = useSession();
 
   const user = (data as any)?.user.data.user;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user === null) {
-      router.push("/login");
-    }
-  }, [user]);
-
-  console.log("USER", user);
+//   const router = useRouter();
+// 
+//   useEffect(() => {
+//     if (user === null) {
+//       router.push("/login");
+//     }
+//   }, [user]);
+// 
+//   console.log("USER", user);
 
   return (
     <MainPageWrapper>
