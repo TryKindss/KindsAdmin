@@ -383,7 +383,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                             handlePageChange(Number(pageNum));
                           }}
                           isActive={currentPage === pageNum}
-                        >
+                        > 
                           {pageNum}
                         </PaginationLink>
                       )}
@@ -403,7 +403,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                 </PaginationContent>
               </Pagination>
               <div className="text-sm text-muted-foreground text-center mt-4">
-                Page {currentPage} of {emailLogs.pagination.pages} (Total: {emailLogs.pagination.total})
+                Page {currentPage} of {emailLogs?.pagination.pages} (Total: {emailLogs?.pagination.total})
               </div>
             </div>
           )}

@@ -52,7 +52,7 @@ function DashboardHero() {
                 to create a new organization
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="gap-2">
+                <Button className="gap-2 hover:bg-black ">
                   <Download className="h-4 w-4" />
                   Install Kinds
                 </Button>
