@@ -31,7 +31,7 @@ function DashboardHero() {
             <div className="space-y-6 col-span-4">
               <div className="space-y-2">
                 <h1 className="text-2xl font-semibold tracking-tight">
-                  Welcome to the party {user.lastName}!, {thei}
+                  Welcome to the party {user.lastName}!, 
                 </h1>
                 <p className="font-semibold">
                   Authorize our platform with your email provider to bring your
