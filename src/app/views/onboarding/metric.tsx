@@ -14,6 +14,7 @@ import { useFetchDomainStatQuery } from "@/api/dashboard/stats";
 import { useAppSelector } from "@/hooks";
 import DashboardHero from "./dashboard-hero";
 import { useSession } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 const timeRanges = ["All time", "Last 24h", "Last 7d", "Last 30d", "Last 90d"];
 
@@ -22,33 +23,40 @@ interface MetricProps {
   label: string;
   value: number;
   change: number;
+  isLoading?: boolean;
 }
 
-const Metric = ({ icon, label, value, change }: MetricProps) => (
+const Metric = ({ icon, label, value, change, isLoading }: MetricProps) => (
   <div className="flex flex-col items-start p-6 ">
     <div className="flex items-center gap-2">
       <Image alt="" src={icon} className="w-6 h-6 mb-2" />
       <span className="font-bold text-black">{label}</span>
     </div>
     <div className="flex items-center gap-2 mb-1">
-      <span className="text-4xl font-semibold">{value}</span>
-      <div className="flex items-center text-xs text-muted-foreground">
-        <svg
-          className="w-3 h-3"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        {change}%
-      </div>
+      {isLoading ? (
+        <Loader2 className="animate-spin text-black h-8 w-8" />
+      ) : (
+        <>
+          <span className="text-4xl font-semibold">{value}</span>
+          <div className="flex items-center text-xs text-muted-foreground">
+            <svg
+              className="w-3 h-3"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            {change}%
+          </div>
+        </>
+      )}
     </div>
   </div>
 );
@@ -154,6 +162,7 @@ export default function DashBoardMetric() {
               label={metric.label}
               value={metric.value}
               change={metric.change}
+              isLoading={isLoading}
             />
           ))}
         </div>
