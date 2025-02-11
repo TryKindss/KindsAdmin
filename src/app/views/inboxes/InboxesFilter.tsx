@@ -52,7 +52,7 @@ function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
       </div>
 
       <div className="space-y-4">
-        <Select
+        {/* <Select
           onValueChange={(value) => setFilter({ ...filter, account: value })}
         >
           <SelectTrigger className="w-full">
@@ -64,7 +64,7 @@ function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
             <SelectItem value="dental">Little Dental Van Nuys</SelectItem>
             <SelectItem value="records">Records & Tax Co.</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
 
         <Select
           value={filter.group}

@@ -42,7 +42,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-
 function LogsTable({ filter, setFilter }: LogsPageProps) {
   const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>(
     []
@@ -65,20 +64,20 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     isError: emailLogsError,
     isFetching,
   } = useFetchEmailLogsQuery(
-    { 
-      orgId, 
+    {
+      orgId,
       page: currentPage,
-      limit: 20 
-    }, 
-    { 
+      limit: 20,
+    },
+    {
       skip: !token || orgId.length === 0,
-      refetchOnMountOrArgChange: true 
+      refetchOnMountOrArgChange: true,
     }
   );
 
   React.useEffect(() => {
-    console.log('Current page:', currentPage);
-    console.log('Current data:', emailLogs);
+    console.log("Current page:", currentPage);
+    console.log("Current data:", emailLogs);
   }, [currentPage, emailLogs]);
 
   const emails = emailLogs?.items || [];
@@ -135,8 +134,8 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || !emailLogs?.pagination) return;
     if (newPage > emailLogs.pagination.pages) return;
-    
-    console.log('Changing to page:', newPage);
+
+    console.log("Changing to page:", newPage);
     setCurrentPage(newPage);
   };
 
@@ -150,7 +149,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
       if (
         i === 1 ||
         i === totalPages ||
-        i >= currentPage - delta && i <= currentPage + delta
+        (i >= currentPage - delta && i <= currentPage + delta)
       ) {
         range.push(i);
       }
@@ -161,7 +160,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
         if (i - l === 2) {
           rangeWithDots.push(l + 1);
         } else if (i - l !== 1) {
-          rangeWithDots.push('...');
+          rangeWithDots.push("...");
         }
       }
       rangeWithDots.push(i);
@@ -173,241 +172,263 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
 
   return (
     <TableWrapper>
-      {(accountLoading || emailLogsLoading || isFetching) && <TableSkeleton columns={6} />}
-
-      {!accountLoading && !emailLogsLoading && !isFetching && emails.length === 0 && (
-        <TableEmptyState description="No Log to display" title="No Log found" />
+      {(accountLoading || emailLogsLoading || isFetching) && (
+        <TableSkeleton columns={6} />
       )}
 
-      {!accountLoading && !emailLogsLoading && !isFetching && emails.length > 0 && (
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">
-                  <Checkbox
-                    checked={selectedMessageIds.length === emails.length}
-                    onCheckedChange={toggleAll}
-                    aria-label="Select all messages"
-                  />
-                </TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-1">
-                    Action
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Action Carried Out</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-1">
-                    Email Header
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Email Preview</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-1">
-                    Total Users
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>No. of Users</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-1">
-                    Sender Score
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Sender Email Score</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-1">
-                    Detections
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>System Detections</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableHead>
+      {!accountLoading &&
+        !emailLogsLoading &&
+        !isFetching &&
+        emails.length === 0 && (
+          <TableEmptyState
+            description="No Log to display"
+            title="No Log found"
+          />
+        )}
 
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {emails.map((user: EmailItem, index: any) => (
-                <TableRow key={index}>
-                  <TableCell>
+      {!accountLoading &&
+        !emailLogsLoading &&
+        !isFetching &&
+        emails.length > 0 && (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[50px]">
                     <Checkbox
-                      checked={selectedMessageIds.includes(user.id)}
-                      onCheckedChange={() => toggleMessage(user.id)}
-                      aria-label={`Select ${user.user}`}
+                      checked={selectedMessageIds.length === emails.length}
+                      onCheckedChange={toggleAll}
+                      aria-label="Select all messages"
                     />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        className={getActionBadgeColor(user.action)}
-                      >
-                        {user.action}
-                      </Badge>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Action
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Action Carried Out</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
-                  </TableCell>
-                  <TableCell>{user.user}</TableCell>
-                  <TableCell>
-                    <div>
-                      <p>{user.emailHeader.from}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.emailHeader.subject}
-                      </p>
+                  </TableHead>
+                  <TableHead>User</TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Email Header
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Email Preview</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
-                  </TableCell>
-                  <TableCell>{user.totalUsers}</TableCell>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Total Users
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>No. of Users</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Sender Score
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Sender Email Score</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Detections
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>System Detections</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableHead>
 
-                  <TableCell className="py-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-24 rounded-full bg-gray-200">
-                        <div
-                          className={`h-2 rounded-full ${getProgressColor(
-                            user.senderScore
-                          )}`}
-                          style={{ width: `${user.senderScore}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-muted-foreground">
-                        {user.senderScore}%
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {user.detections.map((detection, i) => (
-                      <Badge
-                        key={i}
-                        variant="outline"
-                        className={`${getBadgeVariant(detection)} text-nowrap`}
-                      >
-                        {detection}
-                      </Badge>
-                    ))}
-                  </TableCell>
-
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <MoreVertical className="h-5 w-5 text-muted-foreground" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+                  <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
+              </TableHeader>
+              <TableBody>
+                {emails.map((user: EmailItem, index: any) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedMessageIds.includes(user.id)}
+                        onCheckedChange={() => toggleMessage(user.id)}
+                        aria-label={`Select ${user.user}`}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className={getActionBadgeColor(user.action)}
+                        >
+                          {user.action}
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.user}</TableCell>
+                    <TableCell>
+                      <div>
+                        <p>{user.emailHeader.from}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.emailHeader.subject}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.totalUsers}</TableCell>
 
-            {emails.length === 0 && (
-              <TableEmptyState
-                description="No Logs to display, adjust filter option"
-                title="No Logs Match found"
-              />
-            )}
-          </Table>
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-24 rounded-full bg-gray-200">
+                          <div
+                            className={`h-2 rounded-full ${getProgressColor(
+                              user.senderScore
+                            )}`}
+                            style={{ width: `${user.senderScore}%` }}
+                          />
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {user.senderScore}%
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {user.detections.map((detection, i) => (
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          className={`${getBadgeVariant(
+                            detection
+                          )} text-nowrap`}
+                        >
+                          {detection}
+                        </Badge>
+                      ))}
+                    </TableCell>
 
-          {emailLogs?.pagination && (
-            <div className="py-12">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange(currentPage - 1);
-                      }}
-                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-                    />
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>View Profile</DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600">
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+
+              {emails.length === 0 && (
+                <TableEmptyState
+                  description="No Logs to display, adjust filter option"
+                  title="No Logs Match found"
+                />
+              )}
+            </Table>
+          </>
+        )}
+
+      {emailLogs?.pagination && (
+        <div className="py-12">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(currentPage - 1);
+                  }}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+
+              {getPageNumbers(currentPage, emailLogs.pagination.pages).map(
+                (pageNum, idx) => (
+                  <PaginationItem key={idx}>
+                    {pageNum === "..." ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePageChange(Number(pageNum));
+                        }}
+                        isActive={currentPage === pageNum}
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    )}
                   </PaginationItem>
+                )
+              )}
 
-                  {getPageNumbers(currentPage, emailLogs.pagination.pages).map((pageNum, idx) => (
-                    <PaginationItem key={idx}>
-                      {pageNum === '...' ? (
-                        <PaginationEllipsis />
-                      ) : (
-                        <PaginationLink
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handlePageChange(Number(pageNum));
-                          }}
-                          isActive={currentPage === pageNum}
-                        > 
-                          {pageNum}
-                        </PaginationLink>
-                      )}
-                    </PaginationItem>
-                  ))}
-
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange(currentPage + 1);
-                      }}
-                      className={currentPage === emailLogs.pagination.pages ? 'pointer-events-none opacity-50' : ''}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-              <div className="text-sm text-muted-foreground text-center mt-4">
-                Page {currentPage} of {emailLogs?.pagination.pages} (Total: {emailLogs?.pagination.total})
-              </div>
-            </div>
-          )}
-        </>
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(currentPage + 1);
+                  }}
+                  className={
+                    currentPage === emailLogs.pagination.pages
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+          <div className="text-sm text-muted-foreground text-center mt-4">
+            Page {currentPage} of {emailLogs?.pagination.pages} (Total:{" "}
+            {emailLogs?.pagination.total})
+          </div>
+        </div>
       )}
 
       {emailLogsError ||
