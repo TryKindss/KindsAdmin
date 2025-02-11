@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./Providers";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -18,10 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
-        <Toaster />
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(inter.className, "min-h-screen bg-background")}>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
