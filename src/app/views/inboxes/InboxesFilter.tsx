@@ -89,10 +89,9 @@ function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
             <SelectValue placeholder="Inbox Type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All </SelectItem>
+            <SelectItem value="all">All Inbox Types</SelectItem>
             <SelectItem value="user">User</SelectItem>
-            <SelectItem value="group">Shared Group</SelectItem>
-            <SelectItem value="owner">Owner</SelectItem>
+            <SelectItem value="group">Shared</SelectItem>
           </SelectContent>
         </Select>
 

@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/select";
 import React from "react";
 import FilterSideBarWrapper from "@/components/global/wrappers/FilterSideBarWrapper";
+import { LogsPageProps } from ".";
 
-function UsersFilter() {
+function UsersFilter({filter, setFilter}: LogsPageProps) {
   return (
     <FilterSideBarWrapper>
       <h2 className="text-lg font-semibold">Logs</h2>

@@ -6,24 +6,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import MainPageWrapper from "@/components/global/wrappers/MainPageWrapper";
 import Image from "next/image";
 import Images from "@/utils/images";
-import { useAppSelector } from "@/hooks";
-import { RootState } from "@/store";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 function DashboardHero() {
   const { data } = useSession();
 
   const user = (data as any)?.user.data.user;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user === null) {
-      router.push("/login");
-    }
-  }, [user]);
-
-  console.log("USER", user);
+//   const router = useRouter();
+// 
+//   useEffect(() => {
+//     if (user === null) {
+//       router.push("/login");
+//     }
+//   }, [user]);
+// 
+//   console.log("USER", user);
 
   return (
     <MainPageWrapper>
@@ -54,7 +52,7 @@ function DashboardHero() {
                 to create a new organization
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="gap-2">
+                <Button className="gap-2 hover:bg-black ">
                   <Download className="h-4 w-4" />
                   Install Kinds
                 </Button>

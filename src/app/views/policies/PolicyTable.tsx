@@ -38,8 +38,6 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
     isError: accountDetailsError,
   } = useFetchAllAccountsQuery();
 
-  console.log("ACCOUNTDETAILS", accountDetails);
-  console.log("ACCOUNTDETAILS", accountDetailsError);
   const orgId = accountDetails?.organizations?.[0]?.id || "";
 
   const {
@@ -169,18 +167,16 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
                           <MoreVertical className="h-5 w-5 text-muted-foreground" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>View Profile</DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() =>
                               handleTogglePolicy(policy.id, policy.isEnabled)
                             }
                             disabled={togglePolicyLoading}
+                            className={`${policy.isEnabled ? "text-red-600" : "text-green-600"}`}
                           >
                             {policy.isEnabled ? "Disable" : "Enable"}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>View Profile</DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
-                            Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
