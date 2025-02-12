@@ -37,7 +37,8 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
       <div className="relative">
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search"
+          type="search"
+          placeholder="Search Name"
           className="pl-8"
           value={filter.search}
           onChange={(e) => setFilter({ ...filter, search: e.target.value })}
@@ -59,7 +60,7 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
           </SelectContent>
         </Select>
 
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All Status" />
           </SelectTrigger>
@@ -67,7 +68,7 @@ function PolicyFilter({ filter, setFilter }: PolicyPageProps) {
             <SelectItem value="all">Enabled</SelectItem>
             <SelectItem value="security">Disabled</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
     </FilterSideBarWrapper>
   );
