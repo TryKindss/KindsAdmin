@@ -42,6 +42,7 @@ function AccountFilter({ filter, setFilter }: AccountPageProps) {
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search"
+          type="search"
           className="pl-8"
           value={filter.searchQuery}
           onChange={(e) => {
@@ -62,8 +63,7 @@ function AccountFilter({ filter, setFilter }: AccountPageProps) {
           <SelectContent>
             <SelectItem value="all">All connections</SelectItem>
             <SelectItem value="gmail">Gmail</SelectItem>
-            <SelectItem value="microsoft">Microsoft</SelectItem>
-            <SelectItem value="okta">Okta</SelectItem>
+            <SelectItem value="m365">Microsoft</SelectItem>
           </SelectContent>
         </Select>
 

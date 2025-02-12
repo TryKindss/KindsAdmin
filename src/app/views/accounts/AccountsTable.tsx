@@ -30,7 +30,6 @@ import { AccountPageProps } from ".";
 import { useAppSelector } from "@/hooks";
 import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
 import { formatDate } from "@/lib/utils";
-import { Organization } from "@/lib/type/accounts";
 import TableEmptyState from "@/components/global/empty-table-state";
 import TableSkeleton from "@/components/global/table-loading-state";
 
@@ -41,7 +40,9 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     data: accountData,
     isLoading: accountLoading,
     isError,
-  } = useFetchAllAccountsQuery();
+  } = useFetchAllAccountsQuery(undefined, {
+    skip: !token,
+  });
 
   const offices = accountData?.organizations || [];
 
@@ -77,23 +78,21 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       ? acc.status.toLowerCase() === "active"
       : true;
 
-    let matchesProgress = true;
+
+    let matchesHealthScore = true;
     switch (filter.healthScore) {
       case "low":
-        matchesProgress = acc.healthScore < 79;
+        matchesHealthScore = acc.healthScore >= 0 && acc.healthScore <= 39;
         break;
       case "medium":
-        matchesProgress = acc.healthScore >= 79 && acc.healthScore < 99;
+        matchesHealthScore = acc.healthScore >= 40 && acc.healthScore <= 79;
         break;
       case "high":
-        matchesProgress = acc.healthScore >= 99 && acc.healthScore < 100;
-        break;
-      case "perfect":
-        matchesProgress = acc.healthScore === 100;
+        matchesHealthScore = acc.healthScore >= 80 && acc.healthScore <= 100;
         break;
       case "all":
       default:
-        matchesProgress = true;
+        matchesHealthScore = true;
         break;
     }
 
@@ -104,12 +103,17 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       matchesAutoSync = acc.autoSync === true;
     }
 
+    let matchesConnection = true;
+    if (filter.connections !== 'all' && filter.connections !== '') {
+      matchesConnection = acc.connections.some(conn => 
+        conn.toLowerCase() === filter.connections.toLowerCase()
+      );
+    }
+
     return (
-      matchesSearchQuery && matchesStatus && matchesProgress && matchesAutoSync
+      matchesSearchQuery && matchesStatus && matchesHealthScore && matchesAutoSync && matchesConnection
     );
   });
-
-  console.log("FILTERED ACCOUNT", filteredAccount)
 
   return (
     <>
@@ -273,6 +277,12 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
               ))}
             </TableBody>
           </Table>
+          {filteredAccount.length === 0 && (
+            <TableEmptyState
+              description="No Account to display, adjust filter option"
+              title="No Account Match found"
+            />
+          )}
         </TableWrapper>
       )}
 
