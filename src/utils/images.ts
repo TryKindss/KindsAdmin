@@ -28,6 +28,7 @@ import inboxesIcon from "../../public/dashboard/metric/inboxesIcon.svg";
 import maliciousIcon from "../../public/dashboard/metric/maliciousIcon.svg";
 import messagesIcon from "../../public/dashboard/metric/messagesIcon.svg";
 import organizationIcon from "../../public/dashboard/metric/organizationIcon.svg";
+import welcomeImg from "../../public/dashboard/metric/welcome.png";
 
 const Images = {
   brand: { logo },
@@ -58,6 +59,7 @@ const Images = {
   illustration: {
     dashboard: {
       welcome,
+      welcomeImg,
     },
   },
   dashboard: {

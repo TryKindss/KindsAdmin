@@ -18,7 +18,7 @@ export default function Error({
   }, [error]);
 
   const handleReload = () => {
-    reset(); 
+    reset();
     window.location.reload();
   };
 
@@ -31,16 +31,19 @@ export default function Error({
       <div className="text-center space-y-6 max-w-md mx-auto p-6">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tighter">
-            Oops! Something went wrong
+            Oops! Something wrong
           </h1>
           <p className="text-muted-foreground">
-            We apologize for the inconvenience. An unexpected error has
-            occurred.
+            Kindly login to start a new session or reload fix the error.
           </p>
         </div>
 
         <div className="flex flex-col gap-4 min-w-[200px]">
-          <Button variant="default" onClick={handleReload} className="w-full">
+          <Button
+            variant="default"
+            onClick={handleReload}
+            className="w-full hover:bg-black/90"
+          >
             Try Again
           </Button>
           <Button
