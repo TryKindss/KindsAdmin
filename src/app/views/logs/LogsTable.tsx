@@ -306,7 +306,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     <TableCell>
                       <div>
                         <p>{user.emailHeader.from}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground line-clamp-1">
                           {user.emailHeader.subject}
                         </p>
                       </div>

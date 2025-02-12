@@ -5,7 +5,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 
-export default function DomainChart({ data }: { data: { domain: string; count: number; score: number }[] }) {
+export default function DomainChart({ data }: { data: { domain?: string; type?: string; count: number; score?: number }[] }) {
+  
+  const yAxisKey = data[0]?.domain ? "domain" : "type"
+
   return (
     <div className="w-full h-full">
       <ChartContainer
@@ -15,7 +18,7 @@ export default function DomainChart({ data }: { data: { domain: string; count: n
             color: "rgb(241, 245, 249)", 
           },
         }}
-        className="h-full" // Ensure the container uses full height
+        className="h-full" 
       >
         <BarChart
           data={data}
@@ -31,7 +34,7 @@ export default function DomainChart({ data }: { data: { domain: string; count: n
         >
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
-            dataKey="domain"
+            dataKey={yAxisKey}
             type="category"
             tickLine={false}
             axisLine={false}
@@ -53,7 +56,9 @@ export default function DomainChart({ data }: { data: { domain: string; count: n
               return (
                 <div className="rounded-lg border bg-white p-2 shadow-sm">
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="font-medium">{payload[0].payload.domain}</div>
+                    <div className="font-medium">
+                      {payload[0].payload[yAxisKey]}
+                    </div>
                     <div className="text-right">{payload[0].value}</div>
                   </div>
                 </div>

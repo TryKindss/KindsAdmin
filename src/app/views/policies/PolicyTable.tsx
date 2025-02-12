@@ -93,7 +93,7 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
   });
 
   return (
-    <div className="w-full space-y-4 p-4">
+    <>
       <TableWrapper>
         {/* loading state -- here */}
         {(accountLoading || policyLoading) && <TableSkeleton columns={6} />}
@@ -187,6 +187,6 @@ export default function PolicyTable({ filter, setFilter }: PolicyPageProps) {
           </Table>
         )}
       </TableWrapper>
-    </div>
+    </>
   );
 }
