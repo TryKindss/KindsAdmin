@@ -75,10 +75,10 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     }
   );
 
-  React.useEffect(() => {
-    console.log("Current page:", currentPage);
-    console.log("Current data:", emailLogs);
-  }, [currentPage, emailLogs]);
+  // React.useEffect(() => {
+  //   console.log("Current page:", currentPage);
+  //   console.log("Current data:", emailLogs);
+  // }, [currentPage, emailLogs]);
 
   const emails = emailLogs?.items || [];
 
