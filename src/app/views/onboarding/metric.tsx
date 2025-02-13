@@ -69,7 +69,7 @@ export default function DashBoardMetric() {
   const [timeRange, setTimeRange] = useState("All time");
   const [retryTrigger, setRetryTrigger] = useState(0);
   const [retryCount, setRetryCount] = useState(0);
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 2;
 
   const {
     data: metricData,

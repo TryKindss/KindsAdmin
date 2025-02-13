@@ -75,10 +75,10 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     }
   );
 
-  React.useEffect(() => {
-    console.log("Current page:", currentPage);
-    console.log("Current data:", emailLogs);
-  }, [currentPage, emailLogs]);
+  // React.useEffect(() => {
+  //   console.log("Current page:", currentPage);
+  //   console.log("Current data:", emailLogs);
+  // }, [currentPage, emailLogs]);
 
   const emails = emailLogs?.items || [];
 
@@ -133,9 +133,8 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || !emailLogs?.pagination) return;
-    if (newPage > emailLogs.pagination.pages) return;
+    if (newPage > Number(emailLogs.pagination.totalPages)) return;
 
-    console.log("Changing to page:", newPage);
     setCurrentPage(newPage);
   };
 
@@ -382,31 +381,32 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     handlePageChange(currentPage - 1);
                   }}
                   className={
-                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                    !emailLogs.pagination.hasPreviousPage ? "pointer-events-none opacity-50" : ""
                   }
                 />
               </PaginationItem>
 
-              {getPageNumbers(currentPage, emailLogs.pagination.pages).map(
-                (pageNum, idx) => (
-                  <PaginationItem key={idx}>
-                    {pageNum === "..." ? (
-                      <PaginationEllipsis />
-                    ) : (
-                      <PaginationLink
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handlePageChange(Number(pageNum));
-                        }}
-                        isActive={currentPage === pageNum}
-                      >
-                        {pageNum}
-                      </PaginationLink>
-                    )}
-                  </PaginationItem>
-                )
-              )}
+              {getPageNumbers(
+                Number(emailLogs.pagination.currentPage),
+                Number(emailLogs.pagination.totalPages)
+              ).map((pageNum, idx) => (
+                <PaginationItem key={idx}>
+                  {pageNum === "..." ? (
+                    <PaginationEllipsis />
+                  ) : (
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(Number(pageNum));
+                      }}
+                      isActive={Number(emailLogs.pagination.currentPage) === pageNum}
+                    >
+                      {pageNum}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
+              ))}
 
               <PaginationItem>
                 <PaginationNext
@@ -416,17 +416,15 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     handlePageChange(currentPage + 1);
                   }}
                   className={
-                    currentPage === emailLogs.pagination.pages
-                      ? "pointer-events-none opacity-50"
-                      : ""
+                    !emailLogs.pagination.hasNextPage ? "pointer-events-none opacity-50" : ""
                   }
                 />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
           <div className="text-sm text-muted-foreground text-center mt-4">
-            Page {currentPage} of {emailLogs?.pagination.pages} (Total:{" "}
-            {emailLogs?.pagination.total})
+            Page {emailLogs.pagination.currentPage} of {emailLogs.pagination.totalPages} (Total:{" "}
+            {emailLogs.pagination.totalItems})
           </div>
         </div>
       )}

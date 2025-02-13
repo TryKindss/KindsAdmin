@@ -183,7 +183,7 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="bg-white">
+            <TableBody className="">
               {filteredAccount.map((office) => (
                 <TableRow key={office.id} className="">
                   <TableCell className="font-medium py-3 pl-6 capitalize">

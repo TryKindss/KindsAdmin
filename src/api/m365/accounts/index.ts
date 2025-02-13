@@ -5,7 +5,7 @@ export const domainStatApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchAllAccounts: builder.query<AccountsDetailInterface, void>({
       async queryFn(_arg, _queryApi, _extraOptions, baseQuery) {
-        const MAX_RETRIES = 3;
+        const MAX_RETRIES = 2;
         let retryCount = 0;
 
         while (retryCount < MAX_RETRIES) {
