@@ -74,7 +74,7 @@ export default function SelectAccount({
     <>
       <DialogContent
         hideClose
-        className="sm:max-w-[425px] md:max-w-2xl bg-white bg-opacity-70 p-0"
+        className="sm:max-w-[425px] md:max-w-2xl bg-white/90 p-0"
       >
         <div className="grid gap-4">
           <div className="relative border-b-2 border-kindsGrey flex items-center gap-0 pt-2 px-6">
