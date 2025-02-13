@@ -3,10 +3,12 @@ import apiSlice from "@/api";
 interface EmailLogsResponse {
   items: EmailLogItem[];
   pagination: {
-    total: number;
-    page: number;
-    limit: number;
-    pages: number;
+    currentPage: string;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
 }
 
