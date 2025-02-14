@@ -15,7 +15,7 @@ export default function TableEmptyState({
   actionOnClick
 }: TableEmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-dashed border-gray-200 rounded-lg bg-white p-6 text-center">
+    <div className="flex flex-col items-center justify-center mt-4 w-full h-[400px] border-2 border-dashed border-gray-200 rounded-lg bg-white p-6 text-center">
       <div className="rounded-full bg-gray-100 p-3 mb-4">
         <TableIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
       </div>
