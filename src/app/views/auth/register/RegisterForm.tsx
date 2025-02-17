@@ -86,7 +86,7 @@ export default function RegisterForm(props: RegisterProps) {
       setStep(0);
       toast({
         variant: "destructive",
-        title: "Error creating account",
+        title: "Error",
         description: (err as any)?.data?.error,
         duration: 5000,
       });
