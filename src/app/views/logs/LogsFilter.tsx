@@ -12,7 +12,7 @@ import React from "react";
 import FilterSideBarWrapper from "@/components/global/wrappers/FilterSideBarWrapper";
 import { LogsPageProps } from ".";
 
-function UsersFilter({filter, setFilter}: LogsPageProps) {
+function UsersFilter({ filter, setFilter }: LogsPageProps) {
   return (
     <FilterSideBarWrapper>
       <h2 className="text-lg font-semibold">Logs</h2>
@@ -30,18 +30,21 @@ function UsersFilter({filter, setFilter}: LogsPageProps) {
       </div>
 
       <div className="space-y-4">
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            setFilter({ ...filter, action: value });
+          }}
+        >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Accounts" />
+            <SelectValue placeholder="Actions" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Accounts</SelectItem>
-            <SelectItem value="general">General Health</SelectItem>
-            <SelectItem value="dental">Little Dental Van Nuys</SelectItem>
-            <SelectItem value="records">Records & Tax Co.</SelectItem>
+            <SelectItem value="all">All </SelectItem>
+            <SelectItem value="delivered">Delivered</SelectItem>
+            <SelectItem value="quarantined">Quarantine</SelectItem>
+            <SelectItem value="deleted">Deleted</SelectItem>
           </SelectContent>
         </Select>
-
         <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All groups" />

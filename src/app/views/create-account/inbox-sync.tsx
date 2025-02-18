@@ -79,7 +79,7 @@ export default function InboxSyncCard() {
             )}
           </div>
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           className="w-full justify-start h-12 font-normal"
           onClick={() => handleConnect()}
@@ -94,7 +94,7 @@ export default function InboxSyncCard() {
             />
             <p className="font-medium ">Connect with Gmail</p>
           </div>
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   );
