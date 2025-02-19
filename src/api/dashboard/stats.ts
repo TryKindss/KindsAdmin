@@ -29,7 +29,7 @@ export const domainStatApi = apiSlice.injectEndpoints({
               data.organizations?.count !== undefined;
 
             if (!hasValidData) {
-              console.log(`Invalid or empty response on attempt ${retryCount + 1}, retrying...`);
+              // console.log(`Invalid or empty response on attempt ${retryCount + 1}, retrying...`);
               retryCount++;
               
               if (retryCount === MAX_RETRIES) {

@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
-import { MoreVertical, HelpCircle, Mail, Settings } from "lucide-react";
+import { MoreVertical, HelpCircle, Mail, Settings, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,10 +28,11 @@ import Image from "next/image";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { AccountPageProps } from ".";
 import { useAppSelector } from "@/hooks";
-import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
+import { useFetchAllAccountsQuery, useToggleAccountAutoSyncMutation } from "@/api/m365/accounts";
 import { formatDate } from "@/lib/utils";
 import TableEmptyState from "@/components/global/empty-table-state";
 import TableSkeleton from "@/components/global/table-loading-state";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
   const token = useAppSelector((store) => store.authState.token);
@@ -44,6 +45,10 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     skip: !token,
   });
 
+  const [toggleAutoSync, { isLoading: toggleAccountLoading }] = useToggleAccountAutoSyncMutation();
+  const [loadingId, setLoadingId] = React.useState<string | null>(null);
+
+  const {toast} = useToast()
   const offices = accountData?.organizations || [];
 
   const getProgressColor = (progress: number) => {
@@ -59,15 +64,24 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     if (connection.toLowerCase() === "okta") return Images.emailLog.okta;
   };
 
-  // const handleToggle = (officeId: number) => {
-  //   setOffices(
-  //     offices.map((office) =>
-  //       office.id === officeId
-  //         ? { ...office, autoSync: !office.autoSync }
-  //         : office
-  //     )
-  //   );
-  // };
+  const handleToggle = async (orgId: string, currentState: boolean) => {
+    try {
+      setLoadingId(orgId);
+      await toggleAutoSync({
+        orgId: orgId,
+        enabled: !currentState
+      }).unwrap().then((data)=>{
+        toast({
+          title: "Accounts",
+          description: `Auto Sync ${currentState ? "Disabled" : "Enabled"} succesfully.`
+        })
+      });
+    } catch (error) {
+      console.error('Failed to toggle auto-sync:', error);
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   const filteredAccount = offices.filter((acc) => {
     const matchesSearchQuery =
@@ -254,10 +268,15 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
                     </div>
                   </TableCell>
                   <TableCell className="py-3">
-                    <Switch
-                      checked={office.autoSync}
-                      // onCheckedChange={() => handleToggle(office.id)}
-                    />
+                    {loadingId === office.id ? (
+                      <Loader2 className="h-6 w-6 text-center  animate-spin" />
+                    ) : (
+                      <Switch
+                        checked={office.autoSync}
+                        onCheckedChange={() => handleToggle(office.id, office.autoSync)}
+                        disabled={loadingId !== null}
+                      />
+                    )}
                   </TableCell>
                   <TableCell className="py-3">
                     <DropdownMenu>

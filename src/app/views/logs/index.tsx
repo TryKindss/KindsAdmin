@@ -25,7 +25,7 @@ function LogsView() {
     const [filter, setFilter] = useState({
       active: true,
       search: "",
-      action: "",
+      action: "all",
     });
 
 

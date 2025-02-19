@@ -43,6 +43,7 @@ function InboxesFilter({ filter, setFilter, groups }: UserPageProps) {
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search"
+          type="search"
           className="pl-8"
           onChange={(e) => {
             setFilter({ ...filter, searchQuery: e.target.value });

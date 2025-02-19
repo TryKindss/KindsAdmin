@@ -33,6 +33,8 @@ const authOptions: NextAuthOptions = {
             email,
             password,
           });
+
+          console.log("RESPONSE ++++ ", response)
           
           const user = response.data;
 
@@ -45,7 +47,7 @@ const authOptions: NextAuthOptions = {
           }
         } catch (error) {
           console.error(
-            "Error in In failingggggg:",
+            "Error :",
             (error as any).response.data.error
           );
           return null;

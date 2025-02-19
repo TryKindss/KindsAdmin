@@ -14,7 +14,9 @@ import { useFetchDomainStatQuery } from "@/api/dashboard/stats";
 import { useAppSelector } from "@/hooks";
 import DashboardHero from "./dashboard-hero";
 import { useSession } from "next-auth/react";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const timeRanges = ["All time", "Last 24h", "Last 7d", "Last 30d", "Last 90d"];
 
@@ -24,6 +26,13 @@ interface MetricProps {
   value: number;
   change: number;
   isLoading?: boolean;
+}
+
+interface Filter {
+  id: string;
+  label: string;
+  type: "time" | "other";
+  value: string;
 }
 
 const Metric = ({ icon, label, value, change, isLoading }: MetricProps) => (
@@ -75,28 +84,34 @@ export default function DashBoardMetric() {
     data: metricData,
     isLoading,
     isError,
-    refetch
-  } = useFetchDomainStatQuery(undefined, { 
+    refetch,
+  } = useFetchDomainStatQuery(undefined, {
     skip: !token,
-    refetchOnMountOrArgChange: retryTrigger 
+    refetchOnMountOrArgChange: retryTrigger,
   });
 
   useEffect(() => {
-    const shouldRetry = !isError && metricData && 
-      (!metricData.organizations?.count && !metricData.domains?.count && 
-       !metricData.inboxes?.count && !metricData.messages?.count && 
-       !metricData.maliciousMessages?.count);
+    const shouldRetry =
+      !isError &&
+      metricData &&
+      !metricData.organizations?.count &&
+      !metricData.domains?.count &&
+      !metricData.inboxes?.count &&
+      !metricData.messages?.count &&
+      !metricData.maliciousMessages?.count;
 
     if (shouldRetry && retryCount < MAX_RETRIES) {
       const retryTimeout = setTimeout(() => {
-        console.log(`Retrying fetch (attempt ${retryCount + 1} of ${MAX_RETRIES})...`);
-        setRetryCount(prev => prev + 1);
-        setRetryTrigger(prev => prev + 1);
-      }, 2000 * (retryCount + 1)); 
+        console.log(
+          `Retrying fetch (attempt ${retryCount + 1} of ${MAX_RETRIES})...`
+        );
+        setRetryCount((prev) => prev + 1);
+        setRetryTrigger((prev) => prev + 1);
+      }, 2000 * (retryCount + 1));
 
       return () => clearTimeout(retryTimeout);
     } else if (retryCount >= MAX_RETRIES) {
-      console.log('Max retries reached, giving up...');
+      console.log("Max retries reached, giving up...");
     }
   }, [metricData, isError, retryCount, refetch]);
 
@@ -132,13 +147,60 @@ export default function DashBoardMetric() {
       change: metricData?.maliciousMessages?.percentageChange || 0,
     },
   ];
+
+  // filter param and handle below ----------
+  const [appliedFilters, setAppliedFilters] = useState<Filter[]>([]);
+  const [timeFilter, setTimeFilter] = useState("All time");
+
+  const handleAddTimeFilter = (value: string) => {
+    const newFilter: Filter = {
+      id: `time-${value}`,
+      label: value,
+      type: "time",
+      value,
+    };
+
+    // Remove any existing time filters here ------
+    const filteredFilters = appliedFilters.filter(
+      (filter) => filter.type !== "time"
+    );
+    setAppliedFilters([...filteredFilters, newFilter]);
+    setTimeFilter(value);
+  };
+
+  const handleRemoveFilter = (filterId: string) => {
+    const filter = appliedFilters.find((f) => f.id === filterId);
+    if (filter?.type === "time") {
+      setTimeFilter("All time");
+    }
+    setAppliedFilters(
+      appliedFilters.filter((filter) => filter.id !== filterId)
+    );
+  };
+
   return (
     <>
       {user.hasMicrosoftSync === false && <DashboardHero />}
-      <div className="flex justify-end px-6 py-3  mt-12">
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-muted-foreground">Filter</span>
-          <Select value={timeRange} onValueChange={setTimeRange}>
+      <div className="flex items-center justify-between border-b p-4">
+        <div className="flex flex-wrap gap-2">
+          {appliedFilters.map((filter) => (
+            <Badge key={filter.id} variant="secondary" className="gap-1 px-3">
+              {filter.label}
+              <button
+                onClick={() => handleRemoveFilter(filter.id)}
+                className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              >
+                <X className="h-3 w-3" />
+                <span className="sr-only">Remove {filter.label} filter</span>
+              </button>
+            </Badge>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" className="text-xs font-normal">
+            Filter
+          </Button>
+          <Select value={timeFilter} onValueChange={handleAddTimeFilter}>
             <SelectTrigger className="w-[120px] h-8">
               <SelectValue placeholder="Select time range" />
             </SelectTrigger>

@@ -75,14 +75,13 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     }
   );
 
-  // React.useEffect(() => {
-  //   console.log("Current page:", currentPage);
-  //   console.log("Current data:", emailLogs);
-  // }, [currentPage, emailLogs]);
-
   const emails = emailLogs?.items || [];
 
-  const filteredLogs = emails?.filter((email: any) => {});
+  const filteredLogs = emails?.filter((email: EmailItem) => {
+    const matchesAction =
+      filter.action === "all" || email.action.toLowerCase() === filter.action;
+    return matchesAction;
+  });
 
   const toggleMessage = (id: string) => {
     setSelectedMessageIds((prev) =>
@@ -281,7 +280,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {emails.map((user: EmailItem, index: any) => (
+                {filteredLogs.map((user: EmailItem, index: any) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Checkbox
@@ -381,7 +380,9 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     handlePageChange(currentPage - 1);
                   }}
                   className={
-                    !emailLogs.pagination.hasPreviousPage ? "pointer-events-none opacity-50" : ""
+                    !emailLogs.pagination.hasPreviousPage
+                      ? "pointer-events-none opacity-50"
+                      : ""
                   }
                 />
               </PaginationItem>
@@ -400,7 +401,9 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         e.preventDefault();
                         handlePageChange(Number(pageNum));
                       }}
-                      isActive={Number(emailLogs.pagination.currentPage) === pageNum}
+                      isActive={
+                        Number(emailLogs.pagination.currentPage) === pageNum
+                      }
                     >
                       {pageNum}
                     </PaginationLink>
@@ -416,14 +419,17 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     handlePageChange(currentPage + 1);
                   }}
                   className={
-                    !emailLogs.pagination.hasNextPage ? "pointer-events-none opacity-50" : ""
+                    !emailLogs.pagination.hasNextPage
+                      ? "pointer-events-none opacity-50"
+                      : ""
                   }
                 />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
           <div className="text-sm text-muted-foreground text-center mt-4">
-            Page {emailLogs.pagination.currentPage} of {emailLogs.pagination.totalPages} (Total:{" "}
+            Page {emailLogs.pagination.currentPage} of{" "}
+            {emailLogs.pagination.totalPages} (Total:{" "}
             {emailLogs.pagination.totalItems})
           </div>
         </div>
