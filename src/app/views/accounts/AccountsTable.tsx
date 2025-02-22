@@ -19,8 +19,6 @@ import { Switch } from "@/components/ui/switch";
 import {
   MoreVertical,
   HelpCircle,
-  Mail,
-  Settings,
   Loader2,
 } from "lucide-react";
 import {
@@ -45,9 +43,8 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
   const token = useAppSelector((store) => store.authState.token);
-  const storeOrg = useAppSelector((store) => store.sessionProfileState.data);
 
-  console.log("STOREPROFILE", storeOrg)
+  
   const {
     data: accountData,
     isLoading: accountLoading,

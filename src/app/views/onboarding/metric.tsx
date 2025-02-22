@@ -72,6 +72,8 @@ const Metric = ({ icon, label, value, change, isLoading }: MetricProps) => (
 
 export default function DashBoardMetric() {
   const token = useAppSelector((store) => store.authState.token);
+  const storeOrg = useAppSelector((store) => store.sessionProfileState.data);
+
   const { data } = useSession();
 
   const user = (data as any)?.user.data.user;
