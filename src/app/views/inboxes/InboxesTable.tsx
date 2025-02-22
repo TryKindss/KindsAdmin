@@ -196,6 +196,7 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                   </div>
                 </TableHead>
                 <TableHead>Created</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Role Risk</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
@@ -254,6 +255,18 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                           {formatDate(user.created)}
                         </span>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                    <Badge
+                          variant="outline"
+                          className={
+                            user.status === "active"
+                              ? "bg-green-50 text-green-700 border-green-200 capitalize"
+                              : "bg-red-50 text-red-700 border-red-200 capitalize"
+                          }
+                        >
+                          {user.status}
+                        </Badge>
                     </TableCell>
                     <TableCell>
                       <Badge
