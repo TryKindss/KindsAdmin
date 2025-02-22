@@ -45,7 +45,7 @@ function UsersFilter({ filter, setFilter }: LogsPageProps) {
             <SelectItem value="deleted">Deleted</SelectItem>
           </SelectContent>
         </Select>
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All groups" />
           </SelectTrigger>
@@ -55,7 +55,7 @@ function UsersFilter({ filter, setFilter }: LogsPageProps) {
             <SelectItem value="compliance">Corporate Compliance</SelectItem>
             <SelectItem value="legal">FinTech Legal</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
     </FilterSideBarWrapper>
   );
