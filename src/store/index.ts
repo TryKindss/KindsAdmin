@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import userReducer from "./slice/userSlice";
 import authReducer from "./slice/authSlice";
+import sessionProfileReducer from "./slice/sessionProfileSlice"
 import apiSlice from "@/api";
 import consoleLogger from "./middleware";
 
@@ -9,6 +10,7 @@ export const store = configureStore({
   reducer: {
     userState: userReducer,
     authState: authReducer,
+    sessionProfileState: sessionProfileReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

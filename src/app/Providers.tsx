@@ -3,11 +3,13 @@ import { store } from "@/store";
 import { PropsWithChildren, useEffect } from "react";
 import { Provider } from "react-redux";
 import { SessionProvider, useSession } from "next-auth/react";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setUser } from "@/store/slice/userSlice";
 import { setToken } from "@/store/slice/authSlice";
 import { AccountCreateProvider } from "@/providers/CreateAccountContext";
 import SplashScreen from "@/components/global/splash-screen";
+import { useGetSessionProfileQuery } from "@/api/auth/sessionProfile";
+import { setSessionProfile } from "@/store/slice/sessionProfileSlice";
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
@@ -24,6 +26,14 @@ export default function Providers({ children }: PropsWithChildren) {
 function SessionToState({ children }: PropsWithChildren) {
   const { data, status } = useSession();
   const session = data as any;
+  const token = useAppSelector((store) => store.authState.token);
+
+  const { data: sessionProfile, isLoading } = useGetSessionProfileQuery(
+    undefined,
+    {
+      skip: !token,
+    }
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -31,6 +41,10 @@ function SessionToState({ children }: PropsWithChildren) {
       dispatch(setUser(session?.user?.data?.user));
       dispatch(setToken(session?.user?.data?.access_token));
     }
+
+    if (status === "authenticated" && session?.user && !isLoading) {
+      dispatch(setSessionProfile(sessionProfile || null));
+    }
   }, [status, data, dispatch]);
-  return <>{status === "loading" ? <SplashScreen /> : children}</>;
+  return <>{status === "loading" || isLoading ? <SplashScreen /> : children}</>;
 }

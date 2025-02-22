@@ -16,7 +16,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
-import { MoreVertical, HelpCircle, Mail, Settings, Loader2 } from "lucide-react";
+import {
+  MoreVertical,
+  HelpCircle,
+  Loader2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +32,10 @@ import Image from "next/image";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { AccountPageProps } from ".";
 import { useAppSelector } from "@/hooks";
-import { useFetchAllAccountsQuery, useToggleAccountAutoSyncMutation } from "@/api/m365/accounts";
+import {
+  useFetchAllAccountsQuery,
+  useToggleAccountAutoSyncMutation,
+} from "@/api/m365/accounts";
 import { formatDate } from "@/lib/utils";
 import TableEmptyState from "@/components/global/empty-table-state";
 import TableSkeleton from "@/components/global/table-loading-state";
@@ -37,6 +44,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
   const token = useAppSelector((store) => store.authState.token);
 
+  
   const {
     data: accountData,
     isLoading: accountLoading,
@@ -45,10 +53,11 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     skip: !token,
   });
 
-  const [toggleAutoSync, { isLoading: toggleAccountLoading }] = useToggleAccountAutoSyncMutation();
+  const [toggleAutoSync, { isLoading: toggleAccountLoading }] =
+    useToggleAccountAutoSyncMutation();
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
 
-  const {toast} = useToast()
+  const { toast } = useToast();
   const offices = accountData?.organizations || [];
 
   const getProgressColor = (progress: number) => {
@@ -69,15 +78,19 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
       setLoadingId(orgId);
       await toggleAutoSync({
         orgId: orgId,
-        enabled: !currentState
-      }).unwrap().then((data)=>{
-        toast({
-          title: "Accounts",
-          description: `Auto Sync ${currentState ? "Disabled" : "Enabled"} succesfully.`
-        })
-      });
+        enabled: !currentState,
+      })
+        .unwrap()
+        .then((data) => {
+          toast({
+            title: "Accounts",
+            description: `Auto Sync ${
+              currentState ? "Disabled" : "Enabled"
+            } succesfully.`,
+          });
+        });
     } catch (error) {
-      console.error('Failed to toggle auto-sync:', error);
+      console.error("Failed to toggle auto-sync:", error);
     } finally {
       setLoadingId(null);
     }
@@ -91,7 +104,6 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     const matchesStatus = filter.active
       ? acc.status.toLowerCase() === "active"
       : true;
-
 
     let matchesHealthScore = true;
     switch (filter.healthScore) {
@@ -118,14 +130,18 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
     }
 
     let matchesConnection = true;
-    if (filter.connections !== 'all' && filter.connections !== '') {
-      matchesConnection = acc.connections.some(conn => 
-        conn.toLowerCase() === filter.connections.toLowerCase()
+    if (filter.connections !== "all" && filter.connections !== "") {
+      matchesConnection = acc.connections.some(
+        (conn) => conn.toLowerCase() === filter.connections.toLowerCase()
       );
     }
 
     return (
-      matchesSearchQuery && matchesStatus && matchesHealthScore && matchesAutoSync && matchesConnection
+      matchesSearchQuery &&
+      matchesStatus &&
+      matchesHealthScore &&
+      matchesAutoSync &&
+      matchesConnection
     );
   });
 
@@ -273,7 +289,9 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
                     ) : (
                       <Switch
                         checked={office.autoSync}
-                        onCheckedChange={() => handleToggle(office.id, office.autoSync)}
+                        onCheckedChange={() =>
+                          handleToggle(office.id, office.autoSync)
+                        }
                         disabled={loadingId !== null}
                       />
                     )}

@@ -41,11 +41,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useDebounce } from "@/hooks/useDebounce";
 
 function LogsTable({ filter, setFilter }: LogsPageProps) {
   const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>(
     []
   );
+  const debouncedSearch = useDebounce(filter.search, 500);
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const token = useAppSelector((store) => store.authState.token);
@@ -68,6 +70,8 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
       orgId,
       page: currentPage,
       limit: 20,
+      search: debouncedSearch,
+      status: filter.action.toLowerCase() === "all" ? "" : filter.action,
     },
     {
       skip: !token || orgId.length === 0,
@@ -280,7 +284,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredLogs.map((user: EmailItem, index: any) => (
+                {emails.map((user: EmailItem, index: any) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Checkbox

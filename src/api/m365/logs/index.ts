@@ -43,24 +43,26 @@ interface FetchEmailLogsParams {
   orgId: string;
   page?: number;
   limit?: number;
+  search?: string;
+  status?: string;
 }
 
 export const emailLogApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchEmailLogs: builder.query<EmailLogsResponse, FetchEmailLogsParams>({
-      query: ({ orgId, page = 1, limit = 20 }) => ({
-        url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}`,
+      query: ({ orgId, page = 1, limit = 20,search,status }) => ({
+        url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}`,
         method: "GET",
       }),
-      async onQueryStarted(args, { queryFulfilled }) {
-        console.log('Query started with args:', args);
-        try {
-          const { data } = await queryFulfilled;
-          console.log('Query response:', data);
-        } catch (err) {
-          console.error('Query failed:', err);
-        }
-      },
+      // async onQueryStarted(args, { queryFulfilled }) {
+      //   console.log("Query started with args:", args);
+      //   try {
+      //     const { data } = await queryFulfilled;
+      //     console.log("Query response:", data);
+      //   } catch (err) {
+      //     console.error("Query failed:", err);
+      //   }
+      // },
     }),
   }),
 });
