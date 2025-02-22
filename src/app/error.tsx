@@ -31,10 +31,10 @@ export default function Error({
       <div className="text-center space-y-6 max-w-md mx-auto p-6">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tighter">
-            Oops! Something wrong
+            Oops! Out of Session.
           </h1>
           <p className="text-muted-foreground">
-            Kindly login to start a new session or reload fix the error.
+            Kindly login to start a new session or reload your browser
           </p>
         </div>
 
