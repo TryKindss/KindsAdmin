@@ -190,10 +190,10 @@ export default function RegisterForm(props: RegisterProps) {
               "Sign up"
             )}
           </Button>
-          <p className="text-center">or</p>
+          {/* <p className="text-center">or</p> */}
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button
+          {/* <Button
             size={"lg"}
             variant="outline"
             className="w-full border-kindsGrey"
@@ -204,7 +204,7 @@ export default function RegisterForm(props: RegisterProps) {
               className="w-5 h-5 mr-2"
             />
             Sign up with Google
-          </Button>
+          </Button> */}
 
           <p className="text-xs text-center text-gray-500">
             Already have an account?{" "}
