@@ -159,16 +159,24 @@ export default function RefineSync({
   const [refineSync, { isError, isLoading, data: syncResponse }] =
     useRefineSyncMutation();
 
-
   const handleRefinedSync = async (payload: RefineSyncPayload) => {
     await refineSync(payload)
       .unwrap()
       .then((data) => {
-        onOpenChange(false);
-        toast({
-          title: "Selection updated",
-          duration: 5000,
-        });
+        console.log("REFINESYNC_DATA", data);
+        if (data.error) {
+          toast({
+            title: data?.error,
+            duration: 5000,
+          });
+          return;
+        } else {
+          onOpenChange(false);
+          toast({
+            title: "Selection updated",
+            duration: 5000,
+          });
+        }
       })
       .catch((err) => {
         console.error("Error refining sync", err);
@@ -246,7 +254,7 @@ export default function RefineSync({
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>{tabInfo[tab].tooltip}</p>
-                            </TooltipContent>
+                            </TooltipContent> m
                           </Tooltip>
                         </label>
                       </div>
