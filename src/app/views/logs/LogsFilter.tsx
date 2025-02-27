@@ -16,7 +16,6 @@ function UsersFilter({ filter, setFilter }: LogsPageProps) {
   return (
     <FilterSideBarWrapper>
       <h2 className="text-lg font-semibold">Logs</h2>
-
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="active">Active</TabsTrigger>
@@ -45,7 +44,7 @@ function UsersFilter({ filter, setFilter }: LogsPageProps) {
             <SelectItem value="deleted">Deleted</SelectItem>
           </SelectContent>
         </Select>
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All groups" />
           </SelectTrigger>
@@ -55,7 +54,7 @@ function UsersFilter({ filter, setFilter }: LogsPageProps) {
             <SelectItem value="compliance">Corporate Compliance</SelectItem>
             <SelectItem value="legal">FinTech Legal</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
     </FilterSideBarWrapper>
   );
