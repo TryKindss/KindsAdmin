@@ -58,6 +58,9 @@ export default function SelectAccount({
     const handleKeyPress = (event: KeyboardEvent) => {
       const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
       const isAltPressed = isMac ? event.metaKey : event.altKey;
+      if(isAltPressed){
+        console.log("ALT IS PRESSED ")
+      }
       if (isAltPressed && event.key.toLowerCase() === "n") {
         setOpen(false);
         setShowCreateAccountModal(true);

@@ -38,7 +38,7 @@ export const registerUserApi = apiSlice.injectEndpoints({
     }),
     resendOTP: builder.mutation<any, { email: string }>({
       query: ({ email }) => ({
-        url: "/auth/verify",
+        url: "/auth/resend-verification",
         method: "POST",
         body: { email },
       }),
