@@ -254,7 +254,7 @@ export default function RefineSync({
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>{tabInfo[tab].tooltip}</p>
-                            </TooltipContent> m
+                            </TooltipContent>
                           </Tooltip>
                         </label>
                       </div>

@@ -62,7 +62,7 @@ export default function ConfirmRegister(props: ConfirmProps) {
       toast({
         variant: "destructive",
         title: "Verification Error",
-        description: "Could not verify the OTP. Please try again.",
+        description: (err as any)?.data?.error || "Could not verify the OTP. Please try again.",
       });
     }
   };
