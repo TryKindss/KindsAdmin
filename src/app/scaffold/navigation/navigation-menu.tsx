@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronDown, Bell, Search, LogOut, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import Image from "next/image";
 import Images from "@/utils/images";
 import axios from "axios";
 import { signOut } from "next-auth/react";
+import { useCreateAccountContext } from "@/providers/CreateAccountContext";
 
 export default function NavMenu() {
   const [open, setOpen] = useState(false);
@@ -50,6 +51,31 @@ export default function NavMenu() {
       setLogoutLoading(false);
     }
   };
+
+
+
+//   const { setShowCreateAccountModal, showCreateAccountModal } =
+//   useCreateAccountContext();
+// 
+// React.useEffect(() => {
+//   const handleKeyPress = (event: KeyboardEvent) => {
+//     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+//     console.log("NAVIGATIOON")
+//     const isAltPressed = isMac ? event.metaKey : event.altKey;
+//     if(isAltPressed){
+//       console.log("ALT IS PRESSED ")
+//     }
+//     if (isAltPressed && event.key.toLowerCase() === "n") {
+//       setOpen(false);
+//       setShowCreateAccountModal(true);
+//     }
+//   };
+// 
+//   window.addEventListener("keydown", handleKeyPress);
+//   return () => {
+//     window.removeEventListener("keydown", handleKeyPress);
+//   };
+// }, [setOpen, setShowCreateAccountModal]);
 
   return (
     <>
