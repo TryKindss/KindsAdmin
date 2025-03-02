@@ -82,7 +82,7 @@ function SyncPreviewCard() {
             </p>
           </div>
         )}
-        {!isLoading && syncData && (
+        {!isLoading && (
           <CardContent className="space-y-6">
             <div className="space-y-4">
               <div className="flex justify-between items-start flex-col">
@@ -177,7 +177,6 @@ function SyncPreviewCard() {
             </div>
           </CardContent>
         )}
-
         <RefineSync
           open={open}
           onOpenChange={setOpen}
