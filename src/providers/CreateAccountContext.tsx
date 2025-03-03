@@ -9,6 +9,8 @@ interface AccountCreateContextType {
   setAccountName: React.Dispatch<React.SetStateAction<string>>;
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
+  unverifiedEmail: string;
+  setUnverifiedEmail: React.Dispatch<React.SetStateAction<string>>;
   showCreateAccountModal: boolean;
   setShowCreateAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
   showRefineSync: boolean;
@@ -32,6 +34,7 @@ export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
   const [step, setStep] = useState<number>(2);
   const [accountName, setAccountName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
   const [showCreateAccountModal, setShowCreateAccountModal] =
     useState<boolean>(false);
   const [showRefineSync, setShowRefineSync] = useState<boolean>(false);
@@ -47,10 +50,12 @@ export const AccountCreateProvider: React.FC<ContextProviderProps> = ({
       setEmail,
       showCreateAccountModal,
       setShowCreateAccountModal,
+      unverifiedEmail,
+      setUnverifiedEmail,
       showRefineSync,
       setShowRefineSync,
     };
-  }, [step, accountName, email, showCreateAccountModal]);
+  }, [step, accountName, email, showCreateAccountModal,setUnverifiedEmail]);
 
   return (
     <AccountCreateContext.Provider value={contextValue}>

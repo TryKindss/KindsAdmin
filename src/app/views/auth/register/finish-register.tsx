@@ -31,7 +31,7 @@ interface FinishRegisterProps {
   userId: string;
 }
 
-// The shape of form data you collect
+
 interface OnboardingDetails {
   accountName: string;
   timezone: string;
@@ -40,7 +40,7 @@ interface OnboardingDetails {
   emailProvider: string;
 }
 
-// Yup validation schema
+
 const onboardingSchema = yup.object().shape({
   accountName: yup.string().required("Account name is required"),
   timezone: yup.string().required("Timezone is required"),
@@ -57,17 +57,17 @@ export default function FinishRegister({ userId }: FinishRegisterProps) {
   const router = useRouter();
   const { toast } = useToast();
 
-  // RTK Query mutation
+  
   const [registerOnboarding, { isLoading }] = useRegisterOnboardingMutation();
 
-  // Initialize Formik
+  
   const formik = useFormik<OnboardingDetails>({
     initialValues: {
       accountName: "",
-      timezone: "los-angeles", // default selection
-      accountsManaged: "1-5", // default selection
-      inboxesManaged: "1-5", // default selection
-      emailProvider: "outlook", // default selection
+      timezone: "los-angeles", 
+      accountsManaged: "1-5", 
+      inboxesManaged: "1-5", 
+      emailProvider: "Outlook", 
     },
     validationSchema: onboardingSchema,
     onSubmit: async (values) => {
@@ -228,9 +228,9 @@ export default function FinishRegister({ userId }: FinishRegisterProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Outlook">Outlook</SelectItem>
-                <SelectItem value="Gmail">Gmail</SelectItem>
+                {/* <SelectItem value="Gmail">Gmail</SelectItem>
                 <SelectItem value="Yahoo">Yahoo Mail</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="other">Other</SelectItem> */}
               </SelectContent>
             </Select>
             {formik.touched.emailProvider && formik.errors.emailProvider && (
