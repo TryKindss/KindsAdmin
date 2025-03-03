@@ -46,12 +46,7 @@ function DashboardHero() {
               <p className="text-primary font-semibold">
                 Press{" "}
                 <kbd className="px-2 py-1 font-bold bg-muted rounded border text-gray-500">
-                  ^ N
-                </kbd>{" "}
-                on Mac or{" "}{" "}
-                <kbd className="px-2 py-1 font-bold bg-muted rounded border text-gray-500">
-                  
-                  ALT N
+                  SHIFT N
                 </kbd>{" "}
                 to create a new organization
               </p>
