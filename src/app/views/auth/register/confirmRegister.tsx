@@ -24,7 +24,6 @@ import {
 } from "@/api/auth/registerUser";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { StringDecoder } from "node:string_decoder";
 
 interface ConfirmProps {
   email: string;
