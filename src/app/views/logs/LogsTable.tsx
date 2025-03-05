@@ -42,12 +42,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useDebounce } from "@/hooks/useDebounce";
+import { getActionBadgeColor, getBadgeVariant, getProgressColor } from "@/utils/helper";
+import { useRouter } from "next/navigation";
 
 function LogsTable({ filter, setFilter }: LogsPageProps) {
   const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>(
     []
   );
   const debouncedSearch = useDebounce(filter.search, 500);
+
+  const router = useRouter();
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const token = useAppSelector((store) => store.authState.token);
@@ -99,41 +103,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     );
   };
 
-  const getActionBadgeColor = (action: string) => {
-    switch (action.toLowerCase()) {
-      case "quarantined":
-        return "text-red-600 bg-red-50 rounded-lg border-2 border-red-200 w-max";
-      case "delivered":
-        return "text-gray-600 bg-gray-50 rounded-lg border-2 border-gray-200 w-max";
-      default:
-        return "text-gray-500 bg-gray-50 rounded-lg border-2 border-gray-200 w-max";
-    }
-  };
-
-  const getBadgeVariant = (detection: string) => {
-    switch (detection.toLowerCase()) {
-      case "malicious":
-        return "bg-red-50 text-red-700 hover:bg-red-100";
-      case "suspicious sender":
-        return "bg-yellow-50 text-yellow-700 hover:bg-yellow-100";
-      case "not malicious":
-        return "bg-green-50 text-green-700 hover:bg-green-100";
-      case "marketing":
-        return "bg-blue-50 text-blue-700 hover:bg-blue-100";
-      case "safe":
-        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
-      default:
-        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
-    }
-  };
-
-  const getProgressColor = (progress: number) => {
-    if (progress < 79) return "bg-red-500";
-    if (progress < 99) return "bg-orange-500";
-    if (progress < 100) return "bg-yellow-500";
-    return "bg-green-500";
-  };
-
+ 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || !emailLogs?.pagination) return;
     if (newPage > Number(emailLogs.pagination.totalPages)) return;
@@ -304,10 +274,10 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell>{user.user}</TableCell>
+                    <TableCell className="truncate text-nowrap max-w-[300px]">{user.user}</TableCell>
                     <TableCell>
                       <div>
-                        <p>{user.emailHeader.from}</p>
+                        <p className="truncate text-nowrap max-w-[200px]">{user.emailHeader.from}</p>
                         <p className="text-sm text-muted-foreground line-clamp-1">
                           {user.emailHeader.subject}
                         </p>
@@ -349,10 +319,12 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         <DropdownMenuTrigger>
                           <MoreVertical className="h-5 w-5 text-muted-foreground" />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>View Profile</DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuContent align="end" className="text-xs">
+                          <DropdownMenuItem className="text-xs" onClick={()=>{
+                            router.push(`logs/${user.id}`)
+                          }}>View Log</DropdownMenuItem>
+                          <DropdownMenuItem className="text-xs">Edit</DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600 text-xs">
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>

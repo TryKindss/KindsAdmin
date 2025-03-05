@@ -8,6 +8,7 @@ import PoliciesView from "../policies";
 import SettingsView from "../settings";
 import UsersView from "../inboxes";
 import AccountsView from "../accounts";
+import { useDashboardTabContext } from "@/providers/DashboardTabContext";
 
 function DashboardView() {
   const tabItems = [
@@ -20,8 +21,9 @@ function DashboardView() {
     { value: "insights", label: "Insights", content: <InsightView /> },
   ];
 
-  const [active, setActive] = useState(tabItems[0].value);
+  // const [active, setActive] = useState(tabItems[0].value);
 
+  const {active, setActive} = useDashboardTabContext();
   return (
     <div className="layout h-full">
       <TabList active={active} setActive={setActive} tabItems={tabItems} />

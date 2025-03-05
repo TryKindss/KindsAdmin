@@ -10,13 +10,16 @@ import { AccountCreateProvider } from "@/providers/CreateAccountContext";
 import SplashScreen from "@/components/global/splash-screen";
 import { useGetSessionProfileQuery } from "@/api/auth/sessionProfile";
 import { setSessionProfile } from "@/store/slice/sessionProfileSlice";
+import { DashboardTabProvider } from "@/providers/DashboardTabContext";
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <Provider store={store}>
       <SessionProvider>
         <SessionToState>
-          <AccountCreateProvider>{children}</AccountCreateProvider>
+          <AccountCreateProvider>
+            <DashboardTabProvider>{children}</DashboardTabProvider>
+          </AccountCreateProvider>
         </SessionToState>
       </SessionProvider>
     </Provider>
