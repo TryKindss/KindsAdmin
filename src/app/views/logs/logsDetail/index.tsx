@@ -2,20 +2,29 @@
 
 import { useState } from "react";
 import { ArrowLeft, HelpCircle, Info } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { InfoItem, InfoItemProps } from "./InfoItem";
+import { useFetchEmailLogByIdQuery } from "@/api/m365/logs";
 
 export default function EmailDetailsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("details");
 
+  const { id } = useParams();
+  const orgId = Array.isArray(id) ? id[0] : id;
+
+  console.log("ORDID", id)
+
   const handleGoBack = () => {
     router.back();
   };
 
+  const {data: emailDetails, isError, isLoading} = useFetchEmailLogByIdQuery({orgId})
+
+  console.log("EMAILDETAILS", emailDetails)
   const emailDetailsOverview: InfoItemProps[] = [
     {
       label: "Date and time received",
@@ -146,6 +155,10 @@ export default function EmailDetailsPage() {
         "Checks if the email contains any potential malware or harmful links.",
     },
   ];
+
+
+
+
 
   return (
     <div className="layout h-full">
