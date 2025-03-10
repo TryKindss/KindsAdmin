@@ -16,6 +16,7 @@ export const getBadgeVariant = (detection: string) => {
     case "suspicious sender":
       return "bg-yellow-50 text-yellow-700 hover:bg-yellow-100";
     case "not malicious":
+    case "pass":
       return "bg-green-50 text-green-700 hover:bg-green-100";
     case "marketing":
       return "bg-blue-50 text-blue-700 hover:bg-blue-100";
@@ -23,7 +24,7 @@ export const getBadgeVariant = (detection: string) => {
       return "bg-gray-50 text-gray-700 hover:bg-gray-100";
     default:
       return "bg-gray-50 text-gray-700 hover:bg-gray-100";
-  }
+}
 };
 
 export const getProgressColor = (progress: number) => {
