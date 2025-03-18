@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, HelpCircle, Info, Loader2 } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,8 +10,11 @@ import { InfoItem, InfoItemProps } from "./InfoItem";
 import { useFetchEmailLogByIdQuery } from "@/api/m365/logs";
 import { formatDate } from "@/lib/utils";
 import DOMPurify from "dompurify";
+import { useDashboardTabContext } from "@/providers/DashboardTabContext";
+import EmailSummary from "./details/information-summary";
 
 export default function EmailDetailsPage() {
+  const { setActive } = useDashboardTabContext();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("details");
 
@@ -169,6 +172,11 @@ export default function EmailDetailsPage() {
   const sanitizedContent = DOMPurify.sanitize(emailDetails?.body || "");
 
   console.log("Sanitized content ", sanitizedContent);
+
+  useEffect(() => {
+    setActive("logs");
+  }, []);
+
   return (
     <>
       {isLoading ? (
@@ -176,161 +184,170 @@ export default function EmailDetailsPage() {
           <Loader2 className="animate-spin text-black w-6 h-6" />
         </div>
       ) : (
-        <div className="layout h-full">
-          <Button
-            variant="ghost"
-            className="mb-4 pl-0 flex items-center gap-1"
-            onClick={handleGoBack}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Go back
-          </Button>
+        <div className="grid grid-cols-5 gap-8">
+          <div className="layout h-full col-span-3">
+            <Button
+              variant="ghost"
+              className="mb-4 pl-0 flex items-center gap-1"
+              onClick={handleGoBack}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Go back
+            </Button>
 
-          <div className="mb-6 capitalize">
-            <h1 className="text-2xl font-bold">{emailDetails?.subject}</h1>
-            <p className="text-muted-foreground">{emailDetails?.subject}</p>
-          </div>
-          <Tabs
-            defaultValue="details"
-            value={activeTab}
-            onValueChange={setActiveTab}
-          >
-            <TabsList className="border-b w-full justify-start rounded-none pb-0 mb-6">
-              <TabsTrigger
-                value="details"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Details
-              </TabsTrigger>
-              <TabsTrigger
-                value="email"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Email
-              </TabsTrigger>
-              <TabsTrigger
-                value="lorem1"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Lorem ipsum
-              </TabsTrigger>
-              <TabsTrigger
-                value="lorem2"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Lorem ipsum
-              </TabsTrigger>
-              <TabsTrigger
-                value="lorem3"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Lorem ipsum
-              </TabsTrigger>
-              <TabsTrigger
-                value="similar"
-                className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                Similar
-              </TabsTrigger>
-            </TabsList>
+            <div className="mb-6 capitalize">
+              <h1 className="text-2xl font-bold">{emailDetails?.subject}</h1>
+              <p className="text-muted-foreground">{emailDetails?.subject}</p>
+            </div>
+            <Tabs
+              defaultValue="details"
+              value={activeTab}
+              onValueChange={setActiveTab}
+            >
+              <TabsList className="border-b w-full justify-start rounded-none pb-0 mb-6">
+                <TabsTrigger
+                  value="details"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Details
+                </TabsTrigger>
+                <TabsTrigger
+                  value="email"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Email
+                </TabsTrigger>
+                <TabsTrigger
+                  value="lorem1"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Lorem ipsum
+                </TabsTrigger>
+                <TabsTrigger
+                  value="lorem2"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Lorem ipsum
+                </TabsTrigger>
+                <TabsTrigger
+                  value="lorem3"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Lorem ipsum
+                </TabsTrigger>
+                <TabsTrigger
+                  value="similar"
+                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                >
+                  Similar
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="details" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-                {emailDetailsOverview.map((item: InfoItemProps, index) => {
-                  return (
-                    <InfoItem
-                      label={item.label}
-                      value={item.value}
-                      tooltipContent={item.tooltipContent}
-                      isBadge={item.isBadge || false}
-                      key={index}
+              <TabsContent value="details" className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                  {emailDetailsOverview.map((item: InfoItemProps, index) => {
+                    return (
+                      <InfoItem
+                        label={item.label}
+                        value={item.value}
+                        tooltipContent={item.tooltipContent}
+                        isBadge={item.isBadge || false}
+                        key={index}
+                      />
+                    );
+                  })}
+                </div>
+
+                <Section title="Security factors" description="lorem ipsum...">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                    {emailSecurityOverview.map((item: InfoItemProps, index) => {
+                      return (
+                        <InfoItem
+                          label={item.label}
+                          value={item.value}
+                          tooltipContent={item.tooltipContent}
+                          isBadge={item.isBadge || false}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                    {emailSecurityScores.map((item: InfoItemProps, index) => {
+                      return (
+                        <InfoItem
+                          label={item.label}
+                          value={item.value}
+                          tooltipContent={item.tooltipContent}
+                          isBadge={item.isBadge || false}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </div>
+                </Section>
+
+                <Section title="Threat Analysis" description="lorem ipsum...">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                    {emailThreatAnalysis.map((item: InfoItemProps, index) => {
+                      return (
+                        <InfoItem
+                          label={item.label}
+                          value={item.value}
+                          tooltipContent={item.tooltipContent}
+                          isBadge={item.isBadge || false}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </div>
+                </Section>
+
+                <Section title="Detections" description="lorem ipsum...">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                    {emailThreatAnalysis.map((item: InfoItemProps, index) => {
+                      return (
+                        <InfoItem
+                          label={item.label}
+                          value={item.value}
+                          tooltipContent={item.tooltipContent}
+                          isBadge={item.isBadge || false}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </div>
+                </Section>
+              </TabsContent>
+
+              <TabsContent value="email">
+                <div className="p-6 border rounded-md">
+                  <p>Email content would go here...</p>
+
+                  <div className="my-8">
+                    <div
+                      className="email-content"
+                      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
                     />
-                  );
-                })}
-              </div>
-
-              <Section title="Security factors" description="lorem ipsum...">
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-                  {emailSecurityOverview.map((item: InfoItemProps, index) => {
-                    return (
-                      <InfoItem
-                        label={item.label}
-                        value={item.value}
-                        tooltipContent={item.tooltipContent}
-                        isBadge={item.isBadge || false}
-                        key={index}
-                      />
-                    );
-                  })}
+                  </div>
                 </div>
+              </TabsContent>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-                  {emailSecurityScores.map((item: InfoItemProps, index) => {
-                    return (
-                      <InfoItem
-                        label={item.label}
-                        value={item.value}
-                        tooltipContent={item.tooltipContent}
-                        isBadge={item.isBadge || false}
-                        key={index}
-                      />
-                    );
-                  })}
+              <TabsContent value="similar">
+                <div className="p-6 border rounded-md">
+                  <p>Similar emails would be listed here...</p>
                 </div>
-              </Section>
+              </TabsContent>
+            </Tabs>
+          </div>
+          <div className="layout h-full col-span-2">
+            <p>Email summary</p>
+            <div>
+              <EmailSummary/>
 
-              <Section title="Threat Analysis" description="lorem ipsum...">
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-                  {emailThreatAnalysis.map((item: InfoItemProps, index) => {
-                    return (
-                      <InfoItem
-                        label={item.label}
-                        value={item.value}
-                        tooltipContent={item.tooltipContent}
-                        isBadge={item.isBadge || false}
-                        key={index}
-                      />
-                    );
-                  })}
-                </div>
-              </Section>
-
-              <Section title="Detections" description="lorem ipsum...">
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-                  {emailThreatAnalysis.map((item: InfoItemProps, index) => {
-                    return (
-                      <InfoItem
-                        label={item.label}
-                        value={item.value}
-                        tooltipContent={item.tooltipContent}
-                        isBadge={item.isBadge || false}
-                        key={index}
-                      />
-                    );
-                  })}
-                </div>
-              </Section>
-            </TabsContent>
-
-            <TabsContent value="email">
-              <div className="p-6 border rounded-md">
-                <p>Email content would go here...</p>
-
-                <div className="my-8">
-                  <div
-                    className="email-content"
-                    dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                  />
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="similar">
-              <div className="p-6 border rounded-md">
-                <p>Similar emails would be listed here...</p>
-              </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </div>
       )}
     </>
