@@ -112,7 +112,7 @@ export default function LoginAuth() {
             <Logo />
           </div>
           <CardTitle className="text-xl font-bold">Welcome Back</CardTitle>
-          <p className="text-sm text-gray-500">Login in less than a minute</p>
+          {/* <p className="text-sm text-gray-500">Login in less than a minute</p> */}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">

@@ -184,7 +184,7 @@ export default function EmailDetailsPage() {
           <Loader2 className="animate-spin text-black w-6 h-6" />
         </div>
       ) : (
-        <div className="grid grid-cols-5 gap-8">
+        <div className="grid grid-cols-5 gap-">
           <div className="layout h-full col-span-3">
             <Button
               variant="ghost"
@@ -342,7 +342,6 @@ export default function EmailDetailsPage() {
             </Tabs>
           </div>
           <div className="layout h-full col-span-2">
-            <p>Email summary</p>
             <div>
               <EmailSummary/>
 
