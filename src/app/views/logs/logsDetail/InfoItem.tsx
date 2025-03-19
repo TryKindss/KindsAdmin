@@ -1,9 +1,11 @@
+import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getBadgeVariant } from "@/utils/helper";
 import { HelpCircle } from "lucide-react";
 
 export interface InfoItemProps {
@@ -12,7 +14,12 @@ export interface InfoItemProps {
   tooltipContent?: string;
   isBadge?: Boolean | null;
 }
-export function InfoItem({ label, value, tooltipContent }: InfoItemProps) {
+export function InfoItem({
+  label,
+  value,
+  tooltipContent,
+  isBadge,
+}: InfoItemProps) {
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
@@ -30,7 +37,12 @@ export function InfoItem({ label, value, tooltipContent }: InfoItemProps) {
           </TooltipProvider>
         )}
       </div>
-      <div className="text-sm">{value}</div>
+
+      {isBadge ? (
+        <Badge className={`${getBadgeVariant(value as string || "")}`}>{value}</Badge>
+      ) : (
+        <p className="text-sm">{value}</p>
+      )}
     </div>
   );
 }

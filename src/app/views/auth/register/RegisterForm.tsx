@@ -213,7 +213,7 @@ export default function RegisterForm(props: RegisterProps) {
             </Link>
           </p>
         </CardFooter>
-      </Card>
+      </Card>       
     </>
   );
 }
