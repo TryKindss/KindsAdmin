@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp, HelpCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -119,9 +119,9 @@ export default function EmailSummary() {
   return (
     <div className=" max-w-3xl mx-auto ">
       {/* Security Notes Card */}
-      <div className="border rounded-lg p-5 mb-4">
+      <div className="border-2 border-[#D0D5DD] bg-white p-3 mb-4">
         <h2 className="font-semibold mb-2">Kinds Security Notes</h2>
-        <p className="text-gray-700 mb-4 text-sm">
+        <p className="text-gray-700 mb-4 text-sm   ">
           This email was sent by {notification.senderEmail} at{" "}
           {notification.timestamp} to {notification.recipientEmail} along with{" "}
           {notification.quarantinedThreads} other inboxes managed by{" "}
@@ -149,11 +149,11 @@ export default function EmailSummary() {
       {/* Message Status */}
       <div className="mb-4">
         <div className="flex items-center mb-1">
-          <span className="text-sm font-medium mr-1">Message status</span>
+          <span className="text-xs font-semibold text-[#344054] mr-1">Message status</span>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+                <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
               </TooltipTrigger>
               <TooltipContent>
                 <p className="w-[200px]">
@@ -163,19 +163,22 @@ export default function EmailSummary() {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <Badge variant="destructive" className="rounded-full font-normal">
-          {notification.messageStatus}
-        </Badge>
+
+        <div className="border bg-white p-2 mb-4">
+          <Badge variant="destructive" className="rounded-full font-normal">
+            {notification.messageStatus}
+          </Badge>
+        </div>
       </div>
 
       {/* Message Type */}
       <div className="mb-4">
         <div className="flex items-center mb-1">
-          <span className="text-sm font-medium mr-1">Message type</span>
+          <span className="text-xs font-semibold text-[#344054] mr-1">Message type</span>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+                <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
               </TooltipTrigger>
               <TooltipContent>
                 <p className="w-[200px]">
@@ -185,9 +188,11 @@ export default function EmailSummary() {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <Badge variant="destructive" className="rounded-full font-normal">
-          {notification.messageType}
-        </Badge>
+        <div className="border bg-white p-2 mb-4">
+          <Badge variant="destructive" className="rounded-full font-normal">
+            {notification.messageType}
+          </Badge>
+        </div>
       </div>
 
       {/* Detections */}
@@ -198,7 +203,7 @@ export default function EmailSummary() {
             <Badge
               key={index}
               variant="outline"
-              className="rounded-full font-normal"
+              className="rounded-full font-normal text-xs border-[#D5D9EB] border-2 text-[#363F72]"
             >
               {detection}
             </Badge>
@@ -208,167 +213,174 @@ export default function EmailSummary() {
 
       {/* Sender Details */}
       <div className="mb-6">
-          <h3 className="text-sm font-medium mb-2">Sender Details</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Sender email</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Email address of the sender</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.senderEmail}</div>
+        <h3 className="text-sm font-medium mb-2">Sender Details</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Sender email</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Email address of the sender</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Sender Score</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Reputation score of the sender</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              
-              <div className="flex items-center">
-                <Progress value={notification.senderScore} className="w-48 h-2 mr-2" />
-                <span className="text-sm">{notification.senderScore}%</span>
-              </div>
+            <div className="text-sm">{notification.senderEmail}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Sender Score</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Reputation score of the sender</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
 
-              
+            <div className="flex items-center">
+              <div className="w-48 h-2 bg-gray-200 rounded-full mr-2">
+                <div
+                  className="h-2 bg-red-500 rounded-full"
+                  style={{ width: `${notification.senderScore}%` }}
+                />
+              </div>
+              <span className="text-sm">{notification.senderScore}%</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Activity */}
-        <div className="mb-6">
-          <h3 className="text-sm font-medium mb-2">Activity</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Recipient email</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Email address of the recipient</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.recipientEmail}</div>
+      {/* Activity */}
+      <div className="mb-6">
+        <h3 className="text-sm font-medium mb-2">Activity</h3>
+        <div className="grid grid-cols-3  gap-4">
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Recipient email</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Email address of the recipient</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Received</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when the email was received</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.received}</div>
+            <div className="text-sm">{notification.recipientEmail}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Received</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when the email was received</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Detected</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when the threat was detected</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.detected}</div>
+            <div className="text-sm">{notification.activity.received}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Detected</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when the threat was detected</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Opened</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when the email was opened</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.opened}</div>
+            <div className="text-sm">{notification.activity.detected}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Opened</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when the email was opened</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Link Clicked</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when a link in the email was clicked</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.linkClicked}</div>
+            <div className="text-sm">{notification.activity.opened}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Link Clicked</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when a link in the email was clicked</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">First Replied</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when the email was first replied to</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.firstReplied || "N/A"}</div>
+            <div className="text-sm">{notification.activity.linkClicked}</div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">First Replied</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when the email was first replied to</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div>
-              <div className="flex items-center mb-1">
-                <span className="text-sm font-medium mr-1">Reported</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Time when the email was reported</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="text-sm">{notification.activity.reported || "N/A"}</div>
+            <div className="text-sm">
+              {notification.activity.firstReplied || "N/A"}
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center mb-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">Reported</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Time when the email was reported</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div className="text-sm">
+              {notification.activity.reported || "N/A"}
             </div>
           </div>
         </div>
+      </div>
 
       {/* Collapsible Sections */}
       <div className="border-t pt-4">
@@ -427,7 +439,7 @@ export default function EmailSummary() {
         {expandedSections.orgDetails && (
           <div className="py-2">
             <div className="flex items-center mb-1">
-              <span className="text-sm font-medium mr-1">
+              <span className="text-xs font-semibold text-[#344054] mr-1">
                 Organization Manager
               </span>
               <Info className="w-4 h-4 text-gray-400" />
