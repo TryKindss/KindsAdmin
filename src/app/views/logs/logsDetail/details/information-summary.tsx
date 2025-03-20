@@ -119,7 +119,7 @@ export default function EmailSummary() {
   return (
     <div className=" max-w-3xl mx-auto ">
       {/* Security Notes Card */}
-      <div className="border-2 border-[#D0D5DD] bg-white p-3 mb-4">
+      <div className="border-2 border-[#D0D5DD] bg-white p-4 shadow-none mb-4">
         <h2 className="font-semibold mb-2">Kinds Security Notes</h2>
         <p className="text-gray-700 mb-4 text-sm   ">
           This email was sent by {notification.senderEmail} at{" "}
@@ -397,7 +397,7 @@ export default function EmailSummary() {
           )}
         </button>
         {expandedSections.organizations && (
-          <div className="py-2 text-sm text-gray-700">
+          <div className="py-2 text-sm text-[#475467]">
             {notification.impactedOrganizations.join(", ")}
           </div>
         )}
@@ -417,7 +417,7 @@ export default function EmailSummary() {
           )}
         </button>
         {expandedSections.domains && (
-          <div className="py-2 text-sm text-gray-700">
+          <div className="py-2 text-sm text-[#475467]">
             {notification.impactedDomains.join(", ")}
           </div>
         )}
