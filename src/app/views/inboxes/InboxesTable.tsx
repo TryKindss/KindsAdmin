@@ -212,12 +212,12 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                         aria-label={`Select ${user.user.displayName}`}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-xs">
                       <div className="flex flex-col ">
-                        <span className="font-medium capitalize">
+                        <span className="font-medium capitalize truncate text-ellipsis">
                           {user.user.displayName}
                         </span>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-muted-foreground truncate text-ellipsis">
                           {user.user.email}
                         </span>
                       </div>

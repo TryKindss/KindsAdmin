@@ -301,7 +301,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {user.detections.map((detection, i) => (
+                      {user.detections.slice(0,1).map((detection, i) => (
                         <Badge
                           key={i}
                           variant="outline"
