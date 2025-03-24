@@ -16,11 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
-import {
-  MoreVertical,
-  HelpCircle,
-  Loader2,
-} from "lucide-react";
+import { MoreVertical, HelpCircle, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +40,6 @@ import { useToast } from "@/hooks/use-toast";
 export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
   const token = useAppSelector((store) => store.authState.token);
 
-  
   const {
     data: accountData,
     isLoading: accountLoading,
@@ -220,19 +215,23 @@ export default function AccountsTable({ filter, setFilter }: AccountPageProps) {
                     {office.displayName}
                   </TableCell>
                   <TableCell className="py-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-24 rounded-full bg-gray-200">
-                        <div
-                          className={`h-2 rounded-full ${getProgressColor(
-                            office.healthScore
-                          )}`}
-                          style={{ width: `${office.healthScore}%` }}
-                        />
+                    {office.healthScore === null ? (
+                      <p className="text-center">nil</p>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-24 rounded-full bg-gray-200">
+                          <div
+                            className={`h-2 rounded-full ${getProgressColor(
+                              office.healthScore
+                            )}`}
+                            style={{ width: `${office.healthScore}%` }}
+                          />
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {office.healthScore}
+                        </span>
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        {office.healthScore}%
-                      </span>
-                    </div>
+                    )}
                   </TableCell>
                   <TableCell className="py-3">
                     <Badge
