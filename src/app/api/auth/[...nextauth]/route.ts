@@ -48,7 +48,7 @@ const authOptions: NextAuthOptions = {
         } catch (error) {
           console.error(
             "Error :",
-            (error as any).response.data.error
+            (error as any).response.data
           );
           return null;
         }

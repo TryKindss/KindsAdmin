@@ -218,28 +218,10 @@ export default function EmailDetailsPage() {
                   Email
                 </TabsTrigger>
                 <TabsTrigger
-                  value="lorem1"
-                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                >
-                  Lorem ipsum
-                </TabsTrigger>
-                <TabsTrigger
-                  value="lorem2"
-                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                >
-                  Lorem ipsum
-                </TabsTrigger>
-                <TabsTrigger
-                  value="lorem3"
-                  className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                >
-                  Lorem ipsum
-                </TabsTrigger>
-                <TabsTrigger
                   value="similar"
                   className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
                 >
-                  Similar
+                  Similar Messages
                 </TabsTrigger>
               </TabsList>
 
@@ -343,8 +325,7 @@ export default function EmailDetailsPage() {
           </div>
           <div className="layout h-full col-span-2">
             <div>
-              <EmailSummary/>
-
+              <EmailSummary />
             </div>
           </div>
         </div>
