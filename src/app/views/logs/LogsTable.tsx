@@ -277,9 +277,9 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                     <TableCell className="truncate text-nowrap max-w-[300px]">{user.user}</TableCell>
                     <TableCell>
                       <div>
-                        <p className="truncate text-nowrap max-w-[200px]">{user.emailHeader.from}</p>
+                        <p className="truncate text-nowrap max-w-[200px]">{user.emailHeader?.from}</p>
                         <p className="text-sm text-muted-foreground line-clamp-1">
-                          {user.emailHeader.subject}
+                          {user.emailHeader?.subject}
                         </p>
                       </div>
                     </TableCell>
