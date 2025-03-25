@@ -264,7 +264,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col w-max">
                         <Badge
                           key={index}
                           variant="outline"
@@ -301,7 +301,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {user.detections.slice(0,1).map((detection, i) => (
+                      {user.detections.map((detection, i) => (
                         <Badge
                           key={i}
                           variant="outline"
