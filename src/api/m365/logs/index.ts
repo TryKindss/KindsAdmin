@@ -1,4 +1,5 @@
 import apiSlice from "@/api";
+import { EmailLogResponse } from "@/lib/type/logs";
 
 interface EmailLogsResponse {
   items: EmailLogItem[];
@@ -141,7 +142,7 @@ interface EmailByIdParams {
 
 export const emailLogApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchEmailLogs: builder.query<EmailLogsResponse, FetchEmailLogsParams>({
+    fetchEmailLogs: builder.query<EmailLogResponse, FetchEmailLogsParams>({
       query: ({ orgId, page = 1, limit = 20, search, status }) => ({
         url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}`,
         method: "GET",

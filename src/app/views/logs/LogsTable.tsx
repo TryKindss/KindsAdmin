@@ -83,13 +83,13 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     }
   );
 
-  const emails = emailLogs?.items || [];
+  const emails = emailLogs?.items || [] as EmailItem[] || [];
 
-  const filteredLogs = emails?.filter((email: EmailItem) => {
-    const matchesAction =
-      filter.action === "all" || email.action.toLowerCase() === filter.action;
-    return matchesAction;
-  });
+  // const filteredLogs = emails?.filter((email: EmailItem) => {
+  //   const matchesAction =
+  //     filter.action === "all" || email.action.toLowerCase() === filter.action;
+  //   return matchesAction;
+  // });
 
   const toggleMessage = (id: string) => {
     setSelectedMessageIds((prev) =>
@@ -254,13 +254,13 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {emails.map((user: EmailItem, index: any) => (
+                {emails.map((user, index: any) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Checkbox
                         checked={selectedMessageIds.includes(user.id)}
                         onCheckedChange={() => toggleMessage(user.id)}
-                        aria-label={`Select ${user.user}`}
+                        aria-label={`Select ${user.from.address}`}
                       />
                     </TableCell>
                     <TableCell>
@@ -274,16 +274,16 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell className="truncate text-nowrap max-w-[300px]">{user.user}</TableCell>
+                    <TableCell className="truncate text-nowrap max-w-[300px]">{user.from.name}</TableCell>
                     <TableCell>
                       <div>
-                        <p className="truncate text-nowrap max-w-[200px]">{user.emailHeader?.from}</p>
+                        <p className="truncate text-nowrap max-w-[200px]">{user.from.address}</p>
                         <p className="text-sm text-muted-foreground line-clamp-1">
-                          {user.emailHeader?.subject}
+                          {user.subject}
                         </p>
                       </div>
                     </TableCell>
-                    <TableCell>{user.totalUsers}</TableCell>
+                    <TableCell>{user.action}</TableCell>
 
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
@@ -301,7 +301,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {user.detections.map((detection, i) => (
+                      {user.detections.slice(0,1).map((detection, i) => (
                         <Badge
                           key={i}
                           variant="outline"

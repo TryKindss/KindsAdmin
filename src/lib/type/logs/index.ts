@@ -1,27 +1,37 @@
-interface EmailLogResponse {
+export interface EmailLogResponse {
   items: EmailItem[];
   pagination: Pagination;
 }
 
 export interface EmailItem {
-  action: string;
-  user: string;
   id: string;
-  messageId: string;
-  emailHeader: EmailHeader;
-  totalUsers: number;
+  microsoftId: string;
+  subject: string;
+  from: EmailFrom;
+  to: string[]; // Assuming 'to' is an array of strings
+  receivedDateTime: string; // ISO 8601 date string
+  hasAttachments: boolean;
+  status: string;
+  action: string;
   senderScore: number;
   detections: string[];
+}
+
+export interface EmailFrom {
+  name: string;
+  address: string;
+  domain: string;
 }
 
 export interface EmailHeader {
   subject: string;
   from: string;
 }
-
 export interface Pagination {
-  total: number;
-  page: number;
-  limit: number;
-  pages: number;
+  currentPage: string;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
