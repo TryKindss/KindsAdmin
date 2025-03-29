@@ -255,7 +255,10 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
               </TableHeader>
               <TableBody>
                 {emails.map((user, index: any) => (
-                  <TableRow key={index}>
+                  <TableRow className="hover:cursor-pointer" key={index} onClick={(e)=>{
+                    e.stopPropagation()
+                    router.push(`logs/${user.id}`)
+                  }}>
                     <TableCell>
                       <Checkbox
                         checked={selectedMessageIds.includes(user.id)}
@@ -320,7 +323,8 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                           <MoreVertical className="h-5 w-5 text-muted-foreground" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="text-xs">
-                          <DropdownMenuItem className="text-xs" onClick={()=>{
+                          <DropdownMenuItem className="text-xs" onClick={(e)=>{
+                            //  e.stopPropagation()
                             router.push(`logs/${user.id}`)
                           }}>View Log</DropdownMenuItem>
                           <DropdownMenuItem className="text-xs">Edit</DropdownMenuItem>
