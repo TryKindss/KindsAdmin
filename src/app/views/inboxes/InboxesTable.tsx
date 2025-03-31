@@ -27,7 +27,7 @@ import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { UserPageProps } from ".";
 import TableSkeleton from "@/components/global/table-loading-state";
-import { useFetchAllUsersQuery } from "@/api/m365/users";
+import { useFetchAllUsersQuery } from "@/api/m365/inboxes";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { formatDate } from "@/lib/utils";
 import { UserData } from "@/lib/type/user";

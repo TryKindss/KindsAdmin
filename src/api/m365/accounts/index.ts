@@ -15,7 +15,7 @@ export const domainStatApi = apiSlice
           while (retryCount < MAX_RETRIES) {
             try {
               const result = await baseQuery({
-                url: "email/microsoft/organization",
+                url: "email/microsoft/organization?allOrganizations=true",
                 method: "GET",
               });
 
@@ -84,7 +84,7 @@ export const domainStatApi = apiSlice
         { orgId: string; enabled: boolean }
       >({
         query: ({ enabled, orgId }) => ({
-          url: `email/microsoft/organization/${orgId}/auto-sync`,
+          url: `email/microsoft/organization/${orgId}/auto-sync?allOrganizations=true`,
           method: "PATCH",
           body: {
             enabled,

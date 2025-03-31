@@ -6,20 +6,20 @@ export const m365UsersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchAllUsers: builder.query<UserData, void>({
       query: () => ({
-        url: "users/organization",
+        url: "users/organization?allOrganizations=true",
         method: "GET",
       }),
     }),
     fetchDomainStat: builder.query<DomainStatInterface, void>({
       query: () => ({
-        url: "microsoft/dashboard/stats",
+        url: "microsoft/dashboard/stats?allOrganizations=true",
         method: "GET",
       }),
     }),
 
     fetchDashboardStat: builder.query<DashboardStatsInterface, void>({
       query: () => ({
-        url: "protection/dashboard/stats",
+        url: "protection/dashboard/stats?allOrganizations=true",
         method: "GET",
       }),
     }),

@@ -144,7 +144,7 @@ export const emailLogApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchEmailLogs: builder.query<EmailLogResponse, FetchEmailLogsParams>({
       query: ({ orgId, page = 1, limit = 20, search, status }) => ({
-        url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}`,
+        url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}&allOrganizations=true`,
         method: "GET",
       }),
       // async onQueryStarted(args, { queryFulfilled }) {
@@ -159,7 +159,7 @@ export const emailLogApi = apiSlice.injectEndpoints({
     }),
     fetchEmailLogById: builder.query<EmailByIdResponse, EmailByIdParams>({
       query: ({ orgId }) => ({
-        url: `/protection/email-logs/details/${orgId}`,
+        url: `/protection/email-logs/details/${orgId}?allOrganizations=true`,
         method: "GET",
       }),
     }),
