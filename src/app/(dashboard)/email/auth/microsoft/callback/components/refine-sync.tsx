@@ -213,7 +213,7 @@ export default function RefineSync({
               />
             </div>
 
-            <Tabs defaultValue="domains" className="flex-1">
+            <Tabs defaultValue="domains" className="flex-1 overflow-auto">
               <TabsList className="px-6">
                 {(Object.keys(data) as Array<keyof TabData>).map((tab) => (
                   <TabsTrigger key={tab} value={tab} className="flex gap-2">
