@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowLeft, HelpCircle, Info, Loader2 } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { formatDate } from "@/lib/utils";
 import DOMPurify from "dompurify";
 import { useDashboardTabContext } from "@/providers/DashboardTabContext";
 import EmailSummary from "./details/information-summary";
+import { useAppSelector } from "@/hooks";
 
 export default function EmailDetailsPage() {
   const { setActive } = useDashboardTabContext();
@@ -27,13 +28,20 @@ export default function EmailDetailsPage() {
     router.back();
   };
 
+  const token = useAppSelector((state) => state.authState.token);
   const {
     data: emailDetails,
     isError,
     isLoading,
-  } = useFetchEmailLogByIdQuery({ orgId });
+  } = useFetchEmailLogByIdQuery(
+    { orgId },
+    {
+      skip: !token,
+    }
+  );
 
   console.log("EMAILDETAILS", emailDetails);
+
   const emailDetailsOverview: InfoItemProps[] = [
     {
       label: "Date and time received",
@@ -47,7 +55,7 @@ export default function EmailDetailsPage() {
     },
     {
       label: "Sender email",
-      value: `${emailDetails?.from.address.slice(0, 20)}...`,
+      value: `${emailDetails?.from?.address?.slice(0, 20)}...`,
       tooltipContent: "Sender email address",
     },
     {
@@ -66,24 +74,26 @@ export default function EmailDetailsPage() {
   const emailSecurityOverview: InfoItemProps[] = [
     {
       label: "Domain reputation",
-      value: emailDetails?.securityDetails.factors.domainReputation.description,
+      value:
+        emailDetails?.securityDetails?.factors?.domainReputation?.description,
       tooltipContent: "Indicates the trustworthiness of the sender's domain.",
     },
     {
       label: "Content analysis",
-      value: emailDetails?.securityDetails.factors.contentAnalysis.description,
+      value:
+        emailDetails?.securityDetails?.factors?.contentAnalysis?.description,
       tooltipContent: "Analysis of the email content for potential threats.",
     },
     {
       label: "Recipient analysis",
       value:
-        emailDetails?.securityDetails.factors.recipientAnalysis.description,
+        emailDetails?.securityDetails?.factors?.recipientAnalysis?.description,
       tooltipContent:
         "Checks if the recipient details align with known patterns.",
     },
     {
       label: "Time analysis",
-      value: emailDetails?.securityDetails.factors.timeAnalysis.description,
+      value: emailDetails?.securityDetails?.factors?.timeAnalysis?.description,
       tooltipContent:
         "Examines the time the email was sent and received for anomalies.",
     },
@@ -98,32 +108,32 @@ export default function EmailDetailsPage() {
   const emailSecurityScores: InfoItemProps[] = [
     {
       label: "Attachment risk",
-      value: emailDetails?.securityDetails.authentication.dkim.result,
+      value: emailDetails?.securityDetails?.authentication?.dkim?.result,
       tooltipContent:
         "Indicates the risk level of any attachments in the email.",
     },
     {
       label: "Email authentication",
-      value: emailDetails?.securityDetails.authentication.dkim.result,
+      value: emailDetails?.securityDetails?.authentication?.dkim?.result,
       tooltipContent: "Verifies if the email passes authentication checks.",
     },
     {
       label: "SPF",
-      value: emailDetails?.securityDetails.authentication.spf.result,
+      value: emailDetails?.securityDetails?.authentication?.spf?.result,
       tooltipContent:
         "Checks if the email sender is authorized by the domain's SPF record.",
       isBadge: true,
     },
     {
       label: "DKIM",
-      value: emailDetails?.securityDetails.authentication.dkim.result,
+      value: emailDetails?.securityDetails?.authentication?.dkim?.result,
       tooltipContent:
         "Validates the integrity of the email using DKIM signatures.",
       isBadge: true,
     },
     {
       label: "DMARC",
-      value: emailDetails?.securityDetails.authentication.dmarc.result,
+      value: emailDetails?.securityDetails?.authentication?.dmarc?.result,
       tooltipContent:
         "Ensures email alignment and enforcement based on DMARC policy.",
       isBadge: true,
@@ -157,13 +167,13 @@ export default function EmailDetailsPage() {
     },
     {
       label: "Overall score",
-      value: emailDetails?.securityDetails.score,
+      value: emailDetails?.securityDetails?.score,
       tooltipContent:
         "Indicates the likelihood of the email being classified as spam.",
     },
     {
       label: "Malware detection",
-      value: emailDetails?.securityDetails.score,
+      value: emailDetails?.securityDetails?.score,
       tooltipContent:
         "Checks if the email contains any potential malware or harmful links.",
     },
@@ -173,6 +183,10 @@ export default function EmailDetailsPage() {
 
   console.log("Sanitized content ", sanitizedContent);
 
+  const renderError = !isLoading && (emailDetails as any)?.error ? true : false;
+
+  console.log(renderError);
+
   useEffect(() => {
     setActive("logs");
   }, []);
@@ -180,8 +194,18 @@ export default function EmailDetailsPage() {
   return (
     <>
       {isLoading ? (
-        <div className="layout min-h-full w-full flex justify-center items-center">
+        <div className="layout min-h-[50vh] w-full flex justify-center items-center">
           <Loader2 className="animate-spin text-black w-6 h-6" />
+        </div>
+      ) : renderError ? (
+        <div className="layout min-h-[50vh] w-full flex flex-col justify-center items-center gap-4">
+          <p>{(emailDetails as any)?.message}</p>
+          <Button
+            onClick={handleGoBack}
+            className="hover:bg-black hover:text-white"
+          >
+            Go Back
+          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-5 gap-">
