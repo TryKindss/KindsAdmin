@@ -30,7 +30,7 @@ import TableSkeleton from "@/components/global/table-loading-state";
 import { useFetchAllUsersQuery } from "@/api/m365/inboxes";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { formatDate } from "@/lib/utils";
-import { UserData } from "@/lib/type/user";
+import { UserDataItem } from "@/lib/type/user";
 
 function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
   const {
@@ -39,7 +39,7 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
     isLoading: userLoading,
   } = useFetchAllUsersQuery();
 
-  const usersData = userData || [];
+  const usersData = userData?.items || [];
 
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
 
@@ -112,7 +112,7 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
     );
   });
 
-  function getUniqueGroupNames(data: UserData): string[] {
+  function getUniqueGroupNames(data: UserDataItem[]): string[] {
     const uniqueGroups = new Set<string>();
     data.forEach((item) => {
       item.groups.forEach((group) => {
@@ -124,7 +124,7 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
 
   React.useEffect(() => {
     if (!userLoading && userData) {
-      setGroups(getUniqueGroupNames(userData));
+      setGroups(getUniqueGroupNames(userData?.items));
     }
   }, [userLoading, userData]);
 

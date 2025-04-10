@@ -1,10 +1,10 @@
 import apiSlice from "@/api";
 import { DashboardStatsInterface, DomainStatInterface } from "@/lib/type/dashboard/stats";
-import { UserData } from "@/lib/type/user";
+import { UserDataResponse } from "@/lib/type/user";
 
 export const m365UsersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchAllUsers: builder.query<UserData, void>({
+    fetchAllUsers: builder.query<UserDataResponse, void>({
       query: () => ({
         url: "users/organization?allOrganizations=true",
         method: "GET",

@@ -2,7 +2,7 @@ interface User {
   displayName: string;
   email: string;
   microsoftId: string;
-  userPrincipalName: string;
+  userPrincipalName?: string; // optional if it's no longer consistently present
 }
 
 interface Account {
@@ -23,16 +23,28 @@ interface Stats {
   attachments: number;
 }
 
-interface UserDataItem {
+export interface UserDataItem {
   id: string;
   user: User;
   account: Account;
-  groups: Group[];
+  groups: Group[]; // still present even if always empty
   inboxType: string;
   roleRisk: string;
   created: string;
   status: string;
-  stats: Stats;
+  stats: Stats | null; // now nullable
 }
 
-export type UserData = UserDataItem[];
+interface Pagination {
+  currentPage: string;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface UserDataResponse {
+  items: UserDataItem[];
+  pagination: Pagination;
+}
