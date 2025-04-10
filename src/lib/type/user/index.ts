@@ -35,7 +35,7 @@ export interface UserDataItem {
   stats: Stats | null; // now nullable
 }
 
-interface Pagination {
+export interface Pagination {
   currentPage: string;
   totalPages: number;
   totalItems: number;
