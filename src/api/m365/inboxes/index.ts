@@ -11,13 +11,15 @@ interface FetchInboxesParams {
   limit?: number;
   search?: string;
   status?: string;
+  roleRisk?: string;
+  inboxType?: string;
 }
 
 export const m365UsersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchAllUsers: builder.query<UserDataResponse, FetchInboxesParams>({
-      query: ({ page = 1, limit = 20, }) => ({
-        url: `users/organization?&page=${page}&limit=${limit}&allOrganizations=true`,
+      query: ({ page = 1, limit = 20, roleRisk = "", inboxType }) => ({
+        url: `users/organization?&page=${page}&limit=${limit}&allOrganizations=true&roleRisk=${roleRisk}&inboxType=${inboxType}`,
         method: "GET",
       }),
     }),
