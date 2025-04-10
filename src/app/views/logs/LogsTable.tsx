@@ -32,18 +32,14 @@ import { EmailItem } from "@/lib/type/logs";
 import TableSkeleton from "@/components/global/table-loading-state";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { LogsPageProps } from ".";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useDebounce } from "@/hooks/useDebounce";
-import { getActionBadgeColor, getBadgeVariant, getProgressColor } from "@/utils/helper";
+import {
+  getActionBadgeColor,
+  getBadgeVariant,
+  getProgressColor,
+} from "@/utils/helper";
 import { useRouter } from "next/navigation";
+import PaginationBar from "@/components/global/pagination";
 
 function LogsTable({ filter, setFilter }: LogsPageProps) {
   const [selectedMessageIds, setSelectedMessageIds] = React.useState<string[]>(
@@ -83,7 +79,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     }
   );
 
-  const emails = emailLogs?.items || [] as EmailItem[] || [];
+  const emails = emailLogs?.items || ([] as EmailItem[]) || [];
 
   // const filteredLogs = emails?.filter((email: EmailItem) => {
   //   const matchesAction =
@@ -103,44 +99,6 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
     );
   };
 
- 
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || !emailLogs?.pagination) return;
-    if (newPage > Number(emailLogs.pagination.totalPages)) return;
-
-    setCurrentPage(newPage);
-  };
-
-  const getPageNumbers = (currentPage: number, totalPages: number) => {
-    const delta = 1;
-    const range = [];
-    const rangeWithDots = [];
-    let l;
-
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 ||
-        i === totalPages ||
-        (i >= currentPage - delta && i <= currentPage + delta)
-      ) {
-        range.push(i);
-      }
-    }
-
-    for (let i of range) {
-      if (l) {
-        if (i - l === 2) {
-          rangeWithDots.push(l + 1);
-        } else if (i - l !== 1) {
-          rangeWithDots.push("...");
-        }
-      }
-      rangeWithDots.push(i);
-      l = i;
-    }
-
-    return rangeWithDots;
-  };
 
   return (
     <TableWrapper>
@@ -255,10 +213,14 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
               </TableHeader>
               <TableBody>
                 {emails.map((user, index: any) => (
-                  <TableRow className="hover:cursor-pointer" key={index} onClick={(e)=>{
-                    e.stopPropagation()
-                    router.push(`logs/${user.id}`)
-                  }}>
+                  <TableRow
+                    className="hover:cursor-pointer"
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`logs/${user.id}`);
+                    }}
+                  >
                     <TableCell>
                       <Checkbox
                         checked={selectedMessageIds.includes(user.id)}
@@ -277,10 +239,14 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell className="truncate text-nowrap max-w-[300px]">{user.from.name}</TableCell>
+                    <TableCell className="truncate text-nowrap max-w-[300px]">
+                      {user.from.name}
+                    </TableCell>
                     <TableCell>
                       <div>
-                        <p className="truncate text-nowrap max-w-[200px]">{user.from.address}</p>
+                        <p className="truncate text-nowrap max-w-[200px]">
+                          {user.from.address}
+                        </p>
                         <p className="text-sm text-muted-foreground line-clamp-1">
                           {user.subject}
                         </p>
@@ -304,7 +270,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {user.detections.slice(0,1).map((detection, i) => (
+                      {user.detections.slice(0, 1).map((detection, i) => (
                         <Badge
                           key={i}
                           variant="outline"
@@ -323,11 +289,18 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                           <MoreVertical className="h-5 w-5 text-muted-foreground" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="text-xs">
-                          <DropdownMenuItem className="text-xs" onClick={(e)=>{
-                            //  e.stopPropagation()
-                            router.push(`logs/${user.id}`)
-                          }}>View Log</DropdownMenuItem>
-                          <DropdownMenuItem className="text-xs">Edit</DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-xs"
+                            onClick={(e) => {
+                              //  e.stopPropagation()
+                              router.push(`logs/${user.id}`);
+                            }}
+                          >
+                            View Log
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-xs">
+                            Edit
+                          </DropdownMenuItem>
                           <DropdownMenuItem className="text-red-600 text-xs">
                             Delete
                           </DropdownMenuItem>
@@ -349,70 +322,11 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
         )}
 
       {emailLogs?.pagination && (
-        <div className="py-12">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handlePageChange(currentPage - 1);
-                  }}
-                  className={
-                    !emailLogs.pagination.hasPreviousPage
-                      ? "pointer-events-none opacity-50"
-                      : ""
-                  }
-                />
-              </PaginationItem>
-
-              {getPageNumbers(
-                Number(emailLogs.pagination.currentPage),
-                Number(emailLogs.pagination.totalPages)
-              ).map((pageNum, idx) => (
-                <PaginationItem key={idx}>
-                  {pageNum === "..." ? (
-                    <PaginationEllipsis />
-                  ) : (
-                    <PaginationLink
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange(Number(pageNum));
-                      }}
-                      isActive={
-                        Number(emailLogs.pagination.currentPage) === pageNum
-                      }
-                    >
-                      {pageNum}
-                    </PaginationLink>
-                  )}
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handlePageChange(currentPage + 1);
-                  }}
-                  className={
-                    !emailLogs.pagination.hasNextPage
-                      ? "pointer-events-none opacity-50"
-                      : ""
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-          <div className="text-sm text-muted-foreground text-center mt-4">
-            Page {emailLogs.pagination.currentPage} of{" "}
-            {emailLogs.pagination.totalPages} (Total:{" "}
-            {emailLogs.pagination.totalItems})
-          </div>
-        </div>
+        <PaginationBar
+          currentPage={currentPage}
+          paginationData={emailLogs?.pagination}
+          setCurrentPage={setCurrentPage}
+        />
       )}
 
       {emailLogsError ||
