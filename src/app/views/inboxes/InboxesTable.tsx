@@ -226,10 +226,14 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                       {user.account.name}
                     </TableCell>
                     <TableCell className="capitalize">
-                      {user.groups.map((group, index) => {
-                        const isLast = index === user.groups.length - 1;
-                        return `${group.name}${isLast ? "" : ", "}`;
-                      })}
+                      {user.groups.length < 1 ? (
+                        <p className="font-semibold text-center text-xs">-</p>
+                      ) : (
+                        user.groups.map((group, index) => {
+                          const isLast = index === user.groups.length - 1;
+                          return `${group.name}${isLast ? "" : ", "}`;
+                        })
+                      )}
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
@@ -257,16 +261,16 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                    <Badge
-                          variant="outline"
-                          className={
-                            user.status === "active"
-                              ? "bg-green-50 text-green-700 border-green-200 capitalize"
-                              : "bg-red-50 text-red-700 border-red-200 capitalize"
-                          }
-                        >
-                          {user.status}
-                        </Badge>
+                      <Badge
+                        variant="outline"
+                        className={
+                          user.status === "active"
+                            ? "bg-green-50 text-green-700 border-green-200 capitalize"
+                            : "bg-red-50 text-red-700 border-red-200 capitalize"
+                        }
+                      >
+                        {user.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <Badge

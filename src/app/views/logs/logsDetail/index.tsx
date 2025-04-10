@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { InfoItem, InfoItemProps } from "./InfoItem";
-import { useFetchEmailLogByIdQuery } from "@/api/m365/logs";
+import { EmailByIdResponse, useFetchEmailLogByIdQuery } from "@/api/m365/logs";
 import { formatDate } from "@/lib/utils";
 import DOMPurify from "dompurify";
 import { useDashboardTabContext } from "@/providers/DashboardTabContext";
@@ -208,16 +208,23 @@ export default function EmailDetailsPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-5 gap-">
-          <div className="layout h-full col-span-3">
-            <Button
-              variant="ghost"
-              className="mb-4 pl-0 flex items-center gap-1"
-              onClick={handleGoBack}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Go back
-            </Button>
+        <div className="grid grid-cols-7 gap-">
+          <div className="layout h-full col-span-5">
+            <div className="flex items-center py-4 text-sm">
+              <Button
+                variant="ghost"
+                className="pl-0 flex items-center gap-1 hover:bg-transparent text-sm"
+                onClick={handleGoBack}
+                size={"sm"}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span className="text-lg font-medium">Emails</span>
+              </Button>
+              <span className="text-xl text-[#D0D5DD] pr-4">/</span>
+              <h1 className="font-medium text-[#6941C6]">
+                Subject line of email
+              </h1>
+            </div>
 
             <div className="mb-6 capitalize">
               <h1 className="text-2xl font-bold">{emailDetails?.subject}</h1>
@@ -227,6 +234,7 @@ export default function EmailDetailsPage() {
               defaultValue="details"
               value={activeTab}
               onValueChange={setActiveTab}
+              className="bg-none"
             >
               <TabsList className="border-b w-full justify-start rounded-none pb-0 mb-6">
                 <TabsTrigger
@@ -349,7 +357,7 @@ export default function EmailDetailsPage() {
           </div>
           <div className="layout h-full col-span-2">
             <div>
-              <EmailSummary />
+              <EmailSummary emailSummary={emailDetails as EmailByIdResponse} />
             </div>
           </div>
         </div>
