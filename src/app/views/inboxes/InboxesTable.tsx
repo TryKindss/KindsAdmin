@@ -31,15 +31,6 @@ import { useFetchAllUsersQuery } from "@/api/m365/inboxes";
 import TableEmptyState from "@/components/global/empty-table-state";
 import { formatDate } from "@/lib/utils";
 import { UserDataItem } from "@/lib/type/user";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import PaginationBar from "@/components/global/pagination";
 
 function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
@@ -325,70 +316,6 @@ function InboxesTable({ filter, setFilter, setGroups }: UserPageProps) {
               paginationData={userData?.pagination}
               setCurrentPage={setCurrentPage}
             />
-            //             <div className="py-12">
-            //               <Pagination>
-            //                 <PaginationContent>
-            //                   <PaginationItem>
-            //                     <PaginationPrevious
-            //                       href="#"
-            //                       onClick={(e) => {
-            //                         e.preventDefault();
-            //                         handlePageChange(currentPage - 1);
-            //                       }}
-            //                       className={
-            //                         !userData.pagination.hasPreviousPage
-            //                           ? "pointer-events-none opacity-50"
-            //                           : ""
-            //                       }
-            //                     />
-            //                   </PaginationItem>
-            //
-            //                   {getPageNumbers(
-            //                     Number(userData.pagination.currentPage),
-            //                     Number(userData.pagination.totalPages)
-            //                   ).map((pageNum, idx) => (
-            //                     <PaginationItem key={idx}>
-            //                       {pageNum === "..." ? (
-            //                         <PaginationEllipsis />
-            //                       ) : (
-            //                         <PaginationLink
-            //                           href="#"
-            //                           onClick={(e) => {
-            //                             e.preventDefault();
-            //                             handlePageChange(Number(pageNum));
-            //                           }}
-            //                           isActive={
-            //                             Number(userData.pagination.currentPage) === pageNum
-            //                           }
-            //                         >
-            //                           {pageNum}
-            //                         </PaginationLink>
-            //                       )}
-            //                     </PaginationItem>
-            //                   ))}
-            //
-            //                   <PaginationItem>
-            //                     <PaginationNext
-            //                       href="#"
-            //                       onClick={(e) => {
-            //                         e.preventDefault();
-            //                         handlePageChange(currentPage + 1);
-            //                       }}
-            //                       className={
-            //                         !userData.pagination.hasNextPage
-            //                           ? "pointer-events-none opacity-50"
-            //                           : ""
-            //                       }
-            //                     />
-            //                   </PaginationItem>
-            //                 </PaginationContent>
-            //               </Pagination>
-            //               <div className="text-sm text-muted-foreground text-center mt-4">
-            //                 Page {userData.pagination.currentPage} of{" "}
-            //                 {userData.pagination.totalPages} (Total:{" "}
-            //                 {userData.pagination.totalItems})
-            //               </div>
-            //             </div>
           )}
 
           {filteredUser.length === 0 && (
