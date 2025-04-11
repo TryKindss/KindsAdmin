@@ -164,14 +164,14 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                   </TableHead>
                   <TableHead>
                     <div className="flex items-center gap-1">
-                      Total Users
+                      Similar
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
                             <HelpCircle className="h-4 w-4 text-muted-foreground" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>No. of Users</p>
+                            <p>This is the total number of affected inboxes</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -252,7 +252,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         </p>
                       </div>
                     </TableCell>
-                    <TableCell>{user.action}</TableCell>
+                    <TableCell>{(user as any).affectedUsersCount}</TableCell>
 
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
