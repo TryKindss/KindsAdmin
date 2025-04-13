@@ -38,7 +38,32 @@ interface EmailLogItem {
       attachmentRisk: number;
     };
   };
+  similarEmails: SimilarEmailItem[];
 }
+
+export type SimilarEmailItem = {
+  id: string;
+  subject: string;
+  from: SimilarEmailSender;
+  recipient: SimilarEmailRecipient;
+  receivedDateTime: string;
+  status: string;
+  similarityReason: string;
+};
+
+export type SimilarEmailSender = {
+  name: string;
+  address: string;
+  domain: string;
+  isSimilarEmail: boolean;
+};
+
+export type SimilarEmailRecipient = {
+  email: string;
+  name: string;
+  userId: string;
+  isSimilarEmail: boolean;
+};
 
 interface FetchEmailLogsParams {
   orgId: string;
@@ -47,7 +72,6 @@ interface FetchEmailLogsParams {
   search?: string;
   status?: string;
 }
-
 export interface EmailByIdResponse {
   id: string;
   microsoftId: string;
@@ -68,58 +92,111 @@ export interface EmailByIdResponse {
   securityDetails: EmailByIdSecurityDetails;
   mailbox: EmailByIdMailbox;
   user: EmailByIdUser;
+  messageType: string;
+  detections: string[];
+  securityThreats: SecurityThreat[];
+  senderScore: number;
+  activity: EmailActivity;
+  impactedOrganizations: ImpactedEntity[];
+  impactedDomains: ImpactedEntity[];
+  htmlBody: string;
+  plainTextBody: string;
+  isHtml: boolean;
+  affectedUsersCount: number;
+  authentication: AuthenticationDetails;
+  assessment: string;
+  threatAnalysis: ThreatAnalysis;
+  userInfo: EmailUserInfo;
 }
 
 export interface EmailByIdSender {
-  address: string;
   name: string;
+  address: string;
   domain: string;
 }
 
 export interface EmailByIdRecipients {
-  to: string[];
+  to: EmailRecipient[];
   totalCount: number;
 }
 
+export interface EmailRecipient {
+  address: string;
+  name: string;
+}
+
 export interface EmailByIdOrganization {
+  name: string;
   id: string;
-  tenantId: string;
-  domain: string;
-  displayName: string;
 }
 
 export interface EmailByIdSecurityDetails {
   score: number;
   risk: string;
   verdict: string;
-  factors: EmailByIdSecurityFactors;
-  authentication: EmailByIdAuthenticationDetails;
+  factors: SecurityFactors;
+  authentication: AuthenticationDetails;
   overallAssessment: string;
 }
 
-export interface EmailByIdSecurityFactors {
-  domainReputation: EmailByIdFactorAssessment;
-  contentAnalysis: EmailByIdFactorAssessment;
-  recipientAnalysis: EmailByIdFactorAssessment;
-  timeAnalysis: EmailByIdFactorAssessment;
-  attachmentRisk: EmailByIdFactorAssessment;
+export interface SecurityFactors {
+  domainReputation: ScoreAssessment;
+  contentAnalysis: ScoreAssessment;
+  recipientAnalysis: ScoreAssessment;
+  timeAnalysis: ScoreAssessment;
+  attachmentRisk: ScoreAssessment;
 }
 
-export interface EmailByIdFactorAssessment {
+export interface ScoreAssessment {
   score: number;
   assessment: string;
   description: string;
 }
 
-export interface EmailByIdAuthenticationDetails {
-  spf: EmailByIdAuthResult;
-  dkim: EmailByIdAuthResult;
-  dmarc: EmailByIdAuthResult;
+export interface AuthenticationDetails {
+  spf: AuthResult;
+  dkim: AuthResult;
+  dmarc: AuthResult;
   summary: string;
 }
 
-export interface EmailByIdAuthResult {
+export interface AuthResult {
   result: string;
+  description: string;
+}
+
+export interface SecurityThreat {
+  category: string;
+  severity: string;
+  confidence: number;
+  name: string;
+  description: string;
+  indicators: string[];
+  mitigation: string;
+}
+
+export interface EmailActivity {
+  recipientEmail: string;
+  received: string;
+  detected: string;
+  opened: string;
+  linkClicked: string;
+  firstReplied: string;
+  reported: string;
+}
+
+export interface ImpactedEntity {
+  name: string;
+  id: string;
+}
+
+export interface ThreatAnalysis {
+  authenticationScore: number;
+  senderScore: number;
+  contentScore: number;
+  behavioralScore: number;
+  overallScore: number;
+  malwareDetectionScore: number;
   description: string;
 }
 
@@ -128,6 +205,22 @@ export interface EmailByIdMailbox {
   microsoftId: string;
   email: string;
 }
+
+export interface EmailByIdUser {
+  id: string;
+  microsoftId: string;
+  mail: string;
+  displayName: string;
+}
+
+export interface EmailUserInfo {
+  id: string;
+  displayName: string;
+  email: string;
+  jobTitle: string;
+  department: string;
+}
+
 
 export interface EmailByIdUser {
   id: string;

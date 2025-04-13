@@ -14,3 +14,15 @@ export const formatDate = (dateString: string): string => {
 
   return `${month}/${day}/${year}`;
 };
+
+export const formatTimeFull = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  return date.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZoneName: 'short' 
+  });
+};

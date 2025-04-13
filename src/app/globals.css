@@ -42,6 +42,7 @@ body {
     --kind-grey: 217, 16%, 84%;
     --tertiary: 216, 18%, 34%;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -74,6 +75,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -83,4 +85,13 @@ body {
   .layout {
     @apply px-[1rem] md:px-[2.5rem];
   }
+}
+
+.email-content a {
+  text-decoration: underline;
+  color: blue;
+}
+
+.email-content pre , .email-content section{
+  overflow-wrap: break-word;
 }
