@@ -146,7 +146,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
     {
       value: "delivered",
       label: "delivered",
-    },    
+    },
     {
       value: "sent",
       label: "sent",
@@ -179,12 +179,11 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
   );
   const [messageType, setMessageType] = useState<string>(
     statusOptions.find(
-      (item) => item.label.toLowerCase() === emailSummary?.messageType?.toLowerCase()
+      (item) =>
+        item.label.toLowerCase() === emailSummary?.messageType?.toLowerCase()
     )?.label || ""
   );
-  
-  
-  
+
   useEffect(() => {
     setStatus(emailSummary?.action?.toLowerCase());
     setMessageType(emailSummary?.messageType?.toLowerCase());
@@ -462,18 +461,22 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 <SelectValue placeholder="Select status">
                   <Badge
                     variant="outline"
-                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(status)}}`}
+                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
+                      status
+                    )}}`}
                   >
                     {status}
                   </Badge>
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {statusOptions.slice(0,4).map((option) => (
+                {statusOptions.slice(0, 4).map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     <Badge
                       variant="outline"
-                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(option.value)} capitalize`}
+                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
+                        option.value
+                      )} capitalize`}
                     >
                       {option.label}
                     </Badge>
@@ -509,7 +512,9 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 <SelectValue placeholder="Select status">
                   <Badge
                     variant="outline"
-                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(messageType)}}`}
+                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
+                      messageType
+                    )}}`}
                   >
                     {messageType}
                   </Badge>
@@ -520,7 +525,9 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   <SelectItem key={option.value} value={option.value}>
                     <Badge
                       variant="outline"
-                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(option.value)} capitalize`}
+                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
+                        option.value
+                      )} capitalize`}
                     >
                       {option.label}
                     </Badge>
@@ -535,7 +542,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
         <div className="mb-6">
           <h3 className="text-sm font-medium mb-2">Detections</h3>
           <div className="flex flex-wrap gap-2">
-            {emailSummary.detections.map((detection, index) => (
+            {emailSummary?.detections?.map((detection, index) => (
               <Badge
                 key={index}
                 variant="outline"
@@ -567,12 +574,14 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="text-sm">{notification.senderEmail}</div>
+              <div className="text-sm text-wrap">
+                {emailSummary?.from?.address}
+              </div>
             </div>
             <div>
               <div className="flex items-center mb-1">
                 <span className="text-xs font-semibold text-[#344054] mr-1">
-                  Sender Score {notification.senderScore}
+                  Sender Score
                 </span>
                 <TooltipProvider>
                   <Tooltip>
@@ -590,10 +599,10 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 <div className="w-48 h-2 bg-gray-200 rounded-full mr-2">
                   <div
                     className="h-2 bg-red-500 rounded-full"
-                    style={{ width: `${notification.senderScore}%` }}
+                    style={{ width: `${emailSummary?.senderScore}%` }}
                   />
                 </div>
-                <span className="text-sm">{notification.senderScore}%</span>
+                <span className="text-sm">{emailSummary?.senderScore}%</span>
               </div>
             </div>
           </div>
@@ -615,11 +624,11 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
               <ChevronDown className="w-5 h-5" />
             )}
           </button>
-          {expandedSections.organizations && (
-            <div className="py-2 text-sm text-[#475467]">
-              {notification.impactedOrganizations.join(", ")}
-            </div>
-          )}
+
+          {expandedSections.organizations &&
+            emailSummary?.impactedOrganizations?.map((item) => (
+              <p className="py-2 text-sm text-[#475467]">{item.name}</p>
+            ))}
         </div>
 
         <div className="border-t pt-4">
@@ -635,11 +644,10 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
               <ChevronDown className="w-5 h-5" />
             )}
           </button>
-          {expandedSections.domains && (
-            <div className="py-2 text-sm text-[#475467]">
-              {notification.impactedDomains.join(", ")}
-            </div>
-          )}
+          {expandedSections.domains &&
+            emailSummary?.impactedDomains?.map((item) => (
+              <p className="py-2 text-sm text-[#475467]">{item.name}</p>
+            ))}
         </div>
 
         <div className="border-t pt-4">
