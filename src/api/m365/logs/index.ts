@@ -38,7 +38,6 @@ interface EmailLogItem {
       attachmentRisk: number;
     };
   };
-  similarEmails: SimilarEmailItem[];
 }
 
 export type SimilarEmailItem = {
@@ -107,6 +106,7 @@ export interface EmailByIdResponse {
   assessment: string;
   threatAnalysis: ThreatAnalysis;
   userInfo: EmailUserInfo;
+  similarEmails: SimilarEmailItem[];
 }
 
 export interface EmailByIdSender {

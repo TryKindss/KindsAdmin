@@ -12,6 +12,7 @@ import EmailSummary from "./details/information-summary";
 import { useAppSelector } from "@/hooks";
 import Showdown from "showdown";
 import EmailViewer from "./details/email-viewer";
+import SimilarEmailTable from "./details/similar-email-table";
 
 export default function EmailDetailsPage() {
   const { setActive } = useDashboardTabContext();
@@ -75,7 +76,7 @@ export default function EmailDetailsPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-7 gap-">
+        <div className="grid grid-cols-7 gap- pb-8">
           <div className="layout h-full col-span-5">
             <div className="flex items-center py-4 text-sm">
               <Button
@@ -128,8 +129,8 @@ export default function EmailDetailsPage() {
               </TabsContent>
 
               <TabsContent value="similar">
-                <div className="p-6 border rounded-md">
-                  <p>Similar emails would be listed here...</p>
+              <div className=" mx-auto bg-white shadow-sm p-8 ">
+                  <SimilarEmailTable similarEmails={emailDetails?.similarEmails || []}/>
                 </div>
               </TabsContent>
             </Tabs>

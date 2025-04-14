@@ -16,6 +16,7 @@ export const getBadgeVariant = (detection: string) => {
     switch (detection.toLowerCase()) {
       // 🔴 Danger values
       case "malicious":
+      case "inactive":
       case "failed":
         return "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100";
 
@@ -28,6 +29,7 @@ export const getBadgeVariant = (detection: string) => {
       case "safe":
       case "sent":
       case "not malicious":
+      case "active":
       case "pass":
         return "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100";
 
@@ -41,7 +43,6 @@ export const getBadgeVariant = (detection: string) => {
     }
   }
 };
-
 
 export const getProgressColor = (progress: number) => {
   if (progress < 79) return "bg-red-500";
