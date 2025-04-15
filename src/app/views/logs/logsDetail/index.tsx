@@ -90,13 +90,13 @@ export default function EmailDetailsPage() {
               </Button>
               <span className="text-xl text-[#D0D5DD] pr-4">/</span>
               <h1 className="font-medium text-[#6941C6]">
-                Subject line of email
+              {emailDetails?.subject}
               </h1>
             </div>
 
             <div className="mb-6 capitalize">
               <h1 className="text-2xl font-bold">{emailDetails?.subject}</h1>
-              <p className="text-muted-foreground">{emailDetails?.subject}</p>
+              {/* <p className="text-muted-foreground">{emailDetails?.subject}</p> */}
             </div>
             <Tabs
               defaultValue="email"
@@ -126,7 +126,7 @@ export default function EmailDetailsPage() {
                     emailText={emailDetails?.plainTextBody || ""}
                   />
                 </div>
-              </TabsContent>
+              </TabsContent> 
 
               <TabsContent value="similar">
               <div className=" mx-auto bg-white shadow-sm p-8 ">

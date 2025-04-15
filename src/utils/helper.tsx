@@ -18,17 +18,21 @@ export const getBadgeVariant = (detection: string) => {
       case "malicious":
       case "inactive":
       case "failed":
+      case "quarantined":
         return "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100";
 
       // 🟡 Warning values
-      case "suspicious sender":
+      case "suspicious-sender":
+      case "blocked":
+      case "tagged":
+      case "warning":
         return "bg-yellow-50 text-yellow-700 border border-yellow-200 hover:bg-yellow-100";
 
       // ✅ Safe values
       case "delivered":
       case "safe":
       case "sent":
-      case "not malicious":
+      case "non-malicious":
       case "active":
       case "pass":
         return "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100";

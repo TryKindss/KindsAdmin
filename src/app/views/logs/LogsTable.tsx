@@ -194,7 +194,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                   </TableHead>
                   <TableHead>
                     <div className="flex items-center gap-1">
-                      Detections
+                      Message Type
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>

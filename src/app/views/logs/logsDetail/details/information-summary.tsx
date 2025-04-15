@@ -148,16 +148,12 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
       label: "delivered",
     },
     {
-      value: "sent",
-      label: "sent",
+      value: "blocked",
+      label: "blocked",
     },
     {
-      value: "pending",
-      label: "pending",
-    },
-    {
-      value: "failed",
-      label: "failed",
+      value: "quarantined",
+      label: "quarantined",
     },
     {
       value: "normal",
@@ -394,14 +390,14 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="text-sm uppercase">
+              <div className="text-sm upperca se">
                 {emailSummary?.activity?.opened
                   ? formatTimeFull(emailSummary?.activity?.opened)
                   : "-"}
               </div>
             </div>
           </div>
-        </div>
+       </div>
 
         {/* Security Notes Card */}
         {/* <div className="border-2 border-[#D0D5DD] bg-white p-4 shadow-none mb-4">
@@ -470,7 +466,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {statusOptions.slice(0, 4).map((option) => (
+                {statusOptions.slice(0, 3).map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     <Badge
                       variant="outline"
@@ -540,7 +536,23 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
 
         {/* Detections */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium mb-2">Detections</h3>
+        <div className="flex items-center mb-1">
+            <span className="text-xs font-semibold text-[#344054] mr-1">
+              Detections
+            </span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-[#98A2B3] font-bold" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="w-[200px]">
+                  Detections are how we identify and label specific phishing tactics
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
           <div className="flex flex-wrap gap-2">
             {emailSummary?.detections?.map((detection, index) => (
               <Badge

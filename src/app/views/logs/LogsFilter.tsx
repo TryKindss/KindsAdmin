@@ -15,13 +15,13 @@ import { LogsPageProps } from ".";
 function UsersFilter({ filter, setFilter }: LogsPageProps) {
   return (
     <FilterSideBarWrapper>
-      <h2 className="text-lg font-semibold">Logs</h2>
-      <Tabs defaultValue="active" className="w-full">
+      <h2 className="text-lg font-semibold">Emails</h2>
+      {/* <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="all">All</TabsTrigger>
         </TabsList>
-      </Tabs>
+      </Tabs> */}
 
       <div className="relative">
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
