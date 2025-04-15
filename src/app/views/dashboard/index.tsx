@@ -16,7 +16,8 @@ function DashboardView() {
     { value: "policies", label: "Policies", content: <PoliciesView /> },
     { value: "accounts", label: "Accounts", content: <AccountsView /> },
     { value: "users", label: "Inboxes", content: <UsersView /> },
-    { value: "logs", label: "Logs", content: <LogsView /> },
+    // logs refactored to emails 
+    { value: "logs", label: "Emails", content: <LogsView /> },
     { value: "settings", label: "Settings", content: <SettingsView /> },
     { value: "insights", label: "Insights", content: <InsightView /> },
   ];

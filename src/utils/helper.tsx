@@ -11,23 +11,39 @@ export const getActionBadgeColor = (action: string) => {
   }
   return;
 };
-
 export const getBadgeVariant = (detection: string) => {
   if (detection) {
     switch (detection.toLowerCase()) {
+      // 🔴 Danger values
       case "malicious":
-        return "bg-red-50 text-red-700 hover:bg-red-100";
-      case "suspicious sender":
-        return "bg-yellow-50 text-yellow-700 hover:bg-yellow-100";
-      case "not malicious":
-      case "pass":
-        return "bg-green-50 text-green-700 hover:bg-green-100";
-      case "marketing":
-        return "bg-blue-50 text-blue-700 hover:bg-blue-100";
+      case "inactive":
+      case "failed":
+      case "quarantined":
+        return "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100";
+
+      // 🟡 Warning values
+      case "suspicious-sender":
+      case "blocked":
+      case "tagged":
+      case "warning":
+        return "bg-yellow-50 text-yellow-700 border border-yellow-200 hover:bg-yellow-100";
+
+      // ✅ Safe values
+      case "delivered":
       case "safe":
-        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
+      case "sent":
+      case "non-malicious":
+      case "active":
+      case "pass":
+        return "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100";
+
+      // 🔵 Marketing
+      case "marketing":
+        return "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100";
+
+      // ⚪ Default
       default:
-        return "bg-gray-50 text-gray-700 hover:bg-gray-100";
+        return "bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100";
     }
   }
 };

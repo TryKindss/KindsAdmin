@@ -27,7 +27,7 @@ import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { useAppSelector } from "@/hooks";
 import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
-import { useFetchEmailLogsQuery } from "@/api/m365/logs";
+import { useFetchEmailLogsQuery } from "@/api/m365/emails";
 import { EmailItem } from "@/lib/type/logs";
 import TableSkeleton from "@/components/global/table-loading-state";
 import TableEmptyState from "@/components/global/empty-table-state";
@@ -164,14 +164,14 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                   </TableHead>
                   <TableHead>
                     <div className="flex items-center gap-1">
-                      Total Users
+                      Similar
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
                             <HelpCircle className="h-4 w-4 text-muted-foreground" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>No. of Users</p>
+                            <p>This is the total number of affected inboxes</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -194,7 +194,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                   </TableHead>
                   <TableHead>
                     <div className="flex items-center gap-1">
-                      Detections
+                      Message Type
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
@@ -252,7 +252,7 @@ function LogsTable({ filter, setFilter }: LogsPageProps) {
                         </p>
                       </div>
                     </TableCell>
-                    <TableCell>{user.action}</TableCell>
+                    <TableCell>{(user as any).affectedUsersCount}</TableCell>
 
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
