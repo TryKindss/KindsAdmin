@@ -95,3 +95,6 @@ body {
 .email-content pre , .email-content section{
   overflow-wrap: break-word;
 }
+.break-word{
+  overflow-wrap: break-word;
+}

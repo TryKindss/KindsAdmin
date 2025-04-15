@@ -1,4 +1,4 @@
-import { SimilarEmailItem } from "@/api/m365/logs";
+import { SimilarEmailItem } from "@/api/m365/emails";
 import TableEmptyState from "@/components/global/empty-table-state";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatTimeFull } from "@/lib/utils";
 import { getActionBadgeColor, getBadgeVariant } from "@/utils/helper";
 import { HelpCircle, MoreVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -53,7 +54,7 @@ export default function SimilarEmailTable({
   };
   return (
     <TableWrapper>
-      <Table>
+      <Table className="!text-xs">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px]">
@@ -72,7 +73,7 @@ export default function SimilarEmailTable({
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Email Subject</p>
+                      <p>User Organization</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -97,6 +98,22 @@ export default function SimilarEmailTable({
             {/* action head */}
             <TableHead>
               <div className="flex items-center gap-1">
+                Message Type
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Email Message Type</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </TableHead>
+            {/* action head */}
+            <TableHead>
+              <div className="flex items-center gap-1">
                 Email Header
                 <TooltipProvider>
                   <Tooltip>
@@ -110,7 +127,7 @@ export default function SimilarEmailTable({
                 </TooltipProvider>
               </div>
             </TableHead>
-            <TableHead>User</TableHead>
+            <TableHead>Time Delivered</TableHead>
             <TableHead className="w-[50px]"></TableHead>
           </TableRow>
         </TableHeader>
@@ -137,7 +154,12 @@ export default function SimilarEmailTable({
               </TableCell>
               <TableCell className="truncate text-nowrap max-w-[300px]">
                 <Badge className={`${getBadgeVariant(user.status)}`}>
-                  {user.status}
+                  {user.action}
+                </Badge>
+              </TableCell>
+              <TableCell className="truncate text-nowrap max-w-[300px]">
+                <Badge className={`${getBadgeVariant(user.status)}`}>
+                  {user.messageType}
                 </Badge>
               </TableCell>
 
@@ -151,7 +173,7 @@ export default function SimilarEmailTable({
                   </p>
                 </div>
               </TableCell>
-              <TableCell>{user.from.address}</TableCell>
+              <TableCell>{formatTimeFull(user.receivedDateTime)}</TableCell>
 
               {/* <TableCell className="py-3">
                 <div className="flex items-center gap-2">

@@ -1,5 +1,6 @@
 import apiSlice from "@/api";
 import { EmailLogResponse } from "@/lib/type/logs";
+import { url } from "inspector";
 
 interface EmailLogsResponse {
   items: EmailLogItem[];
@@ -39,7 +40,6 @@ interface EmailLogItem {
     };
   };
 }
-
 export type SimilarEmailItem = {
   id: string;
   subject: string;
@@ -47,6 +47,10 @@ export type SimilarEmailItem = {
   recipient: SimilarEmailRecipient;
   receivedDateTime: string;
   status: string;
+  action: string;
+  messageType: string;
+  detections: string[];
+  bodyPreview: string;
   similarityReason: string;
 };
 
@@ -54,14 +58,14 @@ export type SimilarEmailSender = {
   name: string;
   address: string;
   domain: string;
-  isSimilarEmail: boolean;
+  isSimilarEmail?: boolean;
 };
 
 export type SimilarEmailRecipient = {
   email: string;
   name: string;
   userId: string;
-  isSimilarEmail: boolean;
+  isSimilarEmail?: boolean;
 };
 
 interface FetchEmailLogsParams {
@@ -221,7 +225,6 @@ export interface EmailUserInfo {
   department: string;
 }
 
-
 export interface EmailByIdUser {
   id: string;
   microsoftId: string;
@@ -256,7 +259,26 @@ export const emailLogApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateEmailActionStatus: builder.query<any, any>({
+      query: ({ emailId, action }) => ({
+        url: `protection/email-logs/details/67f54f61b407db71273c89c4/status/${emailId}`,
+        method: "PUT",
+        body: {
+          action: action,
+        },
+      }),
+    }),
+    updateEmailDetection: builder.query<any, any>({
+      query: ({ emailId, action }) => ({
+        url: `protection/email-logs/details/67f54f61b407db71273c89c4/status/${emailId}`,
+        method: "PUT",
+        body: {
+          action: action,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useFetchEmailLogsQuery, useFetchEmailLogByIdQuery } = emailLogApi;
+export const { useFetchEmailLogsQuery, useFetchEmailLogByIdQuery } =
+  emailLogApi;

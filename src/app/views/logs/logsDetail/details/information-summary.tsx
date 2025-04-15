@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ConfirmationModal } from "@/components/global/confirmation-modal";
-import { EmailByIdResponse } from "@/api/m365/logs";
+import { EmailByIdResponse } from "@/api/m365/emails";
 import { formatDate, formatTimeFull } from "@/lib/utils";
 import { Select } from "@radix-ui/react-select";
 import {
@@ -159,6 +159,9 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
       value: "normal",
       label: "normal",
     },
+  ];
+
+  const messageTypeOption = [
     {
       value: "malicious",
       label: "malicious",
@@ -208,7 +211,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="text-sm">
+              <div className="text-sm break-all">
                 {emailSummary?.activity?.recipientEmail}
               </div>
             </div>
@@ -390,14 +393,14 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="text-sm upperca se">
+              <div className="text-sm uppercase">
                 {emailSummary?.activity?.opened
                   ? formatTimeFull(emailSummary?.activity?.opened)
                   : "-"}
               </div>
             </div>
           </div>
-       </div>
+        </div>
 
         {/* Security Notes Card */}
         {/* <div className="border-2 border-[#D0D5DD] bg-white p-4 shadow-none mb-4">
@@ -466,7 +469,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {statusOptions.slice(0, 3).map((option) => (
+                {statusOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     <Badge
                       variant="outline"
@@ -517,7 +520,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {statusOptions.slice(4).map((option) => (
+                {messageTypeOption.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     <Badge
                       variant="outline"
@@ -536,7 +539,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
 
         {/* Detections */}
         <div className="mb-6">
-        <div className="flex items-center mb-1">
+          <div className="flex items-center mb-1">
             <span className="text-xs font-semibold text-[#344054] mr-1">
               Detections
             </span>
@@ -547,7 +550,8 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="w-[200px]">
-                  Detections are how we identify and label specific phishing tactics
+                    Detections are how we identify and label specific phishing
+                    tactics
                   </p>
                 </TooltipContent>
               </Tooltip>

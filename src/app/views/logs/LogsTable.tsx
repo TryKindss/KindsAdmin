@@ -27,7 +27,7 @@ import { MoreVertical, HelpCircle } from "lucide-react";
 import TableWrapper from "@/components/global/wrappers/TableWrapper";
 import { useAppSelector } from "@/hooks";
 import { useFetchAllAccountsQuery } from "@/api/m365/accounts";
-import { useFetchEmailLogsQuery } from "@/api/m365/logs";
+import { useFetchEmailLogsQuery } from "@/api/m365/emails";
 import { EmailItem } from "@/lib/type/logs";
 import TableSkeleton from "@/components/global/table-loading-state";
 import TableEmptyState from "@/components/global/empty-table-state";

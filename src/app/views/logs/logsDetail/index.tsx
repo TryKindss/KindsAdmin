@@ -5,7 +5,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { EmailByIdResponse, useFetchEmailLogByIdQuery } from "@/api/m365/logs";
+import { EmailByIdResponse, useFetchEmailLogByIdQuery } from "@/api/m365/emails";
 import DOMPurify from "dompurify";
 import { useDashboardTabContext } from "@/providers/DashboardTabContext";
 import EmailSummary from "./details/information-summary";
@@ -129,7 +129,7 @@ export default function EmailDetailsPage() {
               </TabsContent> 
 
               <TabsContent value="similar">
-              <div className=" mx-auto bg-white shadow-sm p-8 ">
+              <div className=" mx-auto ">
                   <SimilarEmailTable similarEmails={emailDetails?.similarEmails || []}/>
                 </div>
               </TabsContent>
