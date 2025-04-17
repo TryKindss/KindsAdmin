@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, HelpCircle, Info } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  HelpCircle,
+  Info,
+  Loader2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -10,7 +17,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ConfirmationModal } from "@/components/global/confirmation-modal";
-import { EmailByIdResponse } from "@/api/m365/emails";
+import {
+  EmailByIdResponse,
+  useUpdateEmailActionStatusMutation,
+  useUpdateEmailDetectionsMutation,
+  useUpdateEmailMessageTypeMutation,
+} from "@/api/m365/emails";
 import { formatDate, formatTimeFull } from "@/lib/utils";
 import { Select } from "@radix-ui/react-select";
 import {
@@ -20,6 +32,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getBadgeVariant } from "@/utils/helper";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type EmailSummary = {
   senderEmail: string;
@@ -171,17 +191,152 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
       label: "non-malicious",
     },
   ];
+
+  const detectionOptions = [
+    "Impersonation",
+    "Suspicious Sender",
+    "Marketing",
+    "Suspicious Attachment",
+    "Contains PHI",
+    "Contains PII",
+    "Credentials Detected",
+    "Social Engineering",
+    "Blocklist",
+    "Allowlist",
+    "Sexual harassment",
+    "Sexual content",
+    "Racism",
+    "Financial data",
+    "Spear-phishing",
+    "Whaling",
+    "Clone Phishing",
+    "Business Email Compromise",
+    "Gift Card Scam",
+  ];
+
+  // over-complicated state ::: modularize to simpler string state ???
   const [status, setStatus] = useState<string>(
     statusOptions.find(
       (item) => item.label.toLowerCase() === emailSummary?.action?.toLowerCase()
     )?.label || ""
   );
   const [messageType, setMessageType] = useState<string>(
-    statusOptions.find(
+    messageTypeOption.find(
       (item) =>
         item.label.toLowerCase() === emailSummary?.messageType?.toLowerCase()
     )?.label || ""
   );
+
+  console.log("MESSAGETYPE", messageType);
+
+  const { toast } = useToast();
+
+  // detection multi-select variable here
+  const [open, setOpen] = useState(false);
+  const [detections, setDetections] = useState<string[]>(
+    emailSummary?.detections || []
+  );
+  const [tempSelections, setTempSelections] = useState<string[]>([]);
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      setTempSelections([...detections]);
+    }
+    setOpen(isOpen);
+  };
+
+  const handleOptionToggle = (option: string) => {
+    setTempSelections((prev) =>
+      prev.includes(option)
+        ? prev.filter((item) => item !== option)
+        : [...prev, option]
+    );
+  };
+
+  // update email actions/status functions below ----
+  const [
+    updateStatus,
+    {
+      isLoading: updateStatusLoading,
+      data: updateStatusData,
+      isError: updateStatusError,
+    },
+  ] = useUpdateEmailActionStatusMutation();
+
+  // update email messageType functions below ----
+  const [
+    updateMessageType,
+    {
+      isLoading: updateMessageTypeLoading,
+      data: updateMessageTypeData,
+      isError: updateMessageTypeError,
+    },
+  ] = useUpdateEmailMessageTypeMutation();
+
+  // update email detection functions below ----
+  const [
+    updateDetections,
+    {
+      isLoading: updateDetectionsLoading,
+      data: updateDetectionsData,
+      isError: updateDetectionsError,
+    },
+  ] = useUpdateEmailDetectionsMutation();
+
+  // ----------------------
+
+  const updateEmailStatus = async (emailStatus: string) => {
+    try {
+      await updateStatus({
+        emailId: emailSummary.id,
+        action: emailStatus.toUpperCase(),
+      })
+        .unwrap()
+        .then((data) => {
+          console.log("RESPONSE DATA", data);
+          toast({
+            title: "Status updated",
+            duration: 3000,
+          });
+        });
+    } catch (error) {}
+  };
+
+  const updateEmailMessageType = async (emailMessageType: string) => {
+    try {
+      await updateMessageType({
+        emailId: emailSummary.id,
+        messageType: emailMessageType,
+      })
+        .unwrap()
+        .then((data) => {
+          console.log("RESPONSE DATA", data);
+          toast({
+            title: "Message Type Updated",
+            duration: 3000,
+          });
+        });
+    } catch (error) {}
+  };
+
+  const updateEmaildetections = async () => {
+    try {
+      await updateDetections({
+        emailId: emailSummary.id,
+        detections: [...tempSelections],
+      })
+        .unwrap()
+        .then((data) => {
+          console.log("RESPONSE DATA", data);
+          setDetections([...tempSelections]);
+          setOpen(false);
+          toast({
+            title: "Detections Updated",
+            duration: 3000,
+          });
+        });
+    } catch (error) {}
+  };
 
   useEffect(() => {
     setStatus(emailSummary?.action?.toLowerCase());
@@ -455,34 +610,44 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
           </div>
 
           <div className="border bg-white p-2 mb-4">
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-full border-0 p-0 h-auto shadow-none focus:ring-0 focus:ring-offset-0">
-                <SelectValue placeholder="Select status">
-                  <Badge
-                    variant="outline"
-                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
-                      status
-                    )}}`}
-                  >
-                    {status}
-                  </Badge>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {statusOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+            {updateStatusLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Select
+                value={status}
+                onValueChange={(value) => {
+                  setStatus(value);
+                  updateEmailStatus(value);
+                }}
+              >
+                <SelectTrigger className="w-full border-0 p-0 h-auto shadow-none focus:ring-0 focus:ring-offset-0">
+                  <SelectValue placeholder="Select status">
                     <Badge
                       variant="outline"
-                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
-                        option.value
-                      )} capitalize`}
+                      className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
+                        status
+                      )}}`}
                     >
-                      {option.label}
+                      {status}
                     </Badge>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {statusOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <Badge
+                        variant="outline"
+                        className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
+                          option.value
+                        )} capitalize`}
+                      >
+                        {option.label}
+                      </Badge>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
 
@@ -506,42 +671,53 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
             </TooltipProvider>
           </div>
           <div className="border bg-white p-2 mb-4">
-            <Select value={messageType} onValueChange={setMessageType}>
-              <SelectTrigger className="w-full border-0 p-0 h-auto shadow-none focus:ring-0 focus:ring-offset-0">
-                <SelectValue placeholder="Select status">
-                  <Badge
-                    variant="outline"
-                    className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
-                      messageType
-                    )}}`}
-                  >
-                    {messageType}
-                  </Badge>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {messageTypeOption.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+            {updateMessageTypeLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Select
+                value={messageType}
+                onValueChange={(value) => {
+                  setMessageType(value);
+                  updateEmailMessageType(value);
+                  console.log("VLAUE", value);
+                }}
+              >
+                <SelectTrigger className="w-full border-0 p-0 h-auto shadow-none focus:ring-0 focus:ring-offset-0">
+                  <SelectValue placeholder="Select status">
                     <Badge
                       variant="outline"
-                      className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
-                        option.value
-                      )} capitalize`}
+                      className={`rounded-full font-normal text-xs border-2 capitalize ${getBadgeVariant(
+                        messageType
+                      )}}`}
                     >
-                      {option.label}
+                      {messageType}
                     </Badge>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {messageTypeOption.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <Badge
+                        variant="outline"
+                        className={`rounded-full font-normal text-xs border-2 ${getBadgeVariant(
+                          option.value
+                        )} capitalize`}
+                      >
+                        {option.label}
+                      </Badge>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
 
         {/* Detections */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="flex items-center mb-1">
             <span className="text-xs font-semibold text-[#344054] mr-1">
-              Detections
+              Detection types
             </span>
             <TooltipProvider>
               <Tooltip>
@@ -550,23 +726,84 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="w-[200px]">
-                    Detections are how we identify and label specific phishing
-                    tactics
+                    Types of detections found in the message
                   </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {emailSummary?.detections?.map((detection, index) => (
-              <Badge
-                key={index}
-                variant="outline"
-                className="rounded-full font-normal text-xs border-[#D5D9EB] border-2 text-[#363F72]"
-              >
-                {detection}
-              </Badge>
-            ))}
+
+          <div className="border bg-white p-2 mb-4">
+            <Popover open={open} onOpenChange={handleOpenChange}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between font-normal text-left p-1 h-auto border-0 shadow-none"
+                >
+                  <div className="flex flex-wrap gap-1 max-w-[90%] overflow-hidden">
+                    {detections.length === 0 ? (
+                      <Badge
+                        variant="outline"
+                        className="rounded-full font-normal text-xs border-2 border-[#E4E7EC] bg-[#F9FAFB] text-[#344054]"
+                      >
+                        Select detections
+                      </Badge>
+                    ) : (
+                      detections.map((detection) => (
+                        <Badge
+                          key={detection}
+                          variant="outline"
+                          className="rounded-full font-normal text-xs border-2 border-[#E4E7EC] bg-[#F9FAFB] text-[#344054]"
+                        >
+                          {detection}
+                        </Badge>
+                      ))
+                    )}
+                  </div>
+                  <ChevronDown className="h-4 w-4 opacity-50 flex-shrink-0" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[300px] p-0" align="start">
+                <div className="max-h-[300px] overflow-auto p-1">
+                  {detectionOptions.map((option) => (
+                    <div
+                      key={option}
+                      className="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded cursor-pointer"
+                      onClick={() => handleOptionToggle(option)}
+                    >
+                      <Checkbox
+                        id={`option-${option}`}
+                        checked={tempSelections.includes(option)}
+                        onCheckedChange={() => handleOptionToggle(option)}
+                      />
+                      <label
+                        htmlFor={`option-${option}`}
+                        className="text-sm cursor-pointer flex-grow"
+                      >
+                        {option}
+                      </label>
+                      {tempSelections.includes(option) && (
+                        <Check className="h-4 w-4 text-[#027A48]" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="p-2 border-t flex justify-end">
+                  <Button
+                    size="sm"
+                    onClick={updateEmaildetections}
+                    disabled={updateDetectionsLoading}
+                    className={`bg-[#7F56D9] hover:bg-[#6941C6] text-white text-center`}
+                  >
+                    {updateDetectionsLoading ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Update"
+                    )}
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
@@ -680,14 +917,40 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
             )}
           </button>
           {expandedSections.orgDetails && (
-            <div className="py-2">
-              <div className="flex items-center mb-1">
-                <span className="text-xs font-semibold text-[#344054] mr-1">
-                  Organization Manager
-                </span>
-                <Info className="w-4 h-4 text-gray-400" />
+            <div className="py-2 space-y-4">
+              <div>
+                <div className="flex items-center mb-1">
+                  <span className="text-xs font-semibold text-[#344054] mr-1">
+                    Organization Name
+                  </span>
+                  <Info className="w-4 h-4 text-gray-400" />
+                </div>
+                <p className="text-sm">
+                  {emailSummary.organizationDetails.name}
+                </p>
               </div>
-              <div className="text-sm">{notification.organizationManager}</div>
+              <div>
+                <div className="flex items-center mb-1">
+                  <span className="text-xs font-semibold text-[#344054] mr-1">
+                    Organization Display Name
+                  </span>
+                  <Info className="w-4 h-4 text-gray-400" />
+                </div>
+                <p className="text-sm">
+                  {emailSummary.organizationDetails.displayName}
+                </p>
+              </div>
+              <div>
+                <div className="flex items-center mb-1">
+                  <span className="text-xs font-semibold text-[#344054] mr-1">
+                    Domain
+                  </span>
+                  <Info className="w-4 h-4 text-gray-400" />
+                </div>
+                <p className="text-sm">
+                  {emailSummary.organizationDetails.domain}
+                </p>
+              </div>
             </div>
           )}
         </div>

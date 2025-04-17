@@ -111,8 +111,16 @@ export interface EmailByIdResponse {
   threatAnalysis: ThreatAnalysis;
   userInfo: EmailUserInfo;
   similarEmails: SimilarEmailItem[];
+  organizationDetails: OrganizationDetails;
 }
 
+interface OrganizationDetails {
+  id: string;
+  displayName: string;
+  domain: string;
+  tenantId: string;
+  name: string;
+}
 export interface EmailByIdSender {
   name: string;
   address: string;
@@ -236,49 +244,82 @@ interface EmailByIdParams {
   orgId: string;
 }
 
-export const emailLogApi = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
-    fetchEmailLogs: builder.query<EmailLogResponse, FetchEmailLogsParams>({
-      query: ({ orgId, page = 1, limit = 20, search, status }) => ({
-        url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}&allOrganizations=true`,
-        method: "GET",
+export const emailLogApi = apiSlice
+  .enhanceEndpoints({
+    addTagTypes: ["email-log-details"],
+  })
+  .injectEndpoints({
+    endpoints: (builder) => ({
+      fetchEmailLogs: builder.query<EmailLogResponse, FetchEmailLogsParams>({
+        query: ({ orgId, page = 1, limit = 20, search, status }) => ({
+          url: `/protection/email-logs?organizationId=${orgId}&page=${page}&limit=${limit}&status=${status}&search=${search}&allOrganizations=true`,
+          method: "GET",
+        }),
+        // async onQueryStarted(args, { queryFulfilled }) {
+        //   console.log("Query started with args:", args);
+        //   try {
+        //     const { data } = await queryFulfilled;
+        //     console.log("Query response:", data);
+        //   } catch (err) {
+        //     console.error("Query failed:", err);
+        //   }
+        // },
       }),
-      // async onQueryStarted(args, { queryFulfilled }) {
-      //   console.log("Query started with args:", args);
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //     console.log("Query response:", data);
-      //   } catch (err) {
-      //     console.error("Query failed:", err);
-      //   }
-      // },
-    }),
-    fetchEmailLogById: builder.query<EmailByIdResponse, EmailByIdParams>({
-      query: ({ orgId }) => ({
-        url: `/protection/email-logs/details/${orgId}?allOrganizations=true`,
-        method: "GET",
+      fetchEmailLogById: builder.query<EmailByIdResponse, EmailByIdParams>({
+        query: ({ orgId }) => ({
+          url: `/protection/email-logs/details/${orgId}?allOrganizations=true`,
+          method: "GET",
+        }),
       }),
-    }),
-    updateEmailActionStatus: builder.query<any, any>({
-      query: ({ emailId, action }) => ({
-        url: `protection/email-logs/details/67f54f61b407db71273c89c4/status/${emailId}`,
-        method: "PUT",
-        body: {
-          action: action,
-        },
+      updateEmailActionStatus: builder.mutation<
+        any,
+        { emailId: string; action: string }
+      >({
+        query: ({ emailId, action }) => ({
+          url: `protection/email-logs/details/${emailId}/status`,
+          method: "PUT",
+          body: {
+            action: action,
+          },
+        }),
+        invalidatesTags: ["email-log-details",]
       }),
-    }),
-    updateEmailDetection: builder.query<any, any>({
-      query: ({ emailId, action }) => ({
-        url: `protection/email-logs/details/67f54f61b407db71273c89c4/status/${emailId}`,
-        method: "PUT",
-        body: {
-          action: action,
-        },
-      }),
-    }),
-  }),
-});
 
-export const { useFetchEmailLogsQuery, useFetchEmailLogByIdQuery } =
-  emailLogApi;
+      updateEmailMessageType: builder.mutation<
+        any,
+        { emailId: string; messageType: string }
+      >({
+        query: ({ emailId, messageType }) => ({
+          url: `protection/email-logs/details/${emailId}/message-type`,
+          method: "PUT",
+          body: {
+            messageType: messageType,
+          },
+        }),
+        invalidatesTags: ["email-log-details",]
+      }),
+
+      updateEmailDetections: builder.mutation<
+        any,
+        { emailId: string; detections: string[] }
+      >({
+        query: ({ emailId, detections }) => ({
+          url: `protection/email-logs/details/${emailId}/detections`,
+          method: "PUT",
+          body: {
+            detections: detections,
+            notes: ""
+          },
+        }),
+        invalidatesTags: ["email-log-details",]
+      }),
+    }),
+  });
+
+export const {
+  useFetchEmailLogsQuery,
+  useFetchEmailLogByIdQuery,
+  useUpdateEmailActionStatusMutation,
+  useUpdateEmailDetectionsMutation,
+  useUpdateEmailMessageTypeMutation,
+} = emailLogApi;
