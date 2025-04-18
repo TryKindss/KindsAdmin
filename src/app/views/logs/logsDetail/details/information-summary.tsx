@@ -734,7 +734,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
           </div>
 
           <div className="border bg-white p-2 mb-4">
-            <Popover open={open} onOpenChange={handleOpenChange}>
+            <Popover open={open} onOpenChange={handleOpenChange} >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -827,7 +827,7 @@ export default function EmailSummary({ emailSummary }: EmailSummaryParam) {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="text-sm text-wrap">
+              <div className="text-sm text-wrap break-all">
                 {emailSummary?.from?.address}
               </div>
             </div>

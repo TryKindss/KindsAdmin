@@ -63,7 +63,7 @@ export default function EmailDetailsPage() {
     <>
       {isLoading ? (
         <div className="layout min-h-[50vh] w-full flex justify-center items-center">
-          <Loader2 className="animate-spin text-black w-6 h-6" />
+          <Loader2 className="animate-spin text-black w-16 h-16" />
         </div>
       ) : renderError ? (
         <div className="layout min-h-[50vh] w-full flex flex-col justify-center items-center gap-4">
